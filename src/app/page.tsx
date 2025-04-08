@@ -10,7 +10,7 @@ export default function Home() {
       <ThemeToggle />
       
       {/* Hero Section */}
-      <section className="pt-24 pb-16 relative">
+      <section className="min-h-screen pt-24 pb-16 relative flex items-center">
         <div className="container mx-auto px-4">
           <div className="relative">
             <h1 className="text-6xl font-bold z-10 relative">
@@ -43,7 +43,7 @@ export default function Home() {
       </section>
 
       {/* Work Section */}
-      <section id="work" className="py-16 border-t border-foreground">
+      <section id="work" className="min-h-screen py-16 border-t border-foreground flex items-center">
         <div className="container mx-auto px-4">
           <h2 className="text-6xl font-bold mb-8">WORK</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -67,7 +67,7 @@ export default function Home() {
       </section>
 
       {/* Writing Section */}
-      <section id="writing" className="py-16 border-t border-foreground">
+      <section id="writing" className="min-h-screen py-16 border-t border-foreground flex items-center">
         <div className="container mx-auto px-4">
           <h2 className="text-6xl font-bold mb-8">WRITING</h2>
           <article>
@@ -78,7 +78,7 @@ export default function Home() {
       </section>
 
       {/* Experience Section */}
-      <section id="experience" className="py-16 border-t border-foreground">
+      <section id="experience" className="min-h-screen py-16 border-t border-foreground flex items-center">
         <div className="container mx-auto px-4">
           <h2 className="text-6xl font-bold mb-8">EXPERIENCE</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -95,7 +95,7 @@ export default function Home() {
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-16 border-t border-foreground">
+      <section id="about" className="min-h-screen py-16 border-t border-foreground flex items-center">
         <div className="container mx-auto px-4">
           <h2 className="text-6xl font-bold mb-8">ABOUT</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
