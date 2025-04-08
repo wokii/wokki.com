@@ -122,7 +122,7 @@ export default function Home() {
                 </a>
                 {" • "}
                 <a href="https://www.linkedin.com/in/christine-hui-5697b2270/" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
-                  My Wife's LinkedIn, She does marketing and is open to jobs.
+                  My Wife&apos;s LinkedIn, She does marketing and is open to jobs.
                 </a>
                 {" • "}
                 <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
