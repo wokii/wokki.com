@@ -4,6 +4,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --accent: #FF5F40; /* The orange circle in the design */
+  scroll-behavior: smooth;
 }
 
 .dark {

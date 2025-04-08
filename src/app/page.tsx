@@ -1,14 +1,16 @@
 import React from "react";
 import Image from "next/image";
 import ThemeToggle from "./components/theme-toggle";
+import Header from "./components/header";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
+      <Header />
       <ThemeToggle />
       
       {/* Hero Section */}
-      <section className="py-16 relative">
+      <section className="pt-24 pb-16 relative">
         <div className="container mx-auto px-4">
           <div className="relative">
             <h1 className="text-6xl font-bold z-10 relative">
@@ -87,6 +89,46 @@ export default function Home() {
             <div>
               <h3 className="text-3xl">Previously</h3>
               <p className="text-2xl">Bloomberg, stealth startup</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className="py-16 border-t border-foreground">
+        <div className="container mx-auto px-4">
+          <h2 className="text-6xl font-bold mb-8">ABOUT</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <p className="text-xl mb-4">
+                I'm a software engineer and systems thinker passionate about building AI products 
+                that merge elegant design with powerful functionality.
+              </p>
+              <p className="text-xl">
+                With experience across fintech and startups, I bring a unique perspective to 
+                solving complex problems through technology and design.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-2xl mb-4">Contact</h3>
+              <p className="mb-2">
+                <a href="mailto:hello@example.com" className="underline hover:text-accent transition-colors">
+                  hello@example.com
+                </a>
+              </p>
+              <p>
+                <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  GitHub
+                </a>
+                {" • "}
+                <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  LinkedIn
+                </a>
+                {" • "}
+                <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  Twitter
+                </a>
+              </p>
             </div>
           </div>
         </div>
