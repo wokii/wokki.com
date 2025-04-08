@@ -101,7 +101,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <p className="text-xl mb-4">
-                I'm a software engineer and systems thinker passionate about building AI products 
+                I&apos;m a software engineer and systems thinker passionate about building AI products 
                 that merge elegant design with powerful functionality.
               </p>
               <p className="text-xl">
