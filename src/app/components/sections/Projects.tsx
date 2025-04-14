@@ -117,54 +117,52 @@ export default function Projects() {
               {projects.map((project) => (
                 <div 
                   key={project.id}
-                  className="flex-none w-80 h-96 snap-center"
+                  className="flex-none w-80 h-96 snap-center relative"
                 >
-                  <div 
-                    className="card-container h-full perspective-1000 cursor-pointer"
-                    onClick={() => toggleCard(project.id)}
-                  >
+                  <div className="h-full">
+                    {/* Card front */}
                     <div 
-                      className={`card-inner relative w-full h-full transition-transform duration-500 ease-in-out transform-style-3d ${flippedCards.includes(project.id) ? 'rotate-y-180' : ''}`}
+                      className={`absolute w-full h-full bg-foreground text-background p-8 flex items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-0' : 'opacity-100'}`}
+                      onClick={() => toggleCard(project.id)}
                     >
-                      {/* Card front (backside) */}
-                      <div className="card-front absolute w-full h-full backface-hidden bg-foreground text-background p-8 flex items-center justify-center">
-                        <div className="text-center">
-                          <div className="mb-6 w-16 h-16 mx-auto">
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="w-full h-full text-background"
-                            >
-                              <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-                                fill="currentColor"
-                              />
-                              <path
-                                d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
-                                fill="currentColor"
-                              />
-                            </svg>
-                          </div>
-                          <h3 className="text-3xl font-bold mb-4 transition-colors duration-300">{project.title}</h3>
-                        </div>
-                      </div>
-                      
-                      {/* Card back (front side) */}
-                      <div className="card-back absolute w-full h-full backface-hidden bg-background border-2 border-foreground p-8 flex flex-col items-center justify-center rotate-y-180">
-                        <div className="text-center">
-                          <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
-                          <p className="mb-6 text-base">{project.description}</p>
-                          <Link 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="inline-block px-4 py-2 border border-foreground hover:bg-foreground hover:text-background transition-colors"
-                            onClick={(e) => e.stopPropagation()}
+                      <div className="text-center">
+                        <div className="mb-6 w-16 h-16 mx-auto">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-full h-full text-background"
                           >
-                            View Project
-                          </Link>
+                            <path
+                              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                              fill="currentColor"
+                            />
+                            <path
+                              d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+                              fill="currentColor"
+                            />
+                          </svg>
                         </div>
+                        <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
+                      </div>
+                    </div>
+                    
+                    {/* Card back */}
+                    <div 
+                      className={`absolute w-full h-full bg-background border-2 border-foreground p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-100' : 'opacity-0'}`}
+                      onClick={() => toggleCard(project.id)}
+                    >
+                      <div className="text-center">
+                        <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
+                        <p className="mb-6 text-base">{project.description}</p>
+                        <a 
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-block px-4 py-2 border border-foreground hover:bg-foreground hover:text-background transition-colors"
+                        >
+                          View Project
+                        </a>
                       </div>
                     </div>
                   </div>
