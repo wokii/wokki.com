@@ -129,7 +129,24 @@ export default function Projects() {
                       {/* Card front (backside) */}
                       <div className="card-front absolute w-full h-full backface-hidden bg-foreground text-background p-8 flex items-center justify-center">
                         <div className="text-center">
-                          <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
+                          <div className="mb-6 w-16 h-16 mx-auto">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-full h-full text-background"
+                            >
+                              <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </div>
+                          <h3 className="text-3xl font-bold mb-4 transition-colors duration-300">{project.title}</h3>
                         </div>
                       </div>
                       
