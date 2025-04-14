@@ -11,16 +11,16 @@ export default function Experience() {
           <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">JPMorgan</h3>
-              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2023 - Present</p>
+              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2025 - Present</p>
               <p className="mb-4 flex-grow">
-                Software Engineer working on AI and machine learning solutions for financial services.
+                Software Engineer building cross-asset (EQ, IR, CMD, FX) Risk Management solutions on Athena.
               </p>
               <div className="mt-auto">
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full">
-                  AI/ML
+                  Risk Systems
                 </span>
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full ml-2">
-                  FinTech
+                  Real-Time
                 </span>
               </div>
             </div>
@@ -30,9 +30,9 @@ export default function Experience() {
           <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">Stealth Startup</h3>
-              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2022 - 2023</p>
+              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2024</p>
               <p className="mb-4 flex-grow">
-                Co-founder and lead developer building innovative AI products from concept to launch.
+                Lead developer building innovative AI product from concept to launch.
               </p>
               <div className="mt-auto">
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full">
@@ -49,16 +49,16 @@ export default function Experience() {
           <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">Bloomberg</h3>
-              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2020 - 2022</p>
+              <p className="text-sm mb-4 text-foreground/70 group-hover:text-background/70">2020 - 2024</p>
               <p className="mb-4 flex-grow">
-                Software Engineer developing financial data platforms and analytics tools.
+                Software Engineer building data ingestion pipelines and OTC derivatives pricing infrastructure.
               </p>
               <div className="mt-auto">
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full">
                   Data
                 </span>
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full ml-2">
-                  Analytics
+                  Pricing Infra
                 </span>
               </div>
             </div>
