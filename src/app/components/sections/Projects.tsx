@@ -8,42 +8,42 @@ const projects = [
     id: 1,
     title: "AI Coaching App",
     description: "An AI-powered coaching platform that provides personalized guidance and feedback.",
-    link: "https://example.com/ai-coaching",
+    link: "https://www.zera.co/",
     image: "/images/ai-coaching.jpg", // You'll need to add these images
   },
   {
     id: 2,
     title: "Insight System",
-    description: "A behavior change platform that provides actionable insights based on user data.",
-    link: "https://example.com/insight-system",
+    description: "A behavior change platform that provides psychological insights based on users' authorised data.",
+    link: null,
     image: "/images/insight-system.jpg",
   },
   {
     id: 3,
-    title: "Design Portfolio",
-    description: "A collection of UI/UX design projects showcasing creative solutions.",
-    link: "https://example.com/design-portfolio",
+    title: "Wokki.com",
+    description: "This very website you are on right now.",
+    link: "https://wokki.com",
     image: "/images/design-portfolio.jpg",
   },
   {
     id: 4,
-    title: "Data Visualization",
-    description: "Interactive data visualizations that make complex information accessible.",
-    link: "https://example.com/data-viz",
+    title: "Divination App",
+    description: "A digital divination tool that combines classical I Ching hexagram casting with LLM-powered interpretations.",
+    link: "https://xiaoliuyao.streamlit.app/",
     image: "/images/data-viz.jpg",
   },
   {
     id: 5,
-    title: "Mobile App",
-    description: "A cross-platform mobile application with seamless user experience.",
-    link: "https://example.com/mobile-app",
-    image: "/images/mobile-app.jpg",
+    title: "CallSense MVP",
+    description: "An MVP that leverages LLMs to analyze sales call transcripts, extracting objections, intent, and sentiment to enhance sales strategies.",
+    link: "https://glyphic.streamlit.app/",
+    image: "/images/sales-call-analytics.jpg",
   },
   {
     id: 6,
-    title: "Web Platform",
-    description: "A comprehensive web platform with advanced features and integrations.",
-    link: "https://example.com/web-platform",
+    title: "Financial Analysis",
+    description: "A concise and elegant script that automates a part of tedious and repetitive financial analysis processes for KPMG.",
+    link: "https://github.com/wokii/fa-automation/",
     image: "/images/web-platform.jpg",
   },
 ];
@@ -122,7 +122,7 @@ export default function Projects() {
                   <div className="h-full">
                     {/* Card front */}
                     <div 
-                      className={`absolute w-full h-full bg-foreground text-background p-8 flex items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-0' : 'opacity-100'}`}
+                      className={`absolute w-full h-full bg-foreground text-background p-8 flex items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
                       onClick={() => toggleCard(project.id)}
                     >
                       <div className="text-center">
@@ -149,20 +149,22 @@ export default function Projects() {
                     
                     {/* Card back */}
                     <div 
-                      className={`absolute w-full h-full bg-background border-2 border-foreground p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-100' : 'opacity-0'}`}
+                      className={`absolute w-full h-full bg-background border-2 border-foreground p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
                       onClick={() => toggleCard(project.id)}
                     >
                       <div className="text-center">
                         <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
                         <p className="mb-6 text-base">{project.description}</p>
-                        <a 
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block px-4 py-2 border border-foreground hover:bg-foreground hover:text-background transition-colors"
-                        >
-                          View Project
-                        </a>
+                        {project.link && (
+                          <a 
+                            href={project.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block px-4 py-2 border border-foreground hover:bg-foreground hover:text-background transition-colors"
+                          >
+                            View Project
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
