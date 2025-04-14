@@ -22,7 +22,7 @@ const projects = [
   {
     id: 3,
     title: "Wokki.com",
-    description: "This very website you are on right now.",
+    description: "This very website you are on right now. Click to flip back.",
     link: "https://wokki.com",
     image: "/images/design-portfolio.jpg",
   },
