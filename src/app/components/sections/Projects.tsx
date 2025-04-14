@@ -41,7 +41,7 @@ const projects = [
   },
   {
     id: 6,
-    title: "Financial Analysis Automation",
+    title: "FA Automation",
     description: "A concise and elegant script that automates a part of tedious and repetitive financial analysis processes for KPMG.",
     link: "https://github.com/wokii/fa-automation/",
     image: "/images/web-platform.jpg",
