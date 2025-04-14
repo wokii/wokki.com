@@ -112,21 +112,25 @@ export default function Home() {
             <div>
               <h3 className="text-2xl mb-4">Contact</h3>
               <p className="mb-2">
-                <a href="mailto:hello@example.com" className="underline hover:text-accent transition-colors">
-                  hello@example.com
+                <a href="mailto:wokkiacross@gmail.com" className="underline hover:text-accent transition-colors">
+                  wokkiacross@gmail.com
                 </a>
               </p>
               <p>
-                <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                <a href="https://github.com/wokii" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
                   GitHub
                 </a>
                 {" • "}
-                <a href="https://www.linkedin.com/in/christine-hui-5697b2270/" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
-                  My Wife&apos;s LinkedIn, She does marketing and is open to jobs.
+                <a href="https://www.linkedin.com/in/wokki/" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  LinkedIn
                 </a>
                 {" • "}
-                <a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
-                  Twitter
+                <a href="https://www.linkedin.com/in/christine-hui-5697b2270/" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  My Girlfriend&apos;s LinkedIn, She does marketing and is open to jobs.
+                </a>
+                {" • "}
+                <a href="https://x.com/hanwokki" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent transition-colors">
+                  X
                 </a>
               </p>
             </div>
