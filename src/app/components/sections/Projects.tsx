@@ -54,7 +54,7 @@ const projects = [
 
 export default function Projects() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [flippedCards, setFlippedCards] = useState<number[]>([]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([3]);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
