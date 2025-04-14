@@ -23,8 +23,8 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <Link href="#work" className="hover:text-accent transition-colors relative group py-1">
-            Work
+          <Link href="#projects" className="hover:text-accent transition-colors relative group py-1">
+            Projects
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
           </Link>
           <Link href="#writing" className="hover:text-accent transition-colors relative group py-1">
@@ -68,11 +68,11 @@ export default function Header() {
         <div className="md:hidden bg-background p-4 border-b border-foreground/10">
           <nav className="flex flex-col space-y-4">
             <Link 
-              href="#work" 
+              href="#projects" 
               className="hover:text-accent transition-colors relative group py-1"
               onClick={() => setIsMenuOpen(false)}
             >
-              Work
+              Projects
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
             </Link>
             <Link 

@@ -48,7 +48,7 @@ const projects = [
   },
 ];
 
-export default function Work() {
+export default function Projects() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [flippedCards, setFlippedCards] = useState<number[]>([]);
 
@@ -80,9 +80,9 @@ export default function Work() {
   };
 
   return (
-    <section id="work" className="min-h-screen py-16 border-t border-foreground flex items-center">
+    <section id="projects" className="min-h-screen py-16 border-t border-foreground flex items-center">
       <div className="container mx-auto px-4">
-        <h2 className="text-6xl font-bold mb-12">WORK</h2>
+        <h2 className="text-6xl font-bold mb-12">PROJECTS</h2>
         
         {/* Main container with navigation buttons */}
         <div className="relative">
@@ -130,7 +130,6 @@ export default function Work() {
                       <div className="card-front absolute w-full h-full backface-hidden bg-foreground text-background p-8 flex items-center justify-center">
                         <div className="text-center">
                           <h3 className="text-3xl font-bold mb-4">{project.title}</h3>
-                          <p className="text-sm opacity-80">Click to reveal</p>
                         </div>
                       </div>
                       

@@ -25,7 +25,7 @@ export default function Hero() {
           <p className="text-xl">I build AI products that fuse function with form.</p>
         </div>
         <div className="mt-8 flex gap-4">
-          <a href="#work" className="border border-foreground px-6 py-3 hover:bg-foreground hover:text-background transition-colors">
+          <a href="#projects" className="border border-foreground px-6 py-3 hover:bg-foreground hover:text-background transition-colors">
             Explore My Work
           </a>
           <a href="#about" className="border border-foreground px-6 py-3 hover:bg-foreground hover:text-background transition-colors">
