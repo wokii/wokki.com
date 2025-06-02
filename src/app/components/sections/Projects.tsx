@@ -8,16 +8,18 @@ const projects = [
     title: "AI Coaching App",
     description:
       "An AI-powered coaching platform that provides personalized guidance and feedback.",
-    link: "https://www.zera.co/",
+    link: "A personal AI companion using Eleven Labs voice cloning and LLMs to provide emotional support on demand.",
     image: "/images/ai-coaching.jpg", // You'll need to add these images
+    background: null,
   },
   {
     id: 2,
-    title: "Insight System",
+    title: "Digital Twin",
     description:
-      "A behavior change platform that provides psychological insights based on users' authorised data.",
-    link: null,
+      "An digital twin of myself, that provides on-demand emotional support to my girlfriend Christine. Powered by LLM and Elevanlab voice cloning.",
+    link: "https://christine.wokki.com",
     image: "/images/insight-system.jpg",
+    background: "HEART",
   },
   {
     id: 3,
@@ -25,6 +27,7 @@ const projects = [
     description: "This very website you are on right now. Click to flip back.",
     link: "https://wokki.com",
     image: "/images/design-portfolio.jpg",
+    background: null,
   },
   {
     id: 4,
@@ -33,6 +36,7 @@ const projects = [
       "A digital divination tool that combines classical I Ching hexagram casting with LLM-powered interpretations.",
     link: "https://xiaoliuyao.streamlit.app/",
     image: "/images/data-viz.jpg",
+    background: null,
   },
   {
     id: 5,
@@ -41,6 +45,7 @@ const projects = [
       "An MVP that leverages LLMs to analyze sales call transcripts, extracting objections, intent, and sentiment to enhance sales strategies.",
     link: "https://glyphic.streamlit.app/",
     image: "/images/sales-call-analytics.jpg",
+    background: null,
   },
   {
     id: 6,
@@ -49,6 +54,16 @@ const projects = [
       "A concise and elegant script that automates a part of tedious and repetitive financial analysis processes for KPMG.",
     link: "https://github.com/wokii/fa-automation/",
     image: "/images/web-platform.jpg",
+    background: null,
+  },
+  {
+    id: 7,
+    title: "Insight System",
+    description:
+      "A behavior change platform that provides psychological insights based on users' authorised data.",
+    link: null,
+    image: "/images/insight-system.jpg",
+    background: null,
   },
 ];
 
@@ -182,10 +197,21 @@ export default function Projects() {
 
                     {/* Card back */}
                     <div
-                      className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                      className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? "opacity-100" : "opacity-0 pointer-events-none"} ${project.background ? "relative" : ""}`}
                       onClick={() => toggleCard(project.id)}
                     >
-                      <div className="text-center">
+                      {project.background === "HEART" && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <svg
+                            viewBox="0 0 24 24"
+                            fill="red"
+                            className="w-full h-full opacity-20"
+                          >
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                          </svg>
+                        </div>
+                      )}
+                      <div className="text-center relative z-10">
                         <h3 className="text-2xl md:text-3xl font-bold mb-4">
                           {project.title}
                         </h3>

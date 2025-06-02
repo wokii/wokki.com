@@ -22,8 +22,8 @@ export default function Experience() {
                 2025 - Present
               </p>
               <p className="mb-4 flex-grow">
-                Software Engineer building cross-asset (EQ, IR, CMD, FX) Risk
-                Management solutions on Athena.
+                Quant Dev building cross-asset (EQ, IR, CMD, FX) Risk
+                Management solutions on Athena for the Margin Trading desk.
               </p>
               <div className="mt-auto">
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full">
