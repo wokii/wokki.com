@@ -27,6 +27,7 @@ export default function Hero() {
           </div>
         </div>
         <div className="mt-4">
+          
           <p className="text-xl">
             I build AI products that fuse function with form.
           </p>

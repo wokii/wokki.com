@@ -21,6 +21,8 @@ const projects = [
     link: "A personal AI companion using Eleven Labs voice cloning and LLMs to provide emotional support on demand.",
     image: "/images/ai-coaching.jpg", // You'll need to add these images
     background: null,
+    cardSuit: "♣",
+    cardRank: "A",
   },
   {
     id: 2,
@@ -30,6 +32,8 @@ const projects = [
     link: "https://christine.wokki.com",
     image: "/images/insight-system.jpg",
     background: "HEART",
+    cardSuit: "♥",
+    cardRank: "Q",
   },
   {
     id: 3,
@@ -38,6 +42,8 @@ const projects = [
     link: "https://wokki.com",
     image: "/images/design-portfolio.jpg",
     background: null,
+    cardSuit: "♠",
+    cardRank: "A",
   },
   {
     id: 4,
@@ -47,6 +53,8 @@ const projects = [
     link: "https://xiaoliuyao.streamlit.app/",
     image: "/images/data-viz.jpg",
     background: null,
+    cardSuit: "♦",
+    cardRank: "J",
   },
   {
     id: 5,
@@ -79,7 +87,7 @@ const projects = [
 
 export default function Projects() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [flippedCards, setFlippedCards] = useState<number[]>([3]);
+  const [flippedCards, setFlippedCards] = useState<number[]>([2, 3]);
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -173,7 +181,7 @@ export default function Projects() {
               {projects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex-none w-[90vw] md:w-80 h-96 snap-center relative"
+                  className="flex-none w-[90vw] md:w-72 h-96 snap-center relative"
                 >
                   <div className="h-full">
                     {/* Card front */}
@@ -210,6 +218,18 @@ export default function Projects() {
                       className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? "opacity-100" : "opacity-0 pointer-events-none"} ${project.background ? "relative" : ""}`}
                       onClick={() => toggleCard(project.id)}
                     >
+                      {project.cardSuit && project.cardRank && (
+                        <>
+                          <div className="absolute top-4 left-4 flex flex-col items-center text-3xl font-bold">
+                            <span className={project.cardSuit === "♥" || project.cardSuit === "♦" ? "text-red-500" : ""}>{project.cardRank}</span>
+                            <span className={project.cardSuit === "♥" || project.cardSuit === "♦" ? "text-red-500" : ""}>{project.cardSuit}</span>
+                          </div>
+                          <div className="absolute bottom-4 right-4 flex flex-col items-center text-3xl font-bold transform rotate-180">
+                            <span className={project.cardSuit === "♥" || project.cardSuit === "♦" ? "text-red-500" : ""}>{project.cardRank}</span>
+                            <span className={project.cardSuit === "♥" || project.cardSuit === "♦" ? "text-red-500" : ""}>{project.cardSuit}</span>
+                          </div>
+                        </>
+                      )}
                       {project.background === "HEART" && (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <svg

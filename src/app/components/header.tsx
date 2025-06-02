@@ -15,8 +15,8 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="#hero" className="font-bold text-xl relative group">
-            <span className="text-foreground group-hover:text-accent transition-colors">H</span>
-            <span className="text-accent group-hover:text-foreground transition-colors">W</span>
+            <span className="text-foreground group-hover:text-accent transition-colors">I'm </span>
+            <span className="text-accent group-hover:text-foreground transition-colors">Wokki</span>
             <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
           </Link>
         </div>
