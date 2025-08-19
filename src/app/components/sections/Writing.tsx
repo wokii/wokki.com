@@ -9,7 +9,7 @@ export default function Writing() {
       <div className="container mx-auto px-4">
         <h2 className="text-4xl md:text-6xl font-bold mb-8">WRITING</h2>
         <article>
-          <h3 className="text-3xl">Latest Post Title</h3>
+          <h3 className="text-3xl">Nothing here yet.</h3>
           <p>April 24, 2024</p>
         </article>
       </div>
