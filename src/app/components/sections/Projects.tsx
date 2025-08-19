@@ -294,7 +294,7 @@ export default function Projects() {
                             href={project.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-block px-4 py-2 border border-foreground hover:bg-foreground hover:text-background transition-colors"
+                            className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-foreground hover:text-background transition-colors"
                           >
                             View Project
                           </a>
