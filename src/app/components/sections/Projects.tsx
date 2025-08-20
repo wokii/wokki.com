@@ -1,6 +1,14 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 
+// Tunable layout constants
+const COVERAGE_RATIO = 0.3; // portion of a card that remains covered
+const SHIFT_RATIO = 1 - COVERAGE_RATIO; // translate by 70% of width
+const SCALE_STEP = 0.02; // scale reduction per layer
+const MIN_SCALE = 0.6; // never scale smaller than this
+const HOVER_PULL_PADDING = 24; // extra space to fully reveal on hover
+const HOVER_SCALE_BUMP = 0.05; // additional scale on hover
+
 // Background configurations
 const backgroundConfigs = {
   HEART: {
@@ -102,7 +110,7 @@ export default function Projects() {
       setBaseWidth(measuredWidth);
       setStageWidth(stageW);
 
-      const shift = measuredWidth * 0.7; // 30% covered => 70% shift
+      const shift = measuredWidth * SHIFT_RATIO;
       if (measuredWidth > 0 && shift > 0 && stageW > 0) {
         const maxVisible = Math.floor((stageW - measuredWidth) / shift) + 1;
         const clamped = Math.max(1, Math.min(projects.length, maxVisible));
@@ -114,13 +122,7 @@ export default function Projects() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const horizontalShiftPx = Math.round(baseWidth * 0.7); // 30% covered => 70% shift
-  const scaleStep = 0.02;
-
-  const deckWidth =
-    baseWidth && horizontalShiftPx
-      ? baseWidth + horizontalShiftPx * (visibleCount - 1)
-      : 0;
+  const horizontalShiftPx = Math.round(baseWidth * SHIFT_RATIO);
 
   const prevCard = () =>
     setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
@@ -150,7 +152,7 @@ export default function Projects() {
           <div className="hidden md:flex items-center justify-center">
             <button
               onClick={prevCard}
-              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
+              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
               aria-label="Previous project"
             >
               <svg
@@ -171,7 +173,7 @@ export default function Projects() {
           {/* Stage (measured) */}
           <div
             ref={stageRef}
-            className="relative h-96"
+            className="relative h-96 overflow-visible"
             onMouseLeave={() => setHoveredCardId(null)}
           >
             {/* width measure (hidden) */}
@@ -182,11 +184,14 @@ export default function Projects() {
 
             {/* Stacked deck container */}
             <div
-              className="relative h-96"
+              className="relative h-96 overflow-visible"
               style={{
                 width:
                   baseWidth && horizontalShiftPx
-                    ? Math.min(deckWidth, stageWidth || deckWidth)
+                    ? Math.min(
+                        baseWidth + horizontalShiftPx * (visibleCount - 1),
+                        stageWidth || baseWidth,
+                      )
                     : undefined,
               }}
             >
@@ -198,11 +203,14 @@ export default function Projects() {
 
                 const baseTranslateX = offset * horizontalShiftPx;
                 const overlap = Math.max(0, baseWidth - horizontalShiftPx);
-                const hoverPullPx = overlap + 24; // fully reveal + padding
+                const hoverPullPx = overlap + HOVER_PULL_PADDING; // fully reveal + padding
                 const translateX =
                   baseTranslateX + (isHovered ? hoverPullPx : 0);
-                const baseScale = 1 - offset * scaleStep;
-                const scale = Math.max(0.6, baseScale + (isHovered ? 0.05 : 0));
+                const baseScale = 1 - offset * SCALE_STEP;
+                const scale = Math.max(
+                  MIN_SCALE,
+                  baseScale + (isHovered ? HOVER_SCALE_BUMP : 0),
+                );
 
                 return (
                   <div
@@ -346,7 +354,7 @@ export default function Projects() {
                       <div
                         className="absolute top-0 right-full h-full"
                         style={{
-                          width: hoverPullPx,
+                          width: overlap + HOVER_PULL_PADDING,
                           cursor: "default",
                           pointerEvents: "none",
                         }}
@@ -363,7 +371,7 @@ export default function Projects() {
           <div className="hidden md:flex items-center justify-center">
             <button
               onClick={nextCard}
-              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
+              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
               aria-label="Next project"
             >
               <svg
