@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Background configurations
 const backgroundConfigs = {
@@ -86,29 +86,47 @@ const projects = [
 ];
 
 export default function Projects() {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [flippedCards, setFlippedCards] = useState<number[]>([2, 3]);
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [visibleCount, setVisibleCount] = useState<number>(7);
+  const measureRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const [baseWidth, setBaseWidth] = useState<number>(0);
+  const [stageWidth, setStageWidth] = useState<number>(0);
+  const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
 
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: -400,
-        behavior: "smooth",
-      });
-    }
-  };
+  useEffect(() => {
+    const update = () => {
+      const measuredWidth = measureRef.current?.offsetWidth ?? 0;
+      const stageW = stageRef.current?.offsetWidth ?? 0;
+      setBaseWidth(measuredWidth);
+      setStageWidth(stageW);
 
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollBy({
-        left: 400,
-        behavior: "smooth",
-      });
-    }
-  };
+      const shift = measuredWidth * 0.7; // 30% covered => 70% shift
+      if (measuredWidth > 0 && shift > 0 && stageW > 0) {
+        const maxVisible = Math.floor((stageW - measuredWidth) / shift) + 1;
+        const clamped = Math.max(1, Math.min(projects.length, maxVisible));
+        setVisibleCount(clamped);
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const horizontalShiftPx = Math.round(baseWidth * 0.7); // 30% covered => 70% shift
+  const scaleStep = 0.02;
+
+  const deckWidth =
+    baseWidth && horizontalShiftPx
+      ? baseWidth + horizontalShiftPx * (visibleCount - 1)
+      : 0;
+
+  const prevCard = () =>
+    setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
+  const nextCard = () => setActiveIndex((i) => (i + 1) % projects.length);
 
   const toggleCard = (id: number) => {
-    console.log("Toggling card:", id);
     setFlippedCards((prev) =>
       prev.includes(id)
         ? prev.filter((cardId) => cardId !== id)
@@ -126,15 +144,15 @@ export default function Projects() {
           PROJECTS
         </h2>
 
-        {/* Main container with navigation buttons */}
-        <div className="relative">
-          {/* Navigation buttons - hidden on mobile */}
-          <button
-            onClick={scrollLeft}
-            className="hidden md:block absolute -left-16 top-1/2 -translate-y-1/2 z-10 bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
-            aria-label="Scroll left"
-          >
-            <div className="flex items-center justify-center w-full h-full">
+        {/* Grid: left button | deck stage | right button */}
+        <div className="grid grid-cols-[64px_1fr_64px] items-center">
+          {/* Left button */}
+          <div className="hidden md:flex items-center justify-center">
+            <button
+              onClick={prevCard}
+              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
+              aria-label="Previous project"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -147,15 +165,207 @@ export default function Projects() {
               >
                 <path d="m14 7-5 5 5 5" />
               </svg>
-            </div>
-          </button>
+            </button>
+          </div>
 
-          <button
-            onClick={scrollRight}
-            className="hidden md:block absolute -right-16 top-1/2 -translate-y-1/2 z-10 bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
-            aria-label="Scroll right"
+          {/* Stage (measured) */}
+          <div
+            ref={stageRef}
+            className="relative h-96"
+            onMouseLeave={() => setHoveredCardId(null)}
           >
-            <div className="flex items-center justify-center w-full h-full">
+            {/* width measure (hidden) */}
+            <div
+              ref={measureRef}
+              className="w-[90vw] md:w-72 h-0 invisible pointer-events-none"
+            />
+
+            {/* Stacked deck container */}
+            <div
+              className="relative h-96"
+              style={{
+                width:
+                  baseWidth && horizontalShiftPx
+                    ? Math.min(deckWidth, stageWidth || deckWidth)
+                    : undefined,
+              }}
+            >
+              {projects.map((project, idx) => {
+                const total = projects.length;
+                const offset = (idx - activeIndex + total) % total; // 0 is top/left-most
+                const isVisible = offset < visibleCount; // show top N cards
+                const isHovered = hoveredCardId === project.id;
+
+                const baseTranslateX = offset * horizontalShiftPx;
+                const overlap = Math.max(0, baseWidth - horizontalShiftPx);
+                const hoverPullPx = overlap + 24; // fully reveal + padding
+                const translateX =
+                  baseTranslateX + (isHovered ? hoverPullPx : 0);
+                const baseScale = 1 - offset * scaleStep;
+                const scale = Math.max(0.6, baseScale + (isHovered ? 0.05 : 0));
+
+                return (
+                  <div
+                    key={project.id}
+                    className="absolute top-0 left-0 w-[90vw] md:w-72 h-96 transition-all duration-300 ease-out origin-left"
+                    style={{
+                      transform: `translate(${translateX}px, 0) scale(${scale})`,
+                      zIndex: total - offset,
+                      opacity: isVisible ? 1 : 0,
+                    }}
+                    onMouseEnter={() => setHoveredCardId(project.id)}
+                  >
+                    <div className="h-full">
+                      {/* Card front */}
+                      <div
+                        className={`absolute w-full h-full bg-foreground text-background p-6 md:p-8 flex items-center justify-center transition-opacity duration-300 ${
+                          flippedCards.includes(project.id)
+                            ? "opacity-0 pointer-events-none"
+                            : "opacity-100"
+                        }`}
+                        onClick={() => toggleCard(project.id)}
+                      >
+                        <div className="text-center">
+                          <div className="mb-4 md:mb-6 w-12 h-12 md:w-16 md:h-16 mx-auto">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-full h-full text-background"
+                            >
+                              <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                                fill="currentColor"
+                              />
+                              <path
+                                d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
+                                fill="currentColor"
+                              />
+                            </svg>
+                          </div>
+                          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                            {project.title}
+                          </h3>
+                        </div>
+                      </div>
+
+                      {/* Card back */}
+                      <div
+                        className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${
+                          flippedCards.includes(project.id)
+                            ? "opacity-100"
+                            : "opacity-0 pointer-events-none"
+                        } ${project.background ? "relative" : ""}`}
+                        onClick={() => toggleCard(project.id)}
+                      >
+                        {project.cardSuit && project.cardRank && (
+                          <>
+                            <div className="absolute top-4 left-4 flex flex-col items-center text-3xl font-bold">
+                              <span
+                                className={
+                                  project.cardSuit === "♥" ||
+                                  project.cardSuit === "♦"
+                                    ? "text-red-500"
+                                    : ""
+                                }
+                              >
+                                {project.cardRank}
+                              </span>
+                              <span
+                                className={
+                                  project.cardSuit === "♥" ||
+                                  project.cardSuit === "♦"
+                                    ? "text-red-500"
+                                    : ""
+                                }
+                              >
+                                {project.cardSuit}
+                              </span>
+                            </div>
+                            <div className="absolute bottom-4 right-4 flex flex-col items-center text-3xl font-bold transform rotate-180">
+                              <span
+                                className={
+                                  project.cardSuit === "♥" ||
+                                  project.cardSuit === "♦"
+                                    ? "text-red-500"
+                                    : ""
+                                }
+                              >
+                                {project.cardRank}
+                              </span>
+                              <span
+                                className={
+                                  project.cardSuit === "♥" ||
+                                  project.cardSuit === "♦"
+                                    ? "text-red-500"
+                                    : ""
+                                }
+                              >
+                                {project.cardSuit}
+                              </span>
+                            </div>
+                          </>
+                        )}
+                        {project.background === "HEART" && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill={backgroundConfigs.HEART.color}
+                              className="w-full h-full"
+                              style={{
+                                opacity: backgroundConfigs.HEART.opacity,
+                                width: backgroundConfigs.HEART.size,
+                                height: backgroundConfigs.HEART.size,
+                              }}
+                            >
+                              <path d={backgroundConfigs.HEART.path} />
+                            </svg>
+                          </div>
+                        )}
+                        <div className="text-center relative z-10">
+                          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                            {project.title}
+                          </h3>
+                          <p className="mb-6 text-sm md:text-base">
+                            {project.description}
+                          </p>
+                          {project.link && (
+                            <a
+                              href={project.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-foreground hover:text-background transition-colors"
+                            >
+                              View Project
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {isHovered && (
+                      <div
+                        className="absolute top-0 right-full h-full"
+                        style={{
+                          width: hoverPullPx,
+                          cursor: "default",
+                          pointerEvents: "none",
+                        }}
+                        aria-hidden
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Right button */}
+          <div className="hidden md:flex items-center justify-center">
+            <button
+              onClick={nextCard}
+              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors"
+              aria-label="Next project"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -168,143 +378,7 @@ export default function Projects() {
               >
                 <path d="m10 7 5 5-5 5" />
               </svg>
-            </div>
-          </button>
-
-          {/* Cards container with horizontal scroll */}
-          <div
-            ref={scrollContainerRef}
-            className="overflow-x-auto snap-x snap-mandatory scrollbar-hide"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            <div className="flex gap-4 md:gap-8 pb-6">
-              {projects.map((project) => (
-                <div
-                  key={project.id}
-                  className="flex-none w-[90vw] md:w-72 h-96 snap-center relative"
-                >
-                  <div className="h-full">
-                    {/* Card front */}
-                    <div
-                      className={`absolute w-full h-full bg-foreground text-background p-6 md:p-8 flex items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? "opacity-0 pointer-events-none" : "opacity-100"}`}
-                      onClick={() => toggleCard(project.id)}
-                    >
-                      <div className="text-center">
-                        <div className="mb-4 md:mb-6 w-12 h-12 md:w-16 md:h-16 mx-auto">
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="w-full h-full text-background"
-                          >
-                            <path
-                              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
-                              fill="currentColor"
-                            />
-                            <path
-                              d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                          {project.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    {/* Card back */}
-                    <div
-                      className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${flippedCards.includes(project.id) ? "opacity-100" : "opacity-0 pointer-events-none"} ${project.background ? "relative" : ""}`}
-                      onClick={() => toggleCard(project.id)}
-                    >
-                      {project.cardSuit && project.cardRank && (
-                        <>
-                          <div className="absolute top-4 left-4 flex flex-col items-center text-3xl font-bold">
-                            <span
-                              className={
-                                project.cardSuit === "♥" ||
-                                project.cardSuit === "♦"
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {project.cardRank}
-                            </span>
-                            <span
-                              className={
-                                project.cardSuit === "♥" ||
-                                project.cardSuit === "♦"
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {project.cardSuit}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-4 right-4 flex flex-col items-center text-3xl font-bold transform rotate-180">
-                            <span
-                              className={
-                                project.cardSuit === "♥" ||
-                                project.cardSuit === "♦"
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {project.cardRank}
-                            </span>
-                            <span
-                              className={
-                                project.cardSuit === "♥" ||
-                                project.cardSuit === "♦"
-                                  ? "text-red-500"
-                                  : ""
-                              }
-                            >
-                              {project.cardSuit}
-                            </span>
-                          </div>
-                        </>
-                      )}
-                      {project.background === "HEART" && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <svg
-                            viewBox="0 0 24 24"
-                            fill={backgroundConfigs.HEART.color}
-                            className="w-full h-full"
-                            style={{
-                              opacity: backgroundConfigs.HEART.opacity,
-                              width: backgroundConfigs.HEART.size,
-                              height: backgroundConfigs.HEART.size,
-                            }}
-                          >
-                            <path d={backgroundConfigs.HEART.path} />
-                          </svg>
-                        </div>
-                      )}
-                      <div className="text-center relative z-10">
-                        <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                          {project.title}
-                        </h3>
-                        <p className="mb-6 text-sm md:text-base">
-                          {project.description}
-                        </p>
-                        {project.link && (
-                          <a
-                            href={project.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-foreground hover:text-background transition-colors"
-                          >
-                            View Project
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            </button>
           </div>
         </div>
       </div>

@@ -10,11 +10,11 @@ export default function Hero() {
       <div className="container mx-auto px-4">
         <div className="relative">
           <h1 className="text-4xl md:text-6xl font-bold z-10 relative">
-            Software Engineer.
+            Software Engineer
             <br />
-            Systems Thinker.
+            Systems Thinker
             <br />
-            Aesthetic Explorer.
+            Aesthetic Explorer
           </h1>
           <div className="absolute right-0 top-0 -z-10">
             <Image
@@ -27,7 +27,6 @@ export default function Hero() {
           </div>
         </div>
         <div className="mt-4">
-          
           <p className="text-xl">
             I build AI products that fuse function with form.
           </p>
