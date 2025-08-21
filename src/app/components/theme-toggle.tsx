@@ -16,13 +16,20 @@ export default function ThemeToggle() {
     return null;
   }
 
+  const resolvedTheme =
+    theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme;
+
   return (
     <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
       className="fixed bottom-4 right-4 p-3 rounded-full bg-foreground text-background z-[100]"
       aria-label="Toggle theme"
     >
-      {theme === "light" ? (
+      {resolvedTheme === "light" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -56,4 +63,4 @@ export default function ThemeToggle() {
       )}
     </button>
   );
-} 
+}
