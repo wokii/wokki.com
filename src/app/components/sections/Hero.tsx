@@ -7,7 +7,7 @@ export default function Hero() {
       id="hero"
       className="min-h-screen pt-24 pb-16 relative flex items-center"
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 relative">
         <div className="relative">
           <h1 className="text-4xl md:text-6xl font-bold z-10 relative">
             Software Engineer
@@ -16,15 +16,6 @@ export default function Hero() {
             <br />
             Aesthetic Explorer
           </h1>
-          <div className="absolute right-0 top-0 -z-10">
-            <Image
-              src="/accent-circle.svg"
-              alt=""
-              width={250}
-              height={250}
-              aria-hidden="true"
-            />
-          </div>
         </div>
         <div className="mt-4">
           <p className="text-xl">
@@ -44,6 +35,17 @@ export default function Hero() {
           >
             About Me
           </a>
+        </div>
+        <div className="absolute right-4 md:right-16 bottom-0 -z-10 pointer-events-none select-none">
+          <Image
+            src="/hero.png"
+            alt=""
+            width={560}
+            height={560}
+            className="w-[240px] md:w-[420px] lg:w-[560px] h-auto drop-shadow-lg"
+            priority
+            aria-hidden="true"
+          />
         </div>
       </div>
     </section>
