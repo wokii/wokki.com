@@ -103,6 +103,7 @@ export default function Projects() {
   const [baseWidth, setBaseWidth] = useState<number>(0);
   const [stageWidth, setStageWidth] = useState<number>(0);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
+  const [order, setOrder] = useState<number[]>(projects.map((p) => p.id));
 
   useEffect(() => {
     const update = () => {
@@ -130,6 +131,18 @@ export default function Projects() {
     setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
   const nextCard = () => setActiveIndex((i) => (i + 1) % projects.length);
 
+  const shuffleDeck = () => {
+    setOrder((prev) => {
+      const shuffled = [...prev];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    });
+    setActiveIndex(0);
+  };
+
   const toggleCard = (id: number) => {
     setFlippedCards((prev) =>
       prev.includes(id)
@@ -141,7 +154,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="min-h-screen py-8 md:py-16 border-t border-foreground flex items-center"
+      className="min-h-screen py-8 md:py-16 border-t border-foreground flex flex-col justify-center"
     >
       <div className="container mx-auto px-4">
         <h2 className="text-4xl md:text-6xl font-bold mb-8 md:mb-12">
@@ -197,9 +210,10 @@ export default function Projects() {
                     : undefined,
               }}
             >
-              {projects.map((project, idx) => {
+              {projects.map((project) => {
                 const total = projects.length;
-                const offset = (idx - activeIndex + total) % total; // 0 is top/left-most
+                const position = order.indexOf(project.id);
+                const offset = (position - activeIndex + total) % total; // 0 is top/left-most
                 const isVisible = offset < visibleCount; // show top N cards
                 const isHovered = hoveredCardId === project.id;
 
@@ -367,6 +381,16 @@ export default function Projects() {
                 );
               })}
             </div>
+          </div>
+          {/* Shuffle button */}
+          <div className="mt-6 flex justify-center col-start-2 row-start-2">
+            <button
+              onClick={shuffleDeck}
+              className="bg-foreground text-background px-4 py-2 rounded-full shadow-lg hover:bg-accent transition-colors"
+              aria-label="Shuffle projects"
+            >
+              Shuffle
+            </button>
           </div>
 
           {/* Right button */}
