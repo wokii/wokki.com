@@ -146,6 +146,7 @@ export default function Projects() {
 
   const overlap = Math.max(0, baseWidth - shiftWithGapPx);
   const hoverPullPx = overlap + HOVER_PULL_PADDING;
+  const hoverEnabled = visibleCount > 1;
 
   const prevCard = () =>
     setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
@@ -235,7 +236,7 @@ export default function Projects() {
                 const position = order.indexOf(project.id);
                 const offset = (position - activeIndex + total) % total; // 0 is top/left-most
                 const isVisible = offset < visibleCount; // show top N cards
-                const isHovered = hoveredCardId === project.id;
+                const isHovered = hoverEnabled && hoveredCardId === project.id;
                 const bgKey = project.background;
                 const bg = bgKey ? backgroundConfigs[bgKey] : undefined;
 
@@ -265,7 +266,11 @@ export default function Projects() {
                       zIndex: total - offset,
                       opacity: isVisible ? 1 : 0,
                     }}
-                    onMouseEnter={() => setHoveredCardId(project.id)}
+                    onMouseEnter={
+                      hoverEnabled
+                        ? () => setHoveredCardId(project.id)
+                        : undefined
+                    }
                     showHoverSpacer={isHovered}
                     hoverSpacerStyle={{
                       width: overlap + HOVER_PULL_PADDING,
