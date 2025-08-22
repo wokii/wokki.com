@@ -11,9 +11,11 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div>
             <p className="text-xl mb-4">
-              I&apos;m a software engineer and systems thinker passionate about
-              building AI products that merge elegant design with powerful
-              functionality.
+              I&apos;m a{" "}
+              <span className="text-accent font-bold">Software Engineer</span>{" "}
+              and <span className="text-accent font-bold">System Thinker</span>{" "}
+              passionate about building AI products that merge elegant design
+              with powerful functionality.
             </p>
             <p className="text-xl">
               With experience across fintech and startups, I bring a unique

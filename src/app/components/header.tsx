@@ -20,12 +20,6 @@ export default function Header() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("accentColor");
-    if (saved) {
-      document.documentElement.style.setProperty("--accent", saved);
-      setAccentColor(saved);
-      return;
-    }
     const computed = getComputedStyle(document.documentElement)
       .getPropertyValue("--accent")
       .trim();
@@ -36,7 +30,6 @@ export default function Header() {
 
   const applyAccent = (hex: string) => {
     document.documentElement.style.setProperty("--accent", hex);
-    localStorage.setItem("accentColor", hex);
     setAccentColor(hex);
     setIsColorPaletteOpen(false);
   };
