@@ -1,42 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
-  const [activeSection, setActiveSection] = useState<string>("hero");
-  const observerRef = useRef<IntersectionObserver | null>(null);
-
-  const hexToRgba = (hex: string, alpha: number) => {
-    const sanitized = hex.replace("#", "");
-    const full =
-      sanitized.length === 3
-        ? sanitized
-            .split("")
-            .map((c) => c + c)
-            .join("")
-        : sanitized;
-    const bigint = parseInt(full, 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  };
 
   useEffect(() => {
     const saved = localStorage.getItem("accentColor");
     if (saved) {
       document.documentElement.style.setProperty("--accent", saved);
-      document.documentElement.style.setProperty(
-        "--accent-veil-12",
-        hexToRgba(saved, 0.12),
-      );
-      document.documentElement.style.setProperty(
-        "--accent-veil-18",
-        hexToRgba(saved, 0.18),
-      );
       setAccentColor(saved);
       return;
     }
@@ -44,59 +18,15 @@ export default function Header() {
       .getPropertyValue("--accent")
       .trim();
     if (computed) {
-      document.documentElement.style.setProperty(
-        "--accent-veil-12",
-        hexToRgba(computed, 0.12),
-      );
-      document.documentElement.style.setProperty(
-        "--accent-veil-18",
-        hexToRgba(computed, 0.18),
-      );
       setAccentColor(computed);
     }
   }, []);
 
   const applyAccent = (hex: string) => {
     document.documentElement.style.setProperty("--accent", hex);
-    document.documentElement.style.setProperty(
-      "--accent-veil-12",
-      hexToRgba(hex, 0.12),
-    );
-    document.documentElement.style.setProperty(
-      "--accent-veil-18",
-      hexToRgba(hex, 0.18),
-    );
     localStorage.setItem("accentColor", hex);
     setAccentColor(hex);
   };
-
-  // Observe sections to determine active nav item
-  useEffect(() => {
-    const sectionIds = ["hero", "projects", "writing", "experience", "about"];
-    const sections = sectionIds
-      .map((id) => document.getElementById(id))
-      .filter(Boolean) as HTMLElement[];
-    if (!sections.length) return;
-
-    observerRef.current?.disconnect();
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible.length > 0) {
-          setActiveSection(visible[0].target.id);
-        }
-      },
-      {
-        root: null,
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: [0, 0.25, 0.5, 0.75, 1],
-      },
-    );
-    sections.forEach((el) => observerRef.current?.observe(el));
-    return () => observerRef.current?.disconnect();
-  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -147,51 +77,31 @@ export default function Header() {
         </div>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-2">
+        <nav className="hidden md:flex items-center space-x-8">
           <Link
             href="#projects"
-            className="hover:text-accent transition-colors relative group py-1 rounded-md px-3"
-            style={
-              activeSection === "projects"
-                ? { backgroundColor: "var(--accent-veil-18)" }
-                : undefined
-            }
+            className="hover:text-accent transition-colors relative group py-1"
           >
             Projects
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
           </Link>
           <Link
             href="#writing"
-            className="hover:text-accent transition-colors relative group py-1 rounded-md px-3"
-            style={
-              activeSection === "writing"
-                ? { backgroundColor: "var(--accent-veil-18)" }
-                : undefined
-            }
+            className="hover:text-accent transition-colors relative group py-1"
           >
             Writing
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
           </Link>
           <Link
             href="#experience"
-            className="hover:text-accent transition-colors relative group py-1 rounded-md px-3"
-            style={
-              activeSection === "experience"
-                ? { backgroundColor: "var(--accent-veil-18)" }
-                : undefined
-            }
+            className="hover:text-accent transition-colors relative group py-1"
           >
             Experience
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
           </Link>
           <Link
             href="#about"
-            className="hover:text-accent transition-colors relative group py-1 rounded-md px-3"
-            style={
-              activeSection === "about"
-                ? { backgroundColor: "var(--accent-veil-18)" }
-                : undefined
-            }
+            className="hover:text-accent transition-colors relative group py-1"
           >
             About
             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
@@ -233,15 +143,10 @@ export default function Header() {
       {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-background p-4 border-b border-foreground/10">
-          <nav className="flex flex-col space-y-2">
+          <nav className="flex flex-col space-y-4">
             <Link
               href="#projects"
-              className="hover:text-accent transition-colors relative group py-2 rounded-md px-3"
-              style={
-                activeSection === "projects"
-                  ? { backgroundColor: "var(--accent-veil-12)" }
-                  : undefined
-              }
+              className="hover:text-accent transition-colors relative group py-1"
               onClick={() => setIsMenuOpen(false)}
             >
               Projects
@@ -249,12 +154,7 @@ export default function Header() {
             </Link>
             <Link
               href="#writing"
-              className="hover:text-accent transition-colors relative group py-2 rounded-md px-3"
-              style={
-                activeSection === "writing"
-                  ? { backgroundColor: "var(--accent-veil-12)" }
-                  : undefined
-              }
+              className="hover:text-accent transition-colors relative group py-1"
               onClick={() => setIsMenuOpen(false)}
             >
               Writing
@@ -262,12 +162,7 @@ export default function Header() {
             </Link>
             <Link
               href="#experience"
-              className="hover:text-accent transition-colors relative group py-2 rounded-md px-3"
-              style={
-                activeSection === "experience"
-                  ? { backgroundColor: "var(--accent-veil-12)" }
-                  : undefined
-              }
+              className="hover:text-accent transition-colors relative group py-1"
               onClick={() => setIsMenuOpen(false)}
             >
               Experience
@@ -275,12 +170,7 @@ export default function Header() {
             </Link>
             <Link
               href="#about"
-              className="hover:text-accent transition-colors relative group py-2 rounded-md px-3"
-              style={
-                activeSection === "about"
-                  ? { backgroundColor: "var(--accent-veil-12)" }
-                  : undefined
-              }
+              className="hover:text-accent transition-colors relative group py-1"
               onClick={() => setIsMenuOpen(false)}
             >
               About
