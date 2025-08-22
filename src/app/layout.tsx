@@ -15,8 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Han Wang | Software Engineer & Systems Thinker",
-  description: "Software Engineer. Systems Thinker. Aesthetic Explorer. I build AI products that fuse function with form.",
+  title:
+    "Han Wokki | Welcome to My Site | Software Engineer & Systems Thinker & Aesthetic Explorer",
+  description:
+    "Software Engineer. Systems Thinker. Aesthetic Explorer. I build AI products that fuse function with form.",
 };
 
 export default function RootLayout({
@@ -29,9 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
         <Script
           data-goatcounter="https://wokki.goatcounter.com/count"
           src="//gc.zgo.at/count.js"
