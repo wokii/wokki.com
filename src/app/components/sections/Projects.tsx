@@ -8,6 +8,7 @@ const SCALE_STEP = 0.02; // scale reduction per layer
 const MIN_SCALE = 0.6; // never scale smaller than this
 const HOVER_PULL_PADDING = 24; // extra space to fully reveal on hover
 const HOVER_SCALE_BUMP = 0.05; // additional scale on hover
+const CARD_GAP_PX = 12; // horizontal gap between cards for visual separation
 
 // Background configurations
 const backgroundConfigs = {
@@ -110,7 +111,7 @@ export default function Projects() {
       setBaseWidth(measuredWidth);
       setStageWidth(stageW);
 
-      const shift = measuredWidth * SHIFT_RATIO;
+      const shift = measuredWidth * SHIFT_RATIO + CARD_GAP_PX;
       if (measuredWidth > 0 && shift > 0 && stageW > 0) {
         const maxVisible = Math.floor((stageW - measuredWidth) / shift) + 1;
         const clamped = Math.max(1, Math.min(projects.length, maxVisible));
@@ -123,6 +124,7 @@ export default function Projects() {
   }, []);
 
   const horizontalShiftPx = Math.round(baseWidth * SHIFT_RATIO);
+  const shiftWithGapPx = horizontalShiftPx + CARD_GAP_PX;
 
   const prevCard = () =>
     setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
@@ -189,7 +191,7 @@ export default function Projects() {
                 width:
                   baseWidth && horizontalShiftPx
                     ? Math.min(
-                        baseWidth + horizontalShiftPx * (visibleCount - 1),
+                        baseWidth + shiftWithGapPx * (visibleCount - 1),
                         stageWidth || baseWidth,
                       )
                     : undefined,
@@ -201,8 +203,8 @@ export default function Projects() {
                 const isVisible = offset < visibleCount; // show top N cards
                 const isHovered = hoveredCardId === project.id;
 
-                const baseTranslateX = offset * horizontalShiftPx;
-                const overlap = Math.max(0, baseWidth - horizontalShiftPx);
+                const baseTranslateX = offset * shiftWithGapPx;
+                const overlap = Math.max(0, baseWidth - shiftWithGapPx);
                 const hoverPullPx = overlap + HOVER_PULL_PADDING; // fully reveal + padding
                 const translateX =
                   baseTranslateX + (isHovered ? hoverPullPx : 0);
@@ -215,7 +217,7 @@ export default function Projects() {
                 return (
                   <div
                     key={project.id}
-                    className="absolute top-0 left-0 w-[90vw] md:w-72 h-96 transition-all duration-300 ease-out origin-left"
+                    className="absolute top-0 left-0 w-[90vw] md:w-72 h-96 transition-all duration-300 ease-out origin-left drop-shadow-xl"
                     style={{
                       transform: `translate(${translateX}px, 0) scale(${scale})`,
                       zIndex: total - offset,
@@ -223,10 +225,10 @@ export default function Projects() {
                     }}
                     onMouseEnter={() => setHoveredCardId(project.id)}
                   >
-                    <div className="h-full">
+                    <div className="h-full rounded-[2rem] overflow-hidden ring-1 ring-background/30">
                       {/* Card front */}
                       <div
-                        className={`absolute w-full h-full bg-foreground text-background p-6 md:p-8 flex items-center justify-center transition-opacity duration-300 ${
+                        className={`absolute w-full h-full bg-foreground text-background p-6 md:p-8 flex items-center justify-center transition-opacity duration-300 rounded-[2rem] ${
                           flippedCards.includes(project.id)
                             ? "opacity-0 pointer-events-none"
                             : "opacity-100"
@@ -259,7 +261,7 @@ export default function Projects() {
 
                       {/* Card back */}
                       <div
-                        className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 ${
+                        className={`absolute w-full h-full bg-background border-2 border-foreground p-6 md:p-8 flex flex-col items-center justify-center transition-opacity duration-300 rounded-[2rem] ${
                           flippedCards.includes(project.id)
                             ? "opacity-100"
                             : "opacity-0 pointer-events-none"
