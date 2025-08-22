@@ -187,9 +187,9 @@ export default function Projects() {
           {/* Left button */}
           <div className="hidden md:flex items-center justify-center">
             <button
-              onClick={prevCard}
+              onClick={nextCard}
               className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
-              aria-label="Previous project"
+              aria-label="Next project"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -296,9 +296,9 @@ export default function Projects() {
           {/* Right button */}
           <div className="hidden md:flex items-center justify-center">
             <button
-              onClick={nextCard}
+              onClick={prevCard}
               className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
-              aria-label="Next project"
+              aria-label="Previous project"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
