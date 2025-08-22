@@ -3,9 +3,20 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+const colorOptions = [
+  "#ef4444", // red
+  "#ff5f40", // orange
+  "#f59e0b", // yellow
+  "#10b981", // green
+  "#3b82f6", // blue
+  "#6366f1", // indigo
+  "#8b5cf6", // violet
+];
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
+  const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem("accentColor");
@@ -26,11 +37,45 @@ export default function Header() {
     document.documentElement.style.setProperty("--accent", hex);
     localStorage.setItem("accentColor", hex);
     setAccentColor(hex);
+    setIsColorPaletteOpen(false);
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const ColorButton = ({
+    hex,
+    isSelected,
+  }: {
+    hex: string;
+    isSelected: boolean;
+  }) => (
+    <button
+      onClick={() => applyAccent(hex)}
+      className={`h-5 w-5 rounded-full border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-accent ${
+        isSelected
+          ? "ring-2 ring-accent -translate-y-0.5 opacity-100"
+          : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
+      }`}
+      style={{ backgroundColor: hex, borderColor: "rgba(0,0,0,0.2)" }}
+      aria-label={`Set accent color ${hex}`}
+      title={`Accent ${hex}`}
+    />
+  );
+
+  const NavLink = ({
+    href,
+    children,
+  }: {
+    href: string;
+    children: React.ReactNode;
+  }) => (
+    <Link
+      href={href}
+      className="hover:text-accent transition-colors relative group py-1"
+      onClick={() => setIsMenuOpen(false)}
+    >
+      {children}
+      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+    </Link>
+  );
 
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-foreground/10">
@@ -47,135 +92,100 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Centered Accent color selector (desktop) */}
-        <div
-          className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 z-10"
-          aria-label="Accent color selector"
-        >
-          {[
-            "#ef4444", // red
-            "#ff5f40", // orange
-            "#f59e0b", // yellow
-            "#10b981", // green
-            "#3b82f6", // blue
-            "#6366f1", // indigo
-            "#8b5cf6", // violet
-          ].map((hex) => (
-            <button
-              key={hex}
-              onClick={() => applyAccent(hex)}
-              className={`relative h-5 w-5 rounded-full border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-accent ${
-                accentColor === hex
-                  ? "ring-2 ring-accent -translate-y-0.5 opacity-100"
-                  : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
-              }`}
-              style={{ backgroundColor: hex, borderColor: "rgba(0,0,0,0.2)" }}
-              aria-label={`Set accent color ${hex}`}
-              title={`Accent ${hex}`}
-            />
+        {/* Desktop color selector */}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 z-10">
+          {colorOptions.map((hex) => (
+            <ColorButton key={hex} hex={hex} isSelected={accentColor === hex} />
           ))}
         </div>
 
-        {/* Desktop Navigation */}
+        {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-8">
-          <Link
-            href="#projects"
-            className="hover:text-accent transition-colors relative group py-1"
-          >
-            Projects
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-          </Link>
-          <Link
-            href="#writing"
-            className="hover:text-accent transition-colors relative group py-1"
-          >
-            Writing
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-          </Link>
-          <Link
-            href="#experience"
-            className="hover:text-accent transition-colors relative group py-1"
-          >
-            Experience
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-          </Link>
-          <Link
-            href="#about"
-            className="hover:text-accent transition-colors relative group py-1"
-          >
-            About
-            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-          </Link>
+          <NavLink href="#projects">Projects</NavLink>
+          <NavLink href="#writing">Writing</NavLink>
+          <NavLink href="#experience">Experience</NavLink>
+          <NavLink href="#about">About</NavLink>
         </nav>
 
-        {/* Mobile menu button */}
-        <button
-          className="md:hidden p-2"
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="w-6 h-6"
+        {/* Mobile controls */}
+        <div className="md:hidden flex items-center gap-2">
+          {/* Color palette button */}
+          <button
+            className="relative p-2"
+            onClick={() => setIsColorPaletteOpen(!isColorPaletteOpen)}
+            aria-label="Toggle color palette"
           >
-            {isMenuOpen ? (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            ) : (
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+            <div
+              className="w-6 h-6 rounded-full border-2 border-foreground/20"
+              style={{ backgroundColor: accentColor }}
+            />
+
+            {/* Color palette dropdown */}
+            {isColorPaletteOpen && (
+              <div className="absolute top-full right-0 mt-2 p-3 bg-background border border-foreground/10 rounded-2xl shadow-lg">
+                <div className="grid grid-cols-3 gap-2">
+                  {colorOptions.map((hex) => (
+                    <button
+                      key={hex}
+                      onClick={() => applyAccent(hex)}
+                      className={`h-8 w-8 rounded-full border-2 transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                        accentColor === hex
+                          ? "ring-2 ring-accent scale-110"
+                          : ""
+                      }`}
+                      style={{
+                        backgroundColor: hex,
+                        borderColor: "rgba(0,0,0,0.2)",
+                      }}
+                      aria-label={`Set accent color ${hex}`}
+                    />
+                  ))}
+                </div>
+              </div>
             )}
-          </svg>
-        </button>
+          </button>
+
+          {/* Menu button */}
+          <button
+            className="p-2"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Mobile navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-background p-4 border-b border-foreground/10">
           <nav className="flex flex-col space-y-4">
-            <Link
-              href="#projects"
-              className="hover:text-accent transition-colors relative group py-1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Projects
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              href="#writing"
-              className="hover:text-accent transition-colors relative group py-1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Writing
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              href="#experience"
-              className="hover:text-accent transition-colors relative group py-1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Experience
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </Link>
-            <Link
-              href="#about"
-              className="hover:text-accent transition-colors relative group py-1"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              About
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </Link>
+            <NavLink href="#projects">Projects</NavLink>
+            <NavLink href="#writing">Writing</NavLink>
+            <NavLink href="#experience">Experience</NavLink>
+            <NavLink href="#about">About</NavLink>
           </nav>
         </div>
       )}
