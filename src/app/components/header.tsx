@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 const colorOptions = [
   "#ef4444", // red
@@ -65,7 +66,7 @@ export default function Header() {
     children,
   }: {
     href: string;
-    children: React.ReactNode;
+    children: ReactNode;
   }) => (
     <Link
       href={href}
@@ -112,8 +113,13 @@ export default function Header() {
           {/* Color palette button */}
           <button
             className="relative p-2"
-            onClick={() => setIsColorPaletteOpen(!isColorPaletteOpen)}
+            onClick={() => {
+              setIsColorPaletteOpen(!isColorPaletteOpen);
+              setIsMenuOpen(false);
+            }}
             aria-label="Toggle color palette"
+            aria-expanded={isColorPaletteOpen}
+            aria-controls="mobile-color-palette"
           >
             <div
               className="w-6 h-6 rounded-full border-2 border-foreground/20"
@@ -121,34 +127,34 @@ export default function Header() {
             />
 
             {/* Color palette dropdown */}
-            {isColorPaletteOpen && (
-              <div className="absolute top-full right-0 mt-2 p-3 bg-background border border-foreground/10 rounded-2xl shadow-lg">
-                <div className="grid grid-cols-3 gap-2">
-                  {colorOptions.map((hex) => (
-                    <button
-                      key={hex}
-                      onClick={() => applyAccent(hex)}
-                      className={`h-8 w-8 rounded-full border-2 transition-all hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
-                        accentColor === hex
-                          ? "ring-2 ring-accent scale-110"
-                          : ""
-                      }`}
-                      style={{
-                        backgroundColor: hex,
-                        borderColor: "rgba(0,0,0,0.2)",
-                      }}
-                      aria-label={`Set accent color ${hex}`}
-                    />
-                  ))}
-                </div>
+            <div
+              id="mobile-color-palette"
+              className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-background border border-foreground/10 rounded-2xl shadow-lg z-20 overflow-hidden transition-all duration-200 ease-out transform-gpu origin-top px-3 py-2 ${
+                isColorPaletteOpen
+                  ? "opacity-100 translate-y-0 scale-100"
+                  : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+              }`}
+              aria-hidden={!isColorPaletteOpen}
+            >
+              <div className="flex flex-col items-center gap-2">
+                {colorOptions.map((hex) => (
+                  <ColorButton
+                    key={hex}
+                    hex={hex}
+                    isSelected={accentColor === hex}
+                  />
+                ))}
               </div>
-            )}
+            </div>
           </button>
 
           {/* Menu button */}
           <button
             className="p-2"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={() => {
+              setIsMenuOpen(!isMenuOpen);
+              setIsColorPaletteOpen(false);
+            }}
             aria-label="Toggle menu"
           >
             <svg
