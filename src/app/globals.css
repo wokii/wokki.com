@@ -34,6 +34,16 @@ body {
   font-family: "wokkiFont", Arial, Helvetica, sans-serif;
 }
 
+/* Text selection highlight uses accent color */
+::selection {
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+  color: var(--background);
+}
+::-moz-selection {
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+  color: var(--background);
+}
+
 /* Card flip styles */
 .perspective-1000 {
   perspective: 1000px;
