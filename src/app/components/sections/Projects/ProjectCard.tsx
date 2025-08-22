@@ -26,6 +26,8 @@ type ProjectCardProps = {
 };
 
 const isRedSuit = (suit?: string) => suit === "♥" || suit === "♦";
+const IS_RED_RED = true;
+const RED_SUIT_CLASS = IS_RED_RED ? "text-red-500" : "text-accent";
 
 export default function ProjectCard({
   id,
@@ -94,18 +96,18 @@ export default function ProjectCard({
           {cardSuit && cardRank && (
             <>
               <div className="absolute top-4 left-4 flex flex-col items-center text-3xl font-bold">
-                <span className={isRedSuit(cardSuit) ? "text-red-500" : ""}>
+                <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
                   {cardRank}
                 </span>
-                <span className={isRedSuit(cardSuit) ? "text-red-500" : ""}>
+                <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
                   {cardSuit}
                 </span>
               </div>
               <div className="absolute bottom-4 right-4 flex flex-col items-center text-3xl font-bold transform rotate-180">
-                <span className={isRedSuit(cardSuit) ? "text-red-500" : ""}>
+                <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
                   {cardRank}
                 </span>
-                <span className={isRedSuit(cardSuit) ? "text-red-500" : ""}>
+                <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
                   {cardSuit}
                 </span>
               </div>
@@ -115,8 +117,8 @@ export default function ProjectCard({
             <div className="absolute inset-0 flex items-center justify-center">
               <svg
                 viewBox="0 0 24 24"
-                fill={bg.color}
-                className="w-full h-full"
+                fill="currentColor"
+                className={`w-full h-full ${RED_SUIT_CLASS}`}
                 style={{
                   opacity: bg.opacity,
                   width: bg.size,
