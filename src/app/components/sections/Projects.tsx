@@ -333,7 +333,7 @@ export default function Projects() {
                           </div>
                         )}
                         <div className="text-center relative z-10">
-                          <h3 className="text-2xl md:text-3xl font-bold mb-4">
+                          <h3 className="text-xl md:text-2xl font-bold mb-4 w-[80%] mx-auto">
                             {project.title}
                           </h3>
                           <p className="mb-6 text-sm md:text-base">
