@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 
 // Tunable layout constants
 const COVERAGE_RATIO = 0.3; // portion of a card that remains covered
@@ -20,8 +20,23 @@ const backgroundConfigs = {
   },
 };
 
+type BackgroundKey = keyof typeof backgroundConfigs;
+
+type Project = {
+  id: number;
+  title: string;
+  description: string;
+  link: string | null;
+  image: string;
+  background: BackgroundKey | null;
+  cardSuit?: string;
+  cardRank?: string;
+};
+
+const isRedSuit = (suit?: string) => suit === "♥" || suit === "♦";
+
 // Define the project data
-const projects = [
+const projects: Project[] = [
   {
     id: 1,
     title: "AI Coaching App",
@@ -99,7 +114,6 @@ const projects = [
 export default function Projects() {
   const [flippedCards, setFlippedCards] = useState<number[]>([2, 3]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [visibleCount, setVisibleCount] = useState<number>(7);
   const measureRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [baseWidth, setBaseWidth] = useState<number>(0);
@@ -113,13 +127,6 @@ export default function Projects() {
       const stageW = stageRef.current?.offsetWidth ?? 0;
       setBaseWidth(measuredWidth);
       setStageWidth(stageW);
-
-      const shift = measuredWidth * SHIFT_RATIO + CARD_GAP_PX;
-      if (measuredWidth > 0 && shift > 0 && stageW > 0) {
-        const maxVisible = Math.floor((stageW - measuredWidth) / shift) + 1;
-        const clamped = Math.max(1, Math.min(projects.length, maxVisible));
-        setVisibleCount(clamped);
-      }
     };
     update();
     window.addEventListener("resize", update);
@@ -128,6 +135,18 @@ export default function Projects() {
 
   const horizontalShiftPx = Math.round(baseWidth * SHIFT_RATIO);
   const shiftWithGapPx = horizontalShiftPx + CARD_GAP_PX;
+
+  const visibleCount = useMemo(() => {
+    if (baseWidth > 0 && shiftWithGapPx > 0 && stageWidth > 0) {
+      const maxVisible =
+        Math.floor((stageWidth - baseWidth) / shiftWithGapPx) + 1;
+      return Math.max(1, Math.min(projects.length, maxVisible));
+    }
+    return projects.length;
+  }, [baseWidth, shiftWithGapPx, stageWidth]);
+
+  const overlap = Math.max(0, baseWidth - shiftWithGapPx);
+  const hoverPullPx = overlap + HOVER_PULL_PADDING;
 
   const prevCard = () =>
     setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
@@ -218,10 +237,10 @@ export default function Projects() {
                 const offset = (position - activeIndex + total) % total; // 0 is top/left-most
                 const isVisible = offset < visibleCount; // show top N cards
                 const isHovered = hoveredCardId === project.id;
+                const bgKey = project.background;
+                const bg = bgKey ? backgroundConfigs[bgKey] : undefined;
 
                 const baseTranslateX = offset * shiftWithGapPx;
-                const overlap = Math.max(0, baseWidth - shiftWithGapPx);
-                const hoverPullPx = overlap + HOVER_PULL_PADDING; // fully reveal + padding
                 const translateX =
                   baseTranslateX + (isHovered ? hoverPullPx : 0);
                 const baseScale = 1 - offset * SCALE_STEP;
@@ -289,8 +308,7 @@ export default function Projects() {
                             <div className="absolute top-4 left-4 flex flex-col items-center text-3xl font-bold">
                               <span
                                 className={
-                                  project.cardSuit === "♥" ||
-                                  project.cardSuit === "♦"
+                                  isRedSuit(project.cardSuit)
                                     ? "text-red-500"
                                     : ""
                                 }
@@ -299,8 +317,7 @@ export default function Projects() {
                               </span>
                               <span
                                 className={
-                                  project.cardSuit === "♥" ||
-                                  project.cardSuit === "♦"
+                                  isRedSuit(project.cardSuit)
                                     ? "text-red-500"
                                     : ""
                                 }
@@ -311,8 +328,7 @@ export default function Projects() {
                             <div className="absolute bottom-4 right-4 flex flex-col items-center text-3xl font-bold transform rotate-180">
                               <span
                                 className={
-                                  project.cardSuit === "♥" ||
-                                  project.cardSuit === "♦"
+                                  isRedSuit(project.cardSuit)
                                     ? "text-red-500"
                                     : ""
                                 }
@@ -321,8 +337,7 @@ export default function Projects() {
                               </span>
                               <span
                                 className={
-                                  project.cardSuit === "♥" ||
-                                  project.cardSuit === "♦"
+                                  isRedSuit(project.cardSuit)
                                     ? "text-red-500"
                                     : ""
                                 }
@@ -332,19 +347,19 @@ export default function Projects() {
                             </div>
                           </>
                         )}
-                        {project.background === "HEART" && (
+                        {bg && (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <svg
                               viewBox="0 0 24 24"
-                              fill={backgroundConfigs.HEART.color}
+                              fill={bg.color}
                               className="w-full h-full"
                               style={{
-                                opacity: backgroundConfigs.HEART.opacity,
-                                width: backgroundConfigs.HEART.size,
-                                height: backgroundConfigs.HEART.size,
+                                opacity: bg.opacity,
+                                width: bg.size,
+                                height: bg.size,
                               }}
                             >
-                              <path d={backgroundConfigs.HEART.path} />
+                              <path d={bg.path} />
                             </svg>
                           </div>
                         )}
