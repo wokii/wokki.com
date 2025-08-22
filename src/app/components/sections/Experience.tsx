@@ -13,7 +13,7 @@ export default function Experience() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* JPMorgan Card */}
-          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
+          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group rounded-md">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">
                 JPMorgan
@@ -22,8 +22,8 @@ export default function Experience() {
                 2025 - Present
               </p>
               <p className="mb-4 flex-grow">
-                Quant Dev building cross-asset (EQ, IR, CMD, FX) Risk
-                Management solutions on Athena for the Margin Trading desk.
+                Quant Dev building cross-asset (EQ, IR, CMD, FX) Risk Management
+                solutions on Athena for the Margin Trading desk.
               </p>
               <div className="mt-auto">
                 <span className="inline-block px-3 py-1 text-xs border border-current rounded-full">
@@ -37,7 +37,7 @@ export default function Experience() {
           </div>
 
           {/* Stealth Startup Card */}
-          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
+          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group rounded-sm">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">
                 Stealth Startup
@@ -61,7 +61,7 @@ export default function Experience() {
           </div>
 
           {/* Bloomberg Card */}
-          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group">
+          <div className="border border-foreground p-6 hover:bg-foreground hover:text-background transition-all duration-300 group rounded-sm">
             <div className="flex flex-col h-full">
               <h3 className="text-2xl font-bold mb-2 group-hover:text-accent">
                 Bloomberg

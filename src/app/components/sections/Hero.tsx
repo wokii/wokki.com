@@ -25,15 +25,21 @@ export default function Hero() {
         <div className="mt-8 flex gap-4">
           <a
             href="#projects"
-            className="border border-foreground px-6 py-3 hover:bg-foreground hover:text-background transition-colors"
+            className="group inline-flex items-center gap-2 rounded-md border border-accent bg-accent px-6 py-3 font-medium tracking-wide text-background shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Explore My Work
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </a>
           <a
             href="#about"
-            className="border border-foreground px-6 py-3 hover:bg-foreground hover:text-background transition-colors"
+            className="group inline-flex items-center gap-2 rounded-md border border-accent/60 px-6 py-3 font-medium tracking-wide text-accent transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             About Me
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
           </a>
         </div>
         <div className="absolute right-4 md:right-16 bottom-0 -z-10 pointer-events-none select-none">

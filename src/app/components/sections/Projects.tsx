@@ -91,6 +91,8 @@ const projects = [
     link: null,
     image: "/images/insight-system.jpg",
     background: null,
+    cardSuit: "♣",
+    cardRank: "K",
   },
 ];
 
@@ -383,10 +385,10 @@ export default function Projects() {
             </div>
           </div>
           {/* Shuffle button */}
-          <div className="mt-6 flex justify-center col-start-2 row-start-2">
+          <div className="mt-16 md:mt-24 flex justify-center col-start-2 row-start-2">
             <button
               onClick={shuffleDeck}
-              className="bg-foreground text-background px-4 py-2 rounded-full shadow-lg hover:bg-accent transition-colors"
+              className="bg-foreground text-background px-5 py-2.5 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-accent transition-colors text-sm md:text-base"
               aria-label="Shuffle projects"
             >
               Shuffle
