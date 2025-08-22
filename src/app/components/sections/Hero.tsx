@@ -42,13 +42,14 @@ export default function Hero() {
             </span>
           </a>
         </div>
-        <div className="absolute right-4 md:right-16 bottom-0 -z-10 pointer-events-none select-none">
+        <div className="absolute right-4 md:right-16 bottom-0 translate-y-12 md:translate-y-20 lg:translate-y-24 -z-10 pointer-events-none select-none">
           <Image
             src="/hero.png"
             alt=""
             width={560}
             height={560}
-            className="w-[240px] md:w-[420px] lg:w-[560px] h-auto drop-shadow-lg"
+            sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 60vw"
+            className="w-[clamp(240px,45vw,560px)] h-auto drop-shadow-lg"
             priority
             aria-hidden="true"
           />
