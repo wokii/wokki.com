@@ -70,7 +70,7 @@ export default function Header() {
   }) => (
     <Link
       href={href}
-      className="hover:text-accent transition-colors relative group py-1"
+      className="inline-block hover:text-accent transition-colors relative group py-1"
       onClick={() => setIsMenuOpen(false)}
     >
       {children}
@@ -110,21 +110,23 @@ export default function Header() {
 
         {/* Mobile controls */}
         <div className="md:hidden flex items-center gap-2">
-          {/* Color palette button */}
-          <button
-            className="relative p-2"
-            onClick={() => {
-              setIsColorPaletteOpen(!isColorPaletteOpen);
-              setIsMenuOpen(false);
-            }}
-            aria-label="Toggle color palette"
-            aria-expanded={isColorPaletteOpen}
-            aria-controls="mobile-color-palette"
-          >
-            <div
-              className="w-6 h-6 rounded-full border-2 border-foreground/20"
-              style={{ backgroundColor: accentColor }}
-            />
+          {/* Color palette */}
+          <div className="relative">
+            <button
+              className="p-2"
+              onClick={() => {
+                setIsColorPaletteOpen(!isColorPaletteOpen);
+                setIsMenuOpen(false);
+              }}
+              aria-label="Toggle color palette"
+              aria-expanded={isColorPaletteOpen}
+              aria-controls="mobile-color-palette"
+            >
+              <div
+                className="w-6 h-6 rounded-full border-2 border-foreground/20"
+                style={{ backgroundColor: accentColor }}
+              />
+            </button>
 
             {/* Color palette dropdown */}
             <div
@@ -146,7 +148,7 @@ export default function Header() {
                 ))}
               </div>
             </div>
-          </button>
+          </div>
 
           {/* Menu button */}
           <button
@@ -187,7 +189,7 @@ export default function Header() {
       {/* Mobile navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-background p-4 border-b border-foreground/10">
-          <nav className="flex flex-col space-y-4">
+          <nav className="flex flex-col space-y-4 items-end">
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#writing">Writing</NavLink>
             <NavLink href="#experience">Experience</NavLink>
