@@ -29,10 +29,36 @@ const cornerTransformMap: Record<ArrowCorner, string> = {
 function CornerArrow({
   corner,
   className = "w-24 h-24 md:w-28 md:h-28 text-accent opacity-42 block pointer-events-none z-0",
+  thickness = 15,
+  arm = 51,
 }: {
   corner: ArrowCorner;
   className?: string;
+  thickness?: number;
+  arm?: number;
 }) {
+  const min = 10;
+  const max = 80;
+  const inner = min + thickness;
+  const diagOffset = thickness / Math.SQRT2;
+  const diagMin = inner + diagOffset;
+  const diagMax = max - diagOffset;
+  const armEnd = Math.max(diagMin, Math.min(max, min + arm));
+
+  const d = [
+    `M ${min} ${min}`,
+    `L ${min} ${armEnd}`,
+    `L ${inner} ${armEnd}`,
+    `L ${inner} ${diagMin}`,
+    `L ${diagMax} ${max}`,
+    `L ${max} ${max}`,
+    `L ${max} ${diagMax}`,
+    `L ${diagMin} ${inner}`,
+    `L ${armEnd} ${inner}`,
+    `L ${armEnd} ${min}`,
+    "Z",
+  ].join(" ");
+
   return (
     <svg
       viewBox="10 10 70 70"
@@ -41,11 +67,7 @@ function CornerArrow({
       aria-hidden="true"
       focusable="false"
     >
-      <path
-        d="M 10 10 L 10 50 L 20 50 L 20 27.07 L 72.93 80 L 80 80 L 80 72.93 L 27.07 20 L 50 20 L 50 10 Z"
-        fill="currentColor"
-        transform={cornerTransformMap[corner]}
-      />
+      <path d={d} fill="currentColor" transform={cornerTransformMap[corner]} />
     </svg>
   );
 }
