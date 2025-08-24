@@ -24,9 +24,7 @@ export function useTheme() {
   return useContext(ThemeProviderContext);
 }
 
-export default function ThemeProvider({
-  children,
-}: ThemeProviderProps) {
+export default function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
@@ -34,7 +32,8 @@ export default function ThemeProvider({
     root.classList.remove("light", "dark");
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
         ? "dark"
         : "light";
       root.classList.add(systemTheme);
@@ -49,6 +48,11 @@ export default function ThemeProvider({
     setTheme: (theme: Theme) => {
       setTheme(theme);
       localStorage.setItem("theme", theme);
+      try {
+        document.cookie = `theme=${encodeURIComponent(theme)}; Path=/; Max-Age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+      } catch (e) {
+        // ignore cookie errors
+      }
     },
   };
 
@@ -57,4 +61,4 @@ export default function ThemeProvider({
       {children}
     </ThemeProviderContext.Provider>
   );
-} 
+}

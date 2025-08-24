@@ -30,6 +30,16 @@ export default function Header() {
 
   const applyAccent = (hex: string) => {
     document.documentElement.style.setProperty("--accent", hex);
+    try {
+      localStorage.setItem("accent", hex);
+    } catch (e) {
+      // ignore storage errors (private mode, etc.)
+    }
+    try {
+      document.cookie = `accent=${encodeURIComponent(hex)}; Path=/; Max-Age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+    } catch (e) {
+      // ignore cookie errors
+    }
     setAccentColor(hex);
     setIsColorPaletteOpen(false);
   };
