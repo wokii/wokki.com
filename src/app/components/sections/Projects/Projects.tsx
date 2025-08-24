@@ -30,8 +30,8 @@ type Project = {
   link: string | null;
   image: string;
   background: BackgroundKey | null;
-  cardSuit?: string;
-  cardRank?: string;
+  cardSuit: string;
+  cardRank: string;
 };
 
 // Define the project data
@@ -87,6 +87,8 @@ const projects: Project[] = [
     link: "https://glyphic.streamlit.app/",
     image: "/images/sales-call-analytics.jpg",
     background: null,
+    cardSuit: "♣",
+    cardRank: "2",
   },
   {
     id: 6,
@@ -96,6 +98,8 @@ const projects: Project[] = [
     link: "https://github.com/wokii/fa-automation/",
     image: "/images/web-platform.jpg",
     background: null,
+    cardSuit: "♥",
+    cardRank: "2",
   },
   {
     id: 7,
