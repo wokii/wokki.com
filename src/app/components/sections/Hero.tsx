@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="min-h-screen pt-24 pb-0 md:pb-16 relative flex items-center"
+      className="min-h-[100svh] md:min-h-screen pt-24 pb-0 md:pb-16 relative flex items-center"
     >
       <div className="container mx-auto px-4 md:relative -mt-6 md:mt-0">
         <div className="relative">
