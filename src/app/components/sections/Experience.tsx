@@ -8,6 +8,7 @@ type ExperienceItem = {
   description: string;
   tags: string[];
   roundedClass: string;
+  blurText?: string; // optional substring in period to blur/non-select
 };
 
 type ArrowCorner = "br" | "bl" | "tr" | "tl";
@@ -79,6 +80,19 @@ function ExperienceCard({
   exp: ExperienceItem;
   corner: ArrowCorner;
 }) {
+  const renderPeriod = () => {
+    if (!exp.blurText || !exp.period.includes(exp.blurText)) return exp.period;
+    const parts = exp.period.split(exp.blurText);
+    return (
+      <>
+        {parts[0]}
+        <span className="inline-block blur-[2px] select-none pointer-events-none">
+          {exp.blurText}
+        </span>
+        {parts.slice(1).join(exp.blurText)}
+      </>
+    );
+  };
   return (
     <div
       className={[
@@ -91,7 +105,7 @@ function ExperienceCard({
           {exp.company}
         </h3>
         <p className="text-[11px] md:text-sm mb-4 text-foreground/70 group-hover:text-background/70">
-          {exp.period}
+          {renderPeriod()}
         </p>
         <p className="text-xs md:text-base mb-4 flex-grow">{exp.description}</p>
         <div className="mt-auto hidden md:block">
@@ -145,6 +159,7 @@ const experiences: ExperienceItem[] = [
       "Master of Science in Computing with Machine Learning Specialisation",
     tags: ["Data", "Pricing Infra"],
     roundedClass: "rounded-sm",
+    blurText: "2019",
   },
 ];
 
