@@ -8,7 +8,7 @@ export default function Writing() {
       <SectionTitle>WRITING</SectionTitle>
       <article>
         <h3 className="text-3xl">Nothing here yet.</h3>
-        <p>April 24, 2024</p>
+        <p>Aug 24, 2025</p>
       </article>
     </Section>
   );
