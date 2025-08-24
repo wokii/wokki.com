@@ -32,8 +32,9 @@ export default function ThemeToggle() {
       <span
         className="block text-[20px] leading-none transition-transform duration-300 ease-out rotate-180 group-hover:rotate-0"
         aria-hidden
+        style={{ fontFamily: "sans-serif" }}
       >
-        ☯
+        ☯︎
       </span>
     </button>
   );
