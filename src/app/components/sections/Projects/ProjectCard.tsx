@@ -13,6 +13,7 @@ type ProjectCardProps = {
   title: string;
   description: string;
   link: string | null;
+  detailsLink?: string | null;
   background?: BackgroundConfig;
   cardSuit?: string;
   cardRank?: string;
@@ -34,6 +35,7 @@ export default function ProjectCard({
   title,
   description,
   link,
+  detailsLink,
   background,
   cardSuit,
   cardRank,
@@ -46,6 +48,9 @@ export default function ProjectCard({
   hoverSpacerStyle,
 }: ProjectCardProps) {
   const bg = background;
+  const [isExpanded, setIsExpanded] = React.useState(false);
+  const hasDetails = Boolean(detailsLink);
+  const hasView = Boolean(link);
 
   return (
     <div
@@ -134,19 +139,94 @@ export default function ProjectCard({
               {title}
             </h3>
             <p className="mb-6 text-sm md:text-base">{description}</p>
-            {link && (
+            {hasDetails && hasView ? (
+              <div className="inline-flex items-stretch">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsExpanded(true);
+                  }}
+                  className="px-4 py-2 border border-foreground rounded-l-full hover:bg-accent hover:text-background hover:border-accent transition-colors text-sm md:text-base"
+                >
+                  Details
+                </button>
+                <a
+                  href={link || undefined}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="px-4 py-2 border border-foreground rounded-r-full -ml-px hover:bg-accent hover:text-background hover:border-accent transition-colors text-sm md:text-base"
+                >
+                  View
+                </a>
+              </div>
+            ) : hasView ? (
               <a
-                href={link}
+                href={link || undefined}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-foreground hover:text-background transition-colors"
+                onClick={(e) => e.stopPropagation()}
+                className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-accent hover:text-background hover:border-accent transition-colors"
               >
                 View Project
               </a>
-            )}
+            ) : hasDetails ? (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsExpanded(true);
+                }}
+                className="inline-block px-4 py-2 border border-foreground rounded-full hover:bg-accent hover:text-background hover:border-accent transition-colors"
+              >
+                Details
+              </button>
+            ) : null}
           </div>
         </div>
       </div>
+      {isExpanded && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(false);
+          }}
+        >
+          <div className="absolute inset-0 bg-foreground/40" />
+          <div
+            className="relative z-[101] w-[92vw] max-w-[48rem] h-[75vh] max-h-[42rem] bg-background border-2 border-foreground rounded-[2rem] shadow-2xl p-6 md:p-8 overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <h3 className="text-2xl md:text-3xl font-bold">{title}</h3>
+              <button
+                type="button"
+                onClick={() => setIsExpanded(false)}
+                className="px-3 py-1.5 border border-foreground rounded-full hover:bg-accent hover:text-background hover:border-accent transition-colors text-sm"
+              >
+                Close
+              </button>
+            </div>
+            <div className="prose prose-invert max-w-none">
+              <p className="mb-4 text-sm md:text-base">{description}</p>
+              {detailsLink && (
+                <p className="mt-2 text-sm">
+                  <a
+                    href={detailsLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline hover:text-accent"
+                  >
+                    View more details
+                  </a>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       {showHoverSpacer && (
         <div
           className="absolute top-0 right-full h-full"

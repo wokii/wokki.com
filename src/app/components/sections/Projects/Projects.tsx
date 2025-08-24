@@ -28,6 +28,7 @@ type Project = {
   title: string;
   description: string;
   link: string | null;
+  detailsLink?: string | null;
   image: string;
   background: BackgroundKey | null;
   cardSuit: string;
@@ -57,6 +58,7 @@ const projects: Project[] = [
     background: "HEART",
     cardSuit: "♥",
     cardRank: "Q",
+    detailsLink: "https://github.com/wokii/christine",
   },
   {
     id: 3,
@@ -260,6 +262,7 @@ export default function Projects() {
                     title={project.title}
                     description={project.description}
                     link={project.link}
+                    detailsLink={project.detailsLink}
                     background={bg}
                     cardSuit={project.cardSuit}
                     cardRank={project.cardRank}
