@@ -29,7 +29,7 @@ const cornerTransformMap: Record<ArrowCorner, string> = {
 
 function CornerArrow({
   corner,
-  className = "w-24 h-24 md:w-28 md:h-28 text-accent opacity-42 block pointer-events-none z-0",
+  className = "w-21 h-21 md:w-24 md:h-24 text-accent opacity-42 block pointer-events-none z-0",
   thickness = 15,
   arm = 51,
 }: {
@@ -100,20 +100,20 @@ function ExperienceCard({
         exp.roundedClass,
       ].join(" ")}
     >
-      <div className="relative z-10 p-4 md:p-6 flex flex-col h-full">
-        <h3 className="text-base md:text-2xl font-bold mb-2 group-hover:text-accent">
+      <div className="relative z-10 p-3 md:p-5 flex flex-col h-full">
+        <h3 className="text-base md:text-xl font-bold mb-2 group-hover:text-accent">
           {exp.company}
         </h3>
-        <p className="text-[11px] md:text-sm mb-4 text-foreground/70 group-hover:text-background/70">
+        <p className="text-[10px] md:text-xs mb-4 text-foreground/70 group-hover:text-background/70">
           {renderPeriod()}
         </p>
-        <p className="text-xs md:text-base mb-4 flex-grow">{exp.description}</p>
+        <p className="text-xs md:text-sm mb-4 flex-grow">{exp.description}</p>
         <div className="mt-auto hidden md:block">
           {exp.tags.map((tag, index) => (
             <span
               key={tag}
               className={[
-                "inline-block px-3 py-1 text-[10px] md:text-xs border border-current rounded-full",
+                "inline-block px-2 py-0.5 text-[10px] md:text-xs border border-current rounded-full",
                 index > 0 ? "ml-2" : "",
               ].join(" ")}
             >
@@ -156,7 +156,7 @@ const experiences: ExperienceItem[] = [
     company: "Imperial College London",
     period: "Graduated 2019",
     description:
-      "Master of Science in Computing with Machine Learning Specialisation",
+      "Master of Science in Computing with Machine Learning Specialisation.",
     tags: ["Data", "Pricing Infra"],
     roundedClass: "rounded-sm",
     blurText: "2019",

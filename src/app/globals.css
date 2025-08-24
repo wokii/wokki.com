@@ -125,3 +125,10 @@ body {
     overscroll-behavior-x: none;
   }
 }
+
+/* Slightly scale down on compact phone screens (e.g., iPhone Pro sizes) */
+@media (max-width: 430px) {
+  html {
+    font-size: 88%;
+  }
+}
