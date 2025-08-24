@@ -30,20 +30,44 @@ export default async function RootLayout({
   const themeCookie = cookieStore.get("theme")?.value;
   const accentCookie = cookieStore.get("accent")?.value;
   const themeClass =
-    themeCookie === "dark"
-      ? "dark"
-      : themeCookie === "light"
-        ? "light"
-        : "light";
+    themeCookie === "dark" ? "dark" : themeCookie === "light" ? "light" : "";
   const accentValue = /^[#][0-9a-fA-F]{3,8}$/.test(accentCookie ?? "")
     ? (accentCookie as string)
     : "#ff5f40";
   const htmlStyle = { ["--accent"]: accentValue } as React.CSSProperties;
   return (
-    <html lang="en" className={themeClass} style={htmlStyle}>
+    <html
+      lang="en"
+      className={themeClass}
+      style={htmlStyle}
+      suppressHydrationWarning
+    >
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Script id="prefs-no-flash" strategy="beforeInteractive">
+          {`
+            (function() {
+              try {
+                var storedTheme = localStorage.getItem('theme');
+                var mql = window.matchMedia('(prefers-color-scheme: dark)');
+                var theme = (storedTheme === 'dark' || storedTheme === 'light')
+                  ? storedTheme
+                  : (mql.matches ? 'dark' : 'light');
+                var root = document.documentElement;
+                if (!root.classList.contains(theme)) {
+                  root.classList.remove(theme === 'dark' ? 'light' : 'dark');
+                  root.classList.add(theme);
+                }
+                root.style.colorScheme = theme;
+
+                var storedAccent = localStorage.getItem('accent');
+                var accent = /^#[0-9a-fA-F]{3,8}$/.test(storedAccent || '') ? storedAccent : '#ff5f40';
+                root.style.setProperty('--accent', accent);
+              } catch (e) {}
+            })();
+          `}
+        </Script>
         <ThemeProvider>{children}</ThemeProvider>
         <Script
           data-goatcounter="https://wokki.goatcounter.com/count"
