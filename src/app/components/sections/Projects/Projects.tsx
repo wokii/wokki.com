@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import ProjectCard, { type BackgroundConfig } from "./ProjectCard";
+import Section from "../Section";
+import SectionTitle from "../SectionTitle";
 
 // Tunable layout constants
 const COVERAGE_RATIO = 0.3; // portion of a card that remains covered
@@ -177,149 +179,146 @@ export default function Projects() {
   };
 
   return (
-    <section
+    <Section
       id="projects"
-      className="min-h-screen py-8 md:py-16 border-t border-foreground flex flex-col justify-center"
+      minHeight="screen"
+      paddingY="md"
+      centerContent={false}
     >
-      <div className="container mx-auto px-4">
-        <h2 className="text-4xl md:text-6xl font-bold mb-8 md:mb-12">
-          PROJECTS
-        </h2>
+      <SectionTitle>PROJECTS</SectionTitle>
 
-        {/* Grid: left button | deck stage | right button */}
-        <div className="grid grid-cols-[64px_1fr_64px] items-center">
-          {/* Left button */}
-          <div className="hidden md:flex items-center justify-center">
-            <button
-              onClick={nextCard}
-              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
-              aria-label="Next project"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5"
-              >
-                <path d="m14 7-5 5 5 5" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Stage (measured) */}
-          <div
-            ref={stageRef}
-            className="relative h-96 overflow-visible"
-            onMouseLeave={() => setHoveredCardId(null)}
+      {/* Grid: left button | deck stage | right button */}
+      <div className="grid grid-cols-[64px_1fr_64px] items-center">
+        {/* Left button */}
+        <div className="hidden md:flex items-center justify-center">
+          <button
+            onClick={nextCard}
+            className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
+            aria-label="Next project"
           >
-            {/* width measure (hidden) */}
-            <div
-              ref={measureRef}
-              className="w-[90vw] md:w-72 h-0 invisible pointer-events-none"
-            />
-
-            {/* Stacked deck container */}
-            <div
-              className="relative h-96 overflow-visible"
-              style={{
-                width:
-                  baseWidth && horizontalShiftPx
-                    ? Math.min(
-                        baseWidth + shiftWithGapPx * (visibleCount - 1),
-                        stageWidth || baseWidth,
-                      )
-                    : undefined,
-              }}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5"
             >
-              {projects.map((project) => {
-                const total = projects.length;
-                const position = order.indexOf(project.id);
-                const offset = (position - activeIndex + total) % total; // 0 is top/left-most
-                const isVisible = offset < visibleCount; // show top N cards
-                const isHovered = hoverEnabled && hoveredCardId === project.id;
-                const bgKey = project.background;
-                const bg = bgKey ? backgroundConfigs[bgKey] : undefined;
+              <path d="m14 7-5 5 5 5" />
+            </svg>
+          </button>
+        </div>
 
-                const baseTranslateX = offset * shiftWithGapPx;
-                const translateX =
-                  baseTranslateX + (isHovered ? hoverPullPx : 0);
-                const baseScale = 1 - offset * SCALE_STEP;
-                const scale = Math.max(
-                  MIN_SCALE,
-                  baseScale + (isHovered ? HOVER_SCALE_BUMP : 0),
-                );
+        {/* Stage (measured) */}
+        <div
+          ref={stageRef}
+          className="relative h-96 overflow-visible"
+          onMouseLeave={() => setHoveredCardId(null)}
+        >
+          {/* width measure (hidden) */}
+          <div
+            ref={measureRef}
+            className="w-[90vw] md:w-72 h-0 invisible pointer-events-none"
+          />
 
-                return (
-                  <ProjectCard
-                    key={project.id}
-                    id={project.id}
-                    title={project.title}
-                    description={project.description}
-                    link={project.link}
-                    background={bg}
-                    cardSuit={project.cardSuit}
-                    cardRank={project.cardRank}
-                    flipped={flippedCards.includes(project.id)}
-                    onToggle={toggleCard}
-                    containerStyle={{
-                      transform: `translate(${translateX}px, 0) scale(${scale})`,
-                      zIndex: total - offset,
-                      opacity: isVisible ? 1 : 0,
-                    }}
-                    onMouseEnter={
-                      hoverEnabled
-                        ? () => setHoveredCardId(project.id)
-                        : undefined
-                    }
-                    showHoverSpacer={isHovered}
-                    hoverSpacerStyle={{
-                      width: overlap + HOVER_PULL_PADDING,
-                      cursor: "default",
-                      pointerEvents: "none",
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </div>
-          {/* Shuffle button */}
-          <div className="mt-16 md:mt-24 flex justify-center col-start-2 row-start-2">
-            <button
-              onClick={shuffleDeck}
-              className="bg-foreground text-background px-5 py-2.5 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-accent transition-colors text-sm md:text-base"
-              aria-label="Shuffle projects"
-            >
-              Shuffle
-            </button>
-          </div>
+          {/* Stacked deck container */}
+          <div
+            className="relative h-96 overflow-visible"
+            style={{
+              width:
+                baseWidth && horizontalShiftPx
+                  ? Math.min(
+                      baseWidth + shiftWithGapPx * (visibleCount - 1),
+                      stageWidth || baseWidth,
+                    )
+                  : undefined,
+            }}
+          >
+            {projects.map((project) => {
+              const total = projects.length;
+              const position = order.indexOf(project.id);
+              const offset = (position - activeIndex + total) % total; // 0 is top/left-most
+              const isVisible = offset < visibleCount; // show top N cards
+              const isHovered = hoverEnabled && hoveredCardId === project.id;
+              const bgKey = project.background;
+              const bg = bgKey ? backgroundConfigs[bgKey] : undefined;
 
-          {/* Right button */}
-          <div className="hidden md:flex items-center justify-center">
-            <button
-              onClick={prevCard}
-              className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
-              aria-label="Previous project"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-5 h-5"
-              >
-                <path d="m10 7 5 5-5 5" />
-              </svg>
-            </button>
+              const baseTranslateX = offset * shiftWithGapPx;
+              const translateX = baseTranslateX + (isHovered ? hoverPullPx : 0);
+              const baseScale = 1 - offset * SCALE_STEP;
+              const scale = Math.max(
+                MIN_SCALE,
+                baseScale + (isHovered ? HOVER_SCALE_BUMP : 0),
+              );
+
+              return (
+                <ProjectCard
+                  key={project.id}
+                  id={project.id}
+                  title={project.title}
+                  description={project.description}
+                  link={project.link}
+                  background={bg}
+                  cardSuit={project.cardSuit}
+                  cardRank={project.cardRank}
+                  flipped={flippedCards.includes(project.id)}
+                  onToggle={toggleCard}
+                  containerStyle={{
+                    transform: `translate(${translateX}px, 0) scale(${scale})`,
+                    zIndex: total - offset,
+                    opacity: isVisible ? 1 : 0,
+                  }}
+                  onMouseEnter={
+                    hoverEnabled
+                      ? () => setHoveredCardId(project.id)
+                      : undefined
+                  }
+                  showHoverSpacer={isHovered}
+                  hoverSpacerStyle={{
+                    width: overlap + HOVER_PULL_PADDING,
+                    cursor: "default",
+                    pointerEvents: "none",
+                  }}
+                />
+              );
+            })}
           </div>
         </div>
+        {/* Shuffle button */}
+        <div className="mt-16 md:mt-24 flex justify-center col-start-2 row-start-2">
+          <button
+            onClick={shuffleDeck}
+            className="bg-foreground text-background px-5 py-2.5 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-accent transition-colors text-sm md:text-base"
+            aria-label="Shuffle projects"
+          >
+            Shuffle
+          </button>
+        </div>
+
+        {/* Right button */}
+        <div className="hidden md:flex items-center justify-center">
+          <button
+            onClick={prevCard}
+            className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
+            aria-label="Previous project"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-5 h-5"
+            >
+              <path d="m10 7 5 5-5 5" />
+            </svg>
+          </button>
+        </div>
       </div>
-    </section>
+    </Section>
   );
 }
