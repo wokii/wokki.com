@@ -12,7 +12,9 @@
   --background: #ffffff;
   --foreground: #171717;
   --accent: #ff5f40; /* The orange circle in the design */
+  --header-height: 64px;
   scroll-behavior: smooth;
+  scroll-padding-top: var(--header-height);
 }
 
 .dark {
@@ -114,4 +116,12 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+@media (max-width: 768px) {
+  html,
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-x: none;
+  }
 }
