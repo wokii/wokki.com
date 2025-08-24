@@ -8,12 +8,18 @@ type SectionProps = {
   withTopBorder?: boolean;
   centerContent?: boolean;
   minHeight?: "screen" | "svh" | "none";
+  maxHeight?: "screen" | "none";
   paddingY?: "none" | "sm" | "md" | "lg";
 };
 
 const minHeightClass: Record<NonNullable<SectionProps["minHeight"]>, string> = {
   screen: "min-h-screen",
   svh: "min-h-[100svh] md:min-h-screen",
+  none: "",
+};
+
+const maxHeightClass: Record<NonNullable<SectionProps["maxHeight"]>, string> = {
+  screen: "max-h-screen",
   none: "",
 };
 
@@ -32,6 +38,7 @@ export default function Section({
   withTopBorder = true,
   centerContent = true,
   minHeight = "screen",
+  maxHeight = "screen",
   paddingY = "md",
 }: SectionProps) {
   return (
@@ -39,6 +46,7 @@ export default function Section({
       id={id}
       className={[
         minHeightClass[minHeight],
+        maxHeightClass[maxHeight],
         paddingYClass[paddingY],
         withTopBorder ? "border-t border-foreground" : "",
         centerContent ? "flex items-center" : "",
