@@ -47,10 +47,15 @@ const experiences: ExperienceItem[] = [
 
 export default function Experience() {
   return (
-    <Section id="experience" minHeight="screen" paddingY="md">
+    <Section
+      id="experience"
+      minHeight="svh"
+      paddingY="md"
+      centerContent={false}
+    >
       <SectionTitle>EXPERIENCE</SectionTitle>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 auto-rows-fr items-stretch gap-4 md:gap-8">
+      <div className="grid grid-cols-2 md:grid-cols-2 auto-rows-fr items-stretch gap-4 md:gap-8">
         {experiences.map((exp) => (
           <div
             key={exp.company}

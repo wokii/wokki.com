@@ -49,7 +49,9 @@ export default function Section({
         maxHeightClass[maxHeight],
         paddingYClass[paddingY],
         withTopBorder ? "border-t border-foreground" : "",
-        centerContent ? "flex items-center" : "",
+        centerContent
+          ? "flex items-center"
+          : "flex items-start md:items-center",
         className,
       ]
         .filter(Boolean)

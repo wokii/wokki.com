@@ -4,7 +4,7 @@ import SectionTitle from "./SectionTitle";
 
 export default function About() {
   return (
-    <Section id="about" minHeight="screen" paddingY="md">
+    <Section id="about" minHeight="screen" paddingY="md" centerContent={false}>
       <SectionTitle>ABOUT</SectionTitle>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
