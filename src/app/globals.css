@@ -36,6 +36,12 @@ body {
   font-family: "wokkiFont", Arial, Helvetica, sans-serif;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
 /* Text selection highlight uses accent color */
 ::selection {
   background: color-mix(in srgb, var(--accent) 85%, transparent);
@@ -116,14 +122,6 @@ body {
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
-}
-
-@media (max-width: 768px) {
-  html,
-  body {
-    overflow-x: hidden;
-    overscroll-behavior-x: none;
-  }
 }
 
 /* Slightly scale down on compact phone screens (e.g., iPhone Pro sizes) */

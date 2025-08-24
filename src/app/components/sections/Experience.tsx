@@ -29,7 +29,7 @@ const cornerTransformMap: Record<ArrowCorner, string> = {
 
 function CornerArrow({
   corner,
-  className = "w-21 h-21 md:w-24 md:h-24 text-accent opacity-42 block pointer-events-none z-0",
+  className = "",
   thickness = 15,
   arm = 51,
 }: {
@@ -60,11 +60,14 @@ function CornerArrow({
     "Z",
   ].join(" ");
 
+  const baseClassName =
+    "w-21 h-21 md:w-24 md:h-24 text-accent opacity-42 block pointer-events-none z-0";
+
   return (
     <svg
       viewBox="10 10 70 70"
       xmlns="http://www.w3.org/2000/svg"
-      className={[cornerClassMap[corner], className].join(" ")}
+      className={[cornerClassMap[corner], baseClassName, className].join(" ")}
       aria-hidden="true"
       focusable="false"
     >
@@ -122,7 +125,7 @@ function ExperienceCard({
           ))}
         </div>
       </div>
-      <CornerArrow corner={corner} />
+      <CornerArrow corner={corner} className="md:hidden" />
     </div>
   );
 }
