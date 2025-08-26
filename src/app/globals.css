@@ -129,3 +129,10 @@ body {
     font-size: 88%;
   }
 }
+
+/* Scale down typography slightly on larger screens */
+@media (min-width: 768px) {
+  html {
+    font-size: 90%;
+  }
+}
