@@ -49,7 +49,7 @@ export default function Section({
         maxHeightClass[maxHeight],
         paddingYClass[paddingY],
         withTopBorder ? "border-t border-foreground" : "",
-        !centerContent ? "pt-[var(--header-height)]" : "",
+        !centerContent ? "pt-[calc(var(--header-height)+30px)]" : "",
         centerContent
           ? "flex items-center"
           : "flex items-start md:items-center",
