@@ -14,7 +14,6 @@
   --accent: #ff5f40; /* The orange circle in the design */
   --header-height: 64px;
   scroll-behavior: smooth;
-  scroll-padding-top: var(--header-height);
 }
 
 .dark {
