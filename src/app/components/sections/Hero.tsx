@@ -54,7 +54,7 @@ export default function Hero() {
           width={560}
           height={560}
           sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 75vw"
-          className="w-[clamp(240px,75vw,600px)] md:w-[clamp(240px,45vw,560px)] h-auto drop-shadow-lg"
+          className="w-[clamp(240px,75vw,600px)] md:w-[clamp(240px,45vw,560px)] h-auto drop-shadow-lg scale-90 origin-bottom-right"
           priority
           aria-hidden="true"
         />
