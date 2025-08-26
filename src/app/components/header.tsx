@@ -34,6 +34,43 @@ export default function Header() {
     setIsColorPaletteOpen(false);
   };
 
+  // Keep favicon color in sync with the current accent color
+  useEffect(() => {
+    const updateFaviconWithAccent = (hexColor: string) => {
+      // Inline the W path used for the site mark
+      const wPathD =
+        "M46.764 32.192h12.607L74.976 69.37l18.605-39.636 18.765 39.636 15.925-37.155 12.573-.023-28.656 64.974-18.551-40.943-18.853 40.816-28.02-64.847z";
+
+      const svgMarkup = `<?xml version="1.0" encoding="UTF-8"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 192.756 192.756\">\n  <g transform=\"translate(96.378 96.378) scale(1.25) translate(-96.378 -96.378) translate(2.6 33)\">\n    <path fill=\"${hexColor}\" d=\"${wPathD}\"/>\n  </g>\n</svg>`;
+
+      const dataUrl = `data:image/svg+xml,${encodeURIComponent(svgMarkup)}`;
+
+      let linkEl = document.querySelector(
+        'link[rel="icon"][type="image/svg+xml"]',
+      ) as HTMLLinkElement | null;
+      if (!linkEl) {
+        linkEl = document.querySelector(
+          'link[rel="icon"]',
+        ) as HTMLLinkElement | null;
+      }
+
+      if (linkEl) {
+        linkEl.type = "image/svg+xml";
+        linkEl.href = dataUrl;
+        linkEl.sizes = "any";
+      } else {
+        const newLink = document.createElement("link");
+        newLink.rel = "icon";
+        newLink.type = "image/svg+xml";
+        newLink.sizes = "any";
+        newLink.href = dataUrl;
+        document.head.appendChild(newLink);
+      }
+    };
+
+    updateFaviconWithAccent(accentColor);
+  }, [accentColor]);
+
   const ColorButton = ({
     hex,
     isSelected,
