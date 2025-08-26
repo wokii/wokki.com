@@ -110,7 +110,7 @@ function ExperienceCard({
         <p className="text-[10px] md:text-xs mb-4 text-foreground/70 group-hover:text-background/70">
           {renderPeriod()}
         </p>
-        <p className="text-xs md:text-sm mb-4 flex-grow">{exp.description}</p>
+        <p className="text-sm md:text-base mb-4 flex-grow">{exp.description}</p>
         <div className="mt-auto hidden md:block">
           {exp.tags.map((tag, index) => (
             <span
