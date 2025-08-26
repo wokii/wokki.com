@@ -48,7 +48,7 @@ export default function Section({
         minHeightClass[minHeight],
         maxHeightClass[maxHeight],
         paddingYClass[paddingY],
-        withTopBorder ? "border-t border-foreground" : "",
+        withTopBorder ? "border-t border-foreground/20" : "",
         !centerContent ? "pt-[calc(var(--header-height)+30px)]" : "",
         centerContent
           ? "flex items-center"
