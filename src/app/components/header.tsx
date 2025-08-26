@@ -72,7 +72,7 @@ export default function Header() {
   );
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-background/80 backdrop-blur-sm border-b border-foreground/10">
+    <header className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
         <div className="flex items-center">
           <Link href="#hero" className="font-bold text-xl relative group">
