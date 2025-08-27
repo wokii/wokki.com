@@ -7,6 +7,7 @@ import Projects from "./components/sections/Projects";
 import Writing from "./components/sections/Writing";
 import Experience from "./components/sections/Experience";
 import About from "./components/sections/About";
+import Kindred from "./components/sections/Kindred";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <Projects />
       <Writing />
       <Experience />
+      <Kindred />
       <About />
       <Footer />
     </main>

@@ -135,6 +135,7 @@ export default function Header() {
           <NavLink href="#projects">Projects</NavLink>
           <NavLink href="#writing">Writing</NavLink>
           <NavLink href="#experience">Experience</NavLink>
+          <NavLink href="#kindred">Kindred</NavLink>
           <NavLink href="#about">About</NavLink>
         </nav>
 
@@ -223,6 +224,7 @@ export default function Header() {
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#writing">Writing</NavLink>
             <NavLink href="#experience">Experience</NavLink>
+            <NavLink href="#kindred">Kindred</NavLink>
             <NavLink href="#about">About</NavLink>
           </nav>
         </div>
