@@ -53,7 +53,7 @@ const projects: Project[] = [
     id: 2,
     title: "Digital Twin",
     description:
-      "A digital twin of myself providing on-demand emotional support to my girlfriend Christine. Powered by ElevenLabs and Chatgpt.",
+      "A digital twin of myself providing on-demand emotional support to Christine.",
     link: "https://christine.wokki.com",
     image: "/images/insight-system.jpg",
     background: "HEART",
