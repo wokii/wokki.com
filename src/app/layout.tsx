@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wokki.com"),
-  title: "Han Wokki – Software Engineer, Systems Thinker, Aesthetic Explorer",
+  title: "Han Wokki – Software Engineer, System Thinker, Aesthetic Explorer",
   description: "I build AI products that fuse function with form.",
 };
 

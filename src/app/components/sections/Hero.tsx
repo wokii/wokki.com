@@ -17,7 +17,7 @@ export default function Hero() {
         <h1 className="text-3xl md:text-6xl font-bold z-10 relative text-left">
           Software Engineer
           <br />
-          Systems Thinker
+          System Thinker
           <br />
           Aesthetic Explorer
         </h1>

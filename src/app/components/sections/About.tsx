@@ -11,7 +11,7 @@ export default function About() {
           <p className="text-xl mb-4">
             I&apos;m a{" "}
             <span className="text-accent font-bold">Software Engineer</span> and{" "}
-            <span className="text-accent font-bold">System Thinker</span>{" "}
+            <span className="text-accent font-bold">Systems Thinker</span>{" "}
             passionate about building AI products that merge elegant design with
             powerful functionality.
           </p>
