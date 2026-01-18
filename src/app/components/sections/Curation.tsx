@@ -16,7 +16,7 @@ type VideoLink = {
   description: string;
   url: string;
   creator: string;
-  platform: "TikTok" | "YouTube";
+  platform: "TikTok" | "YouTube" | string;
   imageUrl: string;
 };
 
