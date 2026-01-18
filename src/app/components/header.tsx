@@ -133,6 +133,7 @@ export default function Header() {
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink href="#projects">Projects</NavLink>
+          <NavLink href="#curation">Curation</NavLink>
           <NavLink href="#writing">Writing</NavLink>
           <NavLink href="#experience">Experience</NavLink>
           <NavLink href="#about">About</NavLink>
@@ -221,6 +222,7 @@ export default function Header() {
         <div className="md:hidden bg-background p-4 border-b border-foreground/10">
           <nav className="flex flex-col space-y-4 items-end">
             <NavLink href="#projects">Projects</NavLink>
+            <NavLink href="#curation">Curation</NavLink>
             <NavLink href="#writing">Writing</NavLink>
             <NavLink href="#experience">Experience</NavLink>
             <NavLink href="#about">About</NavLink>
