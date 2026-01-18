@@ -1,6 +1,7 @@
 import React from "react";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
+import { heroTitles } from "./heroContent";
 
 export default function About() {
   return (
@@ -10,15 +11,22 @@ export default function About() {
         <div>
           <p className="text-xl mb-4">
             I&apos;m a{" "}
-            <span className="text-accent font-bold">Software Engineer</span> and{" "}
-            <span className="text-accent font-bold">Systems Thinker</span>{" "}
-            passionate about building AI products that merge elegant design with
-            powerful functionality.
+            {heroTitles.map((item, index) => (
+              <React.Fragment key={item.title}>
+                <span className="text-accent font-bold">{item.title}</span>
+                {index < heroTitles.length - 2 && ", "}
+                {index === heroTitles.length - 2 && " and "}
+                {index === heroTitles.length - 1 && " "}
+              </React.Fragment>
+            ))}
+            passionate about envisioning a world where human is elevated,
+            enhanced, and empowered by technology.
           </p>
           <p className="text-xl">
-            With experience across fintech and startups, I bring a unique
-            perspective to solving complex problems through technology and
-            design.
+            With experience across Mathematics, Finance, Economics, AI Startups,
+            Psychology, Music, Media, Consultancy and Design. I bring an
+            Absolutely unique perspective to solving complex problems through
+            technology and aesthetics.
           </p>
         </div>
         <div>
@@ -56,8 +64,7 @@ export default function About() {
               rel="noopener noreferrer"
               className="underline hover:text-accent transition-colors"
             >
-              My Girlfriend&apos;s LinkedIn, She does marketing and is open to
-              jobs.
+              Girlfriend&apos;s LinkedIn, she is an upcoming influencer.
             </a>
             {" • "}
             <a

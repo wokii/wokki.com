@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Section from "./Section";
+import { heroTitles } from "./heroContent";
 
 export default function Hero() {
   return (
@@ -15,20 +16,15 @@ export default function Hero() {
     >
       <div className="relative">
         <h1 className="text-3xl md:text-6xl font-bold z-10 relative text-left">
-          Theory Engineer
-          <span className="ml-2 text-xs md:text-base text-foreground/50">
-            (philosopher: a.e.)
-          </span>
-          <br />
-          Systems Thinker
-          <span className="ml-2 text-xs md:text-base text-foreground/50">
-            (doer: e.m.)
-          </span>
-          <br />
-          aesthetic explorer
-          <span className="ml-2 text-xs md:text-base text-foreground/50">
-            (visionary: s.j.)
-          </span>
+          {heroTitles.map((item, index) => (
+            <React.Fragment key={item.title}>
+              {item.title}
+              <span className="ml-2 text-xs md:text-base text-foreground/50">
+                {item.note}
+              </span>
+              {index < heroTitles.length - 1 && <br />}
+            </React.Fragment>
+          ))}
         </h1>
       </div>
       <div className="mt-3 md:mt-4">
