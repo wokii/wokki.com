@@ -39,28 +39,57 @@ function CurationCard({
   linkUrl,
   linkLabel,
 }: CurationCardProps) {
+  const hasLink = Boolean(linkUrl);
   return (
     <li className="flex items-center gap-4 rounded-2xl border border-foreground/10 bg-background/60 p-4 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md">
-      <img
-        src={imageUrl}
-        alt={imageAlt}
-        className="h-12 w-12 rounded-full object-cover border border-foreground/10"
-        loading="lazy"
-      />
+      {hasLink ? (
+        <a href={linkUrl} target="_blank" rel="noreferrer" className="shrink-0">
+          <img
+            src={imageUrl}
+            alt={imageAlt}
+            className="h-12 w-12 rounded-full object-cover border border-foreground/10"
+            loading="lazy"
+          />
+        </a>
+      ) : (
+        <img
+          src={imageUrl}
+          alt={imageAlt}
+          className="h-12 w-12 rounded-full object-cover border border-foreground/10"
+          loading="lazy"
+        />
+      )}
       <div>
         <p className="text-xs uppercase tracking-[0.2em] text-foreground/50">
           {shortIntro}
         </p>
-        <p className="mt-1 text-lg font-semibold">{title}</p>
+        {hasLink ? (
+          <a
+            href={linkUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 block text-lg font-semibold hover:text-accent transition-colors"
+          >
+            {title}
+          </a>
+        ) : (
+          <p className="mt-1 text-lg font-semibold">{title}</p>
+        )}
         <p className="mt-2 text-sm text-foreground/60">{description}</p>
-        <a
-          href={linkUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-2 inline-flex text-sm text-accent hover:underline"
-        >
-          {linkLabel}
-        </a>
+        {hasLink ? (
+          <a
+            href={linkUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex text-sm text-accent hover:underline"
+          >
+            {linkLabel}
+          </a>
+        ) : (
+          <span className="mt-2 inline-flex text-sm text-foreground/50">
+            {linkLabel}
+          </span>
+        )}
       </div>
     </li>
   );
