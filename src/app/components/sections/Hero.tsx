@@ -15,16 +15,25 @@ export default function Hero() {
     >
       <div className="relative">
         <h1 className="text-3xl md:text-6xl font-bold z-10 relative text-left">
-          Software Engineer
+          Theory Engineer
+          <span className="ml-2 text-xs md:text-base text-foreground/50">
+            (philosopher: a.e.)
+          </span>
           <br />
           Systems Thinker
+          <span className="ml-2 text-xs md:text-base text-foreground/50">
+            (doer: e.m.)
+          </span>
           <br />
-          Aesthetic Explorer
+          aesthetic explorer
+          <span className="ml-2 text-xs md:text-base text-foreground/50">
+            (visionary: s.j.)
+          </span>
         </h1>
       </div>
       <div className="mt-3 md:mt-4">
         <p className="text-base md:text-xl text-left">
-          I build AI products that fuse function with form.
+          I envision a world where human is elevated by technology.
         </p>
       </div>
       <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-3 md:gap-4">
