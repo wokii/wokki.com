@@ -7,9 +7,14 @@ export default function Writing() {
     <Section id="writing" minHeight="screen" paddingY="none">
       <SectionTitle
         subtitle={
-          <span className="block max-w-[48ch] text-left">
+          <a
+            className="group block max-w-[48ch] text-left transition-all duration-200 hover:-translate-y-[1px] hover:opacity-80 focus-visible:-translate-y-[1px] focus-visible:opacity-80"
+            href="https://www.acmi.net.au/stories-and-ideas/the-wolf-of-wall-street-fairy-dust/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <span
-              className="block"
+              className="block transition-colors duration-200 group-hover:text-accent group-focus-visible:text-accent"
               style={{
                 paddingLeft: "1ch",
                 textIndent: "-1ch",
@@ -20,14 +25,14 @@ export default function Writing() {
               landed. It is no matter. It&apos;s not on the elemental chart.
               It&apos;s not fucking real.&quot;
             </span>
-            <span className="block text-right">
+            <span className="block text-right transition-colors duration-200 group-hover:text-accent group-focus-visible:text-accent">
               —{" "}
-              <span className="invert-selection inline-block bg-accent text-background px-1">
+              <span className="invert-selection inline-block bg-accent text-background px-1 transition-transform duration-200 group-hover:-translate-y-[1px] group-focus-visible:-translate-y-[1px]">
                 Mark H.
               </span>{" "}
               (The Wolf of Wall Street)
             </span>
-          </span>
+          </a>
         }
       >
         WRITING
