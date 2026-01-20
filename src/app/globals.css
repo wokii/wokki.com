@@ -51,6 +51,16 @@ body {
   color: var(--background);
 }
 
+.invert-selection::selection {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+.invert-selection::-moz-selection {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
 /* Card flip styles */
 .perspective-1000 {
   perspective: 1000px;

@@ -3,7 +3,7 @@ import React from "react";
 type SectionTitleProps = {
   children: React.ReactNode;
   className?: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
 };
 
 export default function SectionTitle({
