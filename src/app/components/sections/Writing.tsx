@@ -1,8 +1,14 @@
 import React from "react";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
+import { formatDateOnly, getLastUpdatedIso } from "../../lib/github";
 
-export default function Writing() {
+export default async function Writing() {
+  const lastUpdatedIso = await getLastUpdatedIso();
+  const lastUpdatedLabel =
+    (lastUpdatedIso ? formatDateOnly(lastUpdatedIso) : null) ??
+    (process.env.NODE_ENV === "development" ? "unavailable" : null);
+
   return (
     <Section id="writing" minHeight="screen" paddingY="none">
       <SectionTitle
@@ -39,7 +45,7 @@ export default function Writing() {
       </SectionTitle>
       <article>
         <h3 className="text-3xl">Nothing here yet.</h3>
-        <p>Aug 24, 2025</p>
+        {lastUpdatedLabel ? <p>{lastUpdatedLabel}</p> : null}
       </article>
     </Section>
   );
