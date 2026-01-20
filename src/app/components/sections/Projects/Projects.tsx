@@ -232,7 +232,7 @@ export default function Projects() {
         <div className="hidden md:flex items-center justify-center">
           <button
             onClick={nextCard}
-            className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/10 bg-background/70 text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--background))] hover:text-foreground hover:shadow-md z-20"
             aria-label="Next project"
           >
             <svg
@@ -331,7 +331,7 @@ export default function Projects() {
         <div className="mt-16 md:mt-24 flex justify-center col-start-2 row-start-2">
           <button
             onClick={shuffleDeck}
-            className="bg-foreground text-background px-5 py-2.5 md:px-6 md:py-3 rounded-full shadow-lg hover:bg-accent transition-colors text-sm md:text-base"
+            className="rounded-full border border-foreground/10 bg-background/70 px-5 py-2.5 text-sm text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--background))] hover:text-foreground hover:shadow-md md:px-6 md:py-3 md:text-base"
             aria-label="Shuffle projects"
           >
             Shuffle
@@ -342,7 +342,7 @@ export default function Projects() {
         <div className="hidden md:flex items-center justify-center">
           <button
             onClick={prevCard}
-            className="bg-foreground text-background w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-accent transition-colors z-20"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-foreground/10 bg-background/70 text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--background))] hover:text-foreground hover:shadow-md z-20"
             aria-label="Previous project"
           >
             <svg

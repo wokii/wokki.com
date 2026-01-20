@@ -241,8 +241,7 @@ export default function ProjectCard({
               <p className="mt-3 text-sm text-foreground/70">{description}</p>
             </div>
 
-            <div className="mt-auto flex items-center justify-between text-sm">
-              <span className="text-foreground/50">Tap to close</span>
+            <div className="mt-auto flex items-center justify-end text-sm">
               {link ? (
                 <a
                   href={link}
