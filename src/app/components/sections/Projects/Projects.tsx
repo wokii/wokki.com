@@ -28,6 +28,7 @@ type BackgroundKey = keyof typeof backgroundConfigs;
 type Project = {
   id: number;
   title: string;
+  shortIntro: string;
   description: string;
   link: string | null;
   image: string;
@@ -41,6 +42,7 @@ const projects: Project[] = [
   {
     id: 1,
     title: "AI Coaching App",
+    shortIntro: "Psychology",
     description:
       "An AI-powered coaching platform that provides personalized guidance and feedback.",
     link: "https://zera.co",
@@ -52,6 +54,7 @@ const projects: Project[] = [
   {
     id: 2,
     title: "Digital Twin",
+    shortIntro: "AI, Psychology",
     description:
       "A digital twin of myself providing on-demand emotional support to Christine.",
     link: "https://christine.wokki.com",
@@ -63,6 +66,7 @@ const projects: Project[] = [
   {
     id: 3,
     title: "Wokki.com",
+    shortIntro: "Self",
     description: "This very website you are on right now. Click to flip back.",
     link: "https://wokki.com",
     image: "/images/design-portfolio.jpg",
@@ -73,6 +77,7 @@ const projects: Project[] = [
   {
     id: 4,
     title: "Divination App",
+    shortIntro: "Astrology",
     description:
       "A digital divination tool that combines classical I Ching hexagram casting with LLM-powered interpretations.",
     link: "https://xiaoliuyao.streamlit.app/",
@@ -84,6 +89,7 @@ const projects: Project[] = [
   {
     id: 5,
     title: "CallSense MVP",
+    shortIntro: "Prototype",
     description:
       "An MVP that leverages LLMs to analyze sales call transcripts, extracting objections, intent, and sentiment to enhance sales strategies.",
     link: "https://glyphic.streamlit.app/",
@@ -95,6 +101,7 @@ const projects: Project[] = [
   {
     id: 6,
     title: "FA Automation",
+    shortIntro: "Finance",
     description:
       "A concise and elegant script that automates a part of tedious and repetitive financial analysis processes for KPMG.",
     link: "https://github.com/wokii/fa-automation/",
@@ -106,6 +113,7 @@ const projects: Project[] = [
   {
     id: 7,
     title: "Insight System",
+    shortIntro: "Behavioral Science",
     description:
       "A behavior change platform that provides psychological insights based on users' authorised data.",
     link: null,
@@ -119,6 +127,9 @@ const projects: Project[] = [
 export default function Projects() {
   const [flippedCards, setFlippedCards] = useState<number[]>([2, 3]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [styleVariant, setStyleVariant] = useState<"classic" | "curation">(
+    "curation",
+  );
   const measureRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const [baseWidth, setBaseWidth] = useState<number>(0);
@@ -186,6 +197,34 @@ export default function Projects() {
       centerContent={false}
     >
       <SectionTitle>PROJECTS</SectionTitle>
+      <div className="mt-4 mb-8 flex justify-end">
+        <div className="inline-flex items-center gap-1 rounded-full border border-foreground/10 bg-background/60 p-1 text-xs md:text-sm">
+          <button
+            type="button"
+            onClick={() => setStyleVariant("classic")}
+            className={`rounded-full px-3 py-1.5 transition-colors ${
+              styleVariant === "classic"
+                ? "bg-foreground text-background"
+                : "text-foreground/60 hover:text-foreground"
+            }`}
+            aria-pressed={styleVariant === "classic"}
+          >
+            Classic
+          </button>
+          <button
+            type="button"
+            onClick={() => setStyleVariant("curation")}
+            className={`rounded-full px-3 py-1.5 transition-colors ${
+              styleVariant === "curation"
+                ? "bg-foreground text-background"
+                : "text-foreground/60 hover:text-foreground"
+            }`}
+            aria-pressed={styleVariant === "curation"}
+          >
+            Curation
+          </button>
+        </div>
+      </div>
 
       {/* Grid: left button | deck stage | right button */}
       <div className="grid grid-cols-[64px_1fr_64px] items-center">
@@ -258,11 +297,13 @@ export default function Projects() {
                   key={project.id}
                   id={project.id}
                   title={project.title}
+                  shortIntro={project.shortIntro}
                   description={project.description}
                   link={project.link}
                   background={bg}
                   cardSuit={project.cardSuit}
                   cardRank={project.cardRank}
+                  styleVariant={styleVariant}
                   flipped={flippedCards.includes(project.id)}
                   onToggle={toggleCard}
                   containerStyle={{
