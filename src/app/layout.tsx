@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { heroTitles } from "./components/sections/heroContent";
 import "./globals.css";
 import ThemeProvider from "./theme-provider";
 
@@ -16,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://wokki.com"),
-  title: "Han Wokki – Software Engineer, Systems Thinker, Aesthetic Explorer",
+  title: `Han Wokki – ${heroTitles.map((item) => item.title).join(", ")}`,
   description: "I build AI products that fuse function with form.",
 };
 
