@@ -82,6 +82,11 @@ body {
   transform: rotateY(180deg);
 }
 
+.text-extra-bold {
+  -webkit-text-stroke: 2px currentColor;
+  text-shadow: none;
+}
+
 /* Card container styles */
 .card-container {
   width: 100%;
