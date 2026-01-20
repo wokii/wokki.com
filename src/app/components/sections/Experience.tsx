@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
 
@@ -43,7 +49,7 @@ const timelineEntries: TimelineEntry[] = [
       "Cross-asset risk management tooling for the margin trading desk.",
     startDate: "2025-02-09",
     endDate: new Date().toISOString().slice(0, 10),
-    skills: ["Risk Systems", "Real-Time", "Python", "Finance"],
+    skills: ["Finance", "Mathematics", "Computer Science"],
   },
   {
     id: "stealth",
@@ -52,7 +58,7 @@ const timelineEntries: TimelineEntry[] = [
     description: "Built an AI product from concept to launch.",
     startDate: "2024-02-11",
     endDate: "2024-11-31",
-    skills: ["AI", "Product", "Leadership", "Prototype"],
+    skills: ["Product", "Design", "Computer Science"],
   },
   {
     id: "bloomberg",
@@ -61,7 +67,7 @@ const timelineEntries: TimelineEntry[] = [
     description: "Ingestion pipelines and OTC derivatives pricing infra.",
     startDate: "2020-03-03",
     endDate: "2024-02-09",
-    skills: ["Data", "Pricing Infra", "System Design", "Python"],
+    skills: ["Finance", "Computer Science", "Mathematics"],
   },
   {
     id: "imperial",
@@ -70,7 +76,7 @@ const timelineEntries: TimelineEntry[] = [
     description: "Machine learning specialisation.",
     startDate: "2018-09-01",
     endDate: "2019-11-01",
-    skills: ["Machine Learning", "Research", "Python"],
+    skills: ["Psychology", "Behavioral Science", "Computer Science"],
   },
 ];
 
@@ -87,7 +93,7 @@ const pointsSnapshots: PointsSnapshotWithScore[] = [
     date: "2020-03-03",
     points: {
       health: 60,
-      overall: 34,
+      overall: 35,
       awakeningScore: 20,
     },
   },
@@ -95,40 +101,40 @@ const pointsSnapshots: PointsSnapshotWithScore[] = [
     date: "2022-01-01",
     points: {
       health: 45,
-      overall: 28,
-      awakeningScore: 22,
+      overall: 30,
+      awakeningScore: 24,
     },
   },
   {
     date: "2024-02-09",
     points: {
       health: 58,
-      overall: 40,
-      awakeningScore: 24,
+      overall: 38,
+      awakeningScore: 26,
     },
   },
   {
     date: "2025-09-01",
     points: {
       health: 72,
-      overall: 58,
-      awakeningScore: 30,
+      overall: 55,
+      awakeningScore: 70,
     },
   },
   {
     date: "2026-01-07",
     points: {
       health: 90,
-      overall: 99,
-      awakeningScore: 95,
+      overall: 80,
+      awakeningScore: 88,
     },
   },
   {
     date: "2026-01-10",
     points: {
       health: 99,
-      overall: 99.9,
-      awakeningScore: 100,
+      overall: 95,
+      awakeningScore: 85,
     },
   },
 ];
@@ -151,12 +157,10 @@ export default function Experience() {
     return Array.from(set).sort();
   }, []);
 
-  const filteredEntries = useMemo(() => {
-    if (selectedSkills.length === 0) return timelineEntries;
-    return timelineEntries.filter((entry) =>
-      selectedSkills.some((skill) => entry.skills.includes(skill)),
-    );
-  }, [selectedSkills]);
+  const isHighlighted = (entry: TimelineEntry) =>
+    selectedSkills.length === 0
+      ? true
+      : selectedSkills.some((skill) => entry.skills.includes(skill));
 
   const parseDate = (value: string) => new Date(value);
   const earliestPointDate = new Date(
@@ -206,14 +210,17 @@ export default function Experience() {
   const normalizedSliderTime = clampDate(sliderTime);
   const sliderDate = new Date(normalizedSliderTime);
 
-  const updateSliderFromClientX = (clientX: number) => {
-    const rect = axisRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const ratio = (clientX - rect.left) / rect.width;
-    const clampedRatio = clamp(ratio, 0, 1);
-    const nextTime = minDate.getTime() + clampedRatio * dateRangeMs;
-    setSliderTime(nextTime);
-  };
+  const updateSliderFromClientX = useCallback(
+    (clientX: number) => {
+      const rect = axisRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const ratio = (clientX - rect.left) / rect.width;
+      const clampedRatio = clamp(ratio, 0, 1);
+      const nextTime = minDate.getTime() + clampedRatio * dateRangeMs;
+      setSliderTime(nextTime);
+    },
+    [dateRangeMs, minDate],
+  );
 
   useEffect(() => {
     if (!isDragging) return;
@@ -227,7 +234,7 @@ export default function Experience() {
       window.removeEventListener("pointermove", handleMove);
       window.removeEventListener("pointerup", handleUp);
     };
-  }, [isDragging, dateRangeMs, minDate]);
+  }, [isDragging, updateSliderFromClientX]);
 
   const interpolatedScore = (score: ScoreKey, date: Date) => {
     const snapshots = pointsSnapshots
@@ -282,14 +289,16 @@ export default function Experience() {
       centerContent={false}
       containerClassName="flex h-full flex-col"
     >
-      <SectionTitle>EXPERIENCE</SectionTitle>
+      <SectionTitle className="relative top-4" subtitle="(Under Construction)">
+        EXPERIENCE
+      </SectionTitle>
 
-      <div className="mt-10 rounded-[2.5rem] border border-foreground/10 bg-[color-mix(in_srgb,var(--background)_85%,var(--accent))] p-6 md:p-8 shadow-sm flex-1 min-h-0">
+      <div className="mt-10 rounded-[2.5rem] border border-foreground/10 bg-[color-mix(in_srgb,var(--background)_85%,var(--accent))] p-6 md:p-8 shadow-sm flex-1 min-h-[70vh]">
         <div className="grid h-full gap-8 md:grid-cols-[240px_1fr]">
           <div className="flex flex-col gap-6">
             <div>
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/35">
-                Experience Filter
+                Subject(s) Selector
               </p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button
@@ -323,7 +332,7 @@ export default function Experience() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-foreground/10 bg-background/70 p-4">
+            <div className="mt-auto rounded-2xl border border-foreground/10 bg-background/70 p-4">
               <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/35">
                 Scores
               </p>
@@ -356,7 +365,7 @@ export default function Experience() {
             </div>
           </div>
 
-          <div className="flex min-h-[360px] flex-col">
+          <div className="flex min-h-[60vh] flex-col">
             <div className="relative flex-1 rounded-3xl border border-foreground/10 bg-background/70 p-6 md:p-8">
               <div className="absolute inset-x-6 top-28 bottom-20">
                 <div
@@ -489,7 +498,7 @@ export default function Experience() {
               />
               <div className="absolute top-8 left-6 right-6">
                 <div className="relative h-4">
-                  {years.map((year) => {
+                  {years.slice(1).map((year) => {
                     const yearDate = new Date(Number(year), 0, 1);
                     const left = `${toPercent(yearDate)}%`;
                     return (
@@ -504,7 +513,7 @@ export default function Experience() {
                   })}
                 </div>
                 <div className="relative h-10">
-                  {years.map((year) => {
+                  {years.slice(1).map((year) => {
                     const yearDate = new Date(Number(year), 0, 1);
                     const left = `${toPercent(yearDate)}%`;
                     return (
@@ -517,22 +526,33 @@ export default function Experience() {
                   })}
                 </div>
               </div>
-              {filteredEntries.length > 0 && (
+              {timelineEntries.length > 0 && (
                 <div className="absolute bottom-16 left-6 right-6 h-9">
-                  {filteredEntries.map((entry) => {
+                  {timelineEntries.map((entry) => {
                     const startPercent = toPercent(parseDate(entry.startDate));
                     const endPercent = toPercent(parseDate(entry.endDate));
                     const widthPercent = Math.max(4, endPercent - startPercent);
+                    const highlighted = isHighlighted(entry);
                     return (
                       <div
                         key={entry.id}
-                        className="absolute top-0 h-8 rounded-l-full rounded-r-none border border-foreground/10 bg-background/90 px-3 shadow-none backdrop-blur-sm"
+                        className={`absolute top-0 h-8 rounded-l-full rounded-r-none border px-3 shadow-none backdrop-blur-sm transition-opacity ${
+                          highlighted
+                            ? "border-foreground/10 bg-background/90 opacity-100"
+                            : "border-foreground/5 bg-background/70 opacity-35"
+                        }`}
                         style={{
                           left: `${startPercent}%`,
                           width: `${widthPercent}%`,
                         }}
                       >
-                        <div className="flex h-full items-center justify-center gap-2 text-[9px] font-medium tracking-[0.06em] text-foreground/60 uppercase leading-none">
+                        <div
+                          className={`flex h-full items-center justify-center gap-2 text-[9px] font-medium tracking-[0.06em] uppercase leading-none ${
+                            highlighted
+                              ? "text-foreground/60"
+                              : "text-foreground/30"
+                          }`}
+                        >
                           <span className="inline-flex h-1 w-1 shrink-0 rounded-full bg-foreground/35" />
                           {entry.title}
                         </div>
@@ -550,6 +570,9 @@ export default function Experience() {
                     <div
                       role="slider"
                       aria-label="Timeline handle"
+                      aria-valuemin={minDate.getTime()}
+                      aria-valuemax={maxDate.getTime()}
+                      aria-valuenow={normalizedSliderTime}
                       tabIndex={0}
                       onPointerDown={(event) => {
                         event.preventDefault();
