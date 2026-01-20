@@ -392,7 +392,15 @@ export default function Experience() {
                   style={{ width: `${toPercent(currentDate)}%` }}
                   aria-hidden="true"
                 >
-                  <span className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--background)_65%,transparent)]">
+                  <span
+                    className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--accent)_55%,transparent)]"
+                    style={{
+                      textShadow: "none",
+                      filter: "none",
+                      WebkitTextStroke: "0.6px currentColor",
+                      fontWeight: 900,
+                    }}
+                  >
                     PAST
                   </span>
                 </div>
@@ -404,7 +412,15 @@ export default function Experience() {
                   }}
                   aria-hidden="true"
                 >
-                  <span className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--accent)_10%,transparent)]">
+                  <span
+                    className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--accent)_55%,transparent)]"
+                    style={{
+                      textShadow: "none",
+                      filter: "none",
+                      WebkitTextStroke: "0.6px currentColor",
+                      fontWeight: 900,
+                    }}
+                  >
                     FUTURE
                   </span>
                 </div>
