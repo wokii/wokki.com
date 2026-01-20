@@ -40,46 +40,6 @@ type PointsSnapshotWithScore = Omit<PointsSnapshot, "points"> & {
   points: AtLeastOneScore;
 };
 
-const timelineEntries: TimelineEntry[] = [
-  {
-    id: "jpmorgan",
-    title: "JPMorgan",
-    role: "Quant Dev",
-    description:
-      "Cross-asset risk management tooling for the margin trading desk.",
-    startDate: "2025-02-09",
-    endDate: new Date().toISOString().slice(0, 10),
-    skills: ["Finance", "Mathematics", "Computer Science"],
-  },
-  {
-    id: "stealth",
-    title: "Stealth Startup",
-    role: "Lead Engineer",
-    description: "Built an AI product from concept to launch.",
-    startDate: "2024-02-11",
-    endDate: "2024-11-31",
-    skills: ["Product", "Design", "Computer Science"],
-  },
-  {
-    id: "bloomberg",
-    title: "Bloomberg",
-    role: "Software Engineer",
-    description: "Ingestion pipelines and OTC derivatives pricing infra.",
-    startDate: "2020-03-03",
-    endDate: "2024-02-09",
-    skills: ["Finance", "Computer Science", "Mathematics"],
-  },
-  {
-    id: "imperial",
-    title: "Imperial College London",
-    role: "MSc Computing",
-    description: "Machine learning specialisation.",
-    startDate: "2018-09-01",
-    endDate: "2019-11-01",
-    skills: ["Psychology", "Behavioral Science", "Computer Science"],
-  },
-];
-
 const pointsSnapshots: PointsSnapshotWithScore[] = [
   {
     date: "2018-09-01",
@@ -139,23 +99,76 @@ const pointsSnapshots: PointsSnapshotWithScore[] = [
   },
 ];
 
+const CURRENT_DATE_FALLBACK =
+  pointsSnapshots[pointsSnapshots.length - 1]?.date ?? "2026-01-01";
+const getTodayIso = () => new Date().toISOString().slice(0, 10);
+
+const timelineEntries: TimelineEntry[] = [
+  {
+    id: "jpmorgan",
+    title: "JPMorgan",
+    role: "Quant Dev",
+    description:
+      "Cross-asset risk management tooling for the margin trading desk.",
+    startDate: "2025-02-09",
+    endDate: CURRENT_DATE_FALLBACK,
+    skills: ["Finance", "Mathematics", "Computer Science"],
+  },
+  {
+    id: "stealth",
+    title: "Stealth Startup",
+    role: "Lead Engineer",
+    description: "Built an AI product from concept to launch.",
+    startDate: "2024-02-11",
+    endDate: "2024-11-31",
+    skills: ["Product", "Design", "Computer Science"],
+  },
+  {
+    id: "bloomberg",
+    title: "Bloomberg",
+    role: "Software Engineer",
+    description: "Ingestion pipelines and OTC derivatives pricing infra.",
+    startDate: "2020-03-03",
+    endDate: "2024-02-09",
+    skills: ["Finance", "Computer Science", "Mathematics"],
+  },
+  {
+    id: "imperial",
+    title: "Imperial College London",
+    role: "MSc Computing",
+    description: "Machine learning specialisation.",
+    startDate: "2018-09-01",
+    endDate: "2019-11-01",
+    skills: ["Psychology", "Behavioral Science", "Computer Science"],
+  },
+];
+
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
 export default function Experience() {
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedScores, setSelectedScores] = useState<ScoreKey[]>(["overall"]);
-  const currentDate = new Date();
+  const [currentDateIso, setCurrentDateIso] = useState(CURRENT_DATE_FALLBACK);
+  const currentDate = useMemo(() => new Date(currentDateIso), [currentDateIso]);
   const axisRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
+  const resolvedTimelineEntries = useMemo(
+    () =>
+      timelineEntries.map((entry) =>
+        entry.id === "jpmorgan" ? { ...entry, endDate: currentDateIso } : entry,
+      ),
+    [currentDateIso],
+  );
+
   const allSkills = useMemo(() => {
     const set = new Set<string>();
-    timelineEntries.forEach((entry) => {
+    resolvedTimelineEntries.forEach((entry) => {
       entry.skills.forEach((skill) => set.add(skill));
     });
     return Array.from(set).sort();
-  }, []);
+  }, [resolvedTimelineEntries]);
 
   const isHighlighted = (entry: TimelineEntry) =>
     selectedSkills.length === 0
@@ -203,6 +216,14 @@ export default function Experience() {
   );
 
   const [sliderTime, setSliderTime] = useState<number>(currentDate.getTime());
+
+  useEffect(() => {
+    setCurrentDateIso(getTodayIso());
+  }, []);
+
+  useEffect(() => {
+    setSliderTime(currentDate.getTime());
+  }, [currentDate]);
 
   const clampDate = (time: number) =>
     clamp(time, minDate.getTime(), maxDate.getTime());
@@ -542,9 +563,9 @@ export default function Experience() {
                   })}
                 </div>
               </div>
-              {timelineEntries.length > 0 && (
+              {resolvedTimelineEntries.length > 0 && (
                 <div className="absolute bottom-16 left-6 right-6 h-9">
-                  {timelineEntries.map((entry) => {
+                  {resolvedTimelineEntries.map((entry) => {
                     const startPercent = toPercent(parseDate(entry.startDate));
                     const endPercent = toPercent(parseDate(entry.endDate));
                     const widthPercent = Math.max(4, endPercent - startPercent);
