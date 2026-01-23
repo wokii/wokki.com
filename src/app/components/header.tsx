@@ -134,6 +134,7 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-8">
           <NavLink href="#projects">Projects</NavLink>
           <NavLink href="#curation">Curation</NavLink>
+          <NavLink href="#nodes">Node(s)</NavLink>
           <NavLink href="#writing">Writing</NavLink>
           <NavLink href="#experience">Experience</NavLink>
           <NavLink href="#about">About</NavLink>
@@ -223,6 +224,7 @@ export default function Header() {
           <nav className="flex flex-col space-y-4 items-end">
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#curation">Curation</NavLink>
+            <NavLink href="#nodes">Node(s)</NavLink>
             <NavLink href="#writing">Writing</NavLink>
             <NavLink href="#experience">Experience</NavLink>
             <NavLink href="#about">About</NavLink>
