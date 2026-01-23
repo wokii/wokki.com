@@ -6,6 +6,7 @@ import Hero from "./components/sections/Hero";
 import Projects from "./components/sections/Projects";
 import Curation from "./components/sections/Curation";
 import Writing from "./components/sections/Writing";
+import Principles from "./components/sections/Principles";
 import Experience from "./components/sections/Experience";
 import About from "./components/sections/About";
 
@@ -18,6 +19,7 @@ export default function Home() {
       <Projects />
       <Curation />
       <Writing />
+      <Principles />
       <Experience />
       <About />
       <Footer />
