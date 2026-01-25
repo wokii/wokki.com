@@ -102,6 +102,7 @@ export type ExperienceTimelineEntry = {
   startDate: string;
   endDate: string | null;
   skills: string[];
+  link?: string;
 };
 
 export type ExperiencePointsSnapshot = {
@@ -170,6 +171,18 @@ export type WokkiCom = {
 
 export const WOKKI_DOT_COM = "wokki.com" as const;
 export const CONSULTANCY_WOKKI = "consultancy.wokki" as const;
+
+export type AliasMap = Record<string, string[]>;
+
+export const aliasMap: AliasMap = {
+  jpmorgan: [
+    "JPM",
+    "JPMC",
+    "JPMorgan",
+    "JPMorgan Chase",
+    "JPMorgan Chase & Co",
+  ],
+};
 
 const capitalizeFirst = (value: string) =>
   value ? `${value[0].toUpperCase()}${value.slice(1)}` : "";
@@ -509,8 +522,8 @@ export const wokkiCom: WokkiCom = {
         id: "jpmorgan",
         title: "JPMorgan",
         role: "Quant Dev",
-        description:
-          "Cross-asset risk management tooling for the margin trading desk.",
+        description: "Margin Trading, Prime Finance Service & Clearing.",
+        link: "https://www.jpmorganchase.com/",
         startDate: "2025-02-09",
         endDate: null,
         skills: ["Finance", "Mathematics", "Computer Science"],
@@ -519,16 +532,23 @@ export const wokkiCom: WokkiCom = {
         id: "stealth",
         title: "Stealth Startup",
         role: "Lead Engineer",
-        description: "Built an AI product from concept to launch.",
+        description: "Built an AI Coaching product from concept to launch.",
         startDate: "2024-02-11",
         endDate: "2024-11-31",
-        skills: ["Product", "Design", "Computer Science"],
+        skills: [
+          "Behavioral Science",
+          "Psychology",
+          "Product",
+          "Design",
+          "Computer Science",
+        ],
       },
       {
         id: "bloomberg",
         title: "Bloomberg",
         role: "Software Engineer",
-        description: "Ingestion pipelines and OTC derivatives pricing infra.",
+        description: "Data Ingestion Pipeline & OTC Derivatives Pricing Infra.",
+        link: "https://www.bloomberg.com/",
         startDate: "2020-03-03",
         endDate: "2024-02-09",
         skills: ["Finance", "Computer Science", "Mathematics"],
@@ -537,10 +557,12 @@ export const wokkiCom: WokkiCom = {
         id: "imperial",
         title: "Imperial College London",
         role: "MSc Computing",
-        description: "Machine learning specialisation.",
+        description:
+          "Computing with specialisation in Machine Learning (Nowadays 'AI').",
+        link: "https://www.imperial.ac.uk/",
         startDate: "2018-09-01",
         endDate: "2019-11-01",
-        skills: ["Psychology", "Behavioral Science", "Computer Science"],
+        skills: ["Computer Science"],
       },
     ],
   },

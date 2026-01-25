@@ -13,6 +13,7 @@
   --foreground: #171717;
   --accent: #ff5f40; /* The orange circle in the design */
   --header-height: 64px;
+  --ui-scale: 0.8;
   scroll-behavior: smooth;
 }
 
@@ -33,6 +34,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: "wokkiFont", Arial, Helvetica, sans-serif;
+}
+
+html {
+  font-size: calc(100% * var(--ui-scale));
 }
 
 html,
@@ -140,14 +145,14 @@ body {
 
 /* Slightly scale down on compact phone screens (e.g., iPhone Pro sizes) */
 @media (max-width: 430px) {
-  html {
-    font-size: 88%;
+  :root {
+    --ui-scale: 0.76;
   }
 }
 
-/* Scale down typography slightly on larger screens */
+/* Keep desktop at the target overall scale */
 @media (min-width: 768px) {
-  html {
-    font-size: 90%;
+  :root {
+    --ui-scale: 0.8;
   }
 }

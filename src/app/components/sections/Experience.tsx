@@ -10,6 +10,7 @@ import React, {
 import {
   WOKKI_DOT_COM,
   Zen,
+  aliasMap,
   type ExperiencePointsSnapshot,
   type ExperienceTimelineEntry,
 } from "../../lib/WokkiNodes";
@@ -35,6 +36,18 @@ const getTodayIso = () => new Date().toISOString().slice(0, 10);
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
+const toInitials = (value: string) => {
+  const words = value
+    .replace(/[^a-zA-Z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  if (words.length === 0) return value;
+  return words.map((word) => word[0].toUpperCase()).join(".") + ".";
+};
+
+const estimateLabelCapacity = (widthPercent: number) =>
+  Math.max(6, Math.floor(widthPercent * 0.8));
+
 export default function Experience() {
   const { experience } = Zen[WOKKI_DOT_COM];
   const pointsSnapshots =
@@ -47,7 +60,12 @@ export default function Experience() {
   const [currentDateIso, setCurrentDateIso] = useState(CURRENT_DATE_FALLBACK);
   const currentDate = useMemo(() => new Date(currentDateIso), [currentDateIso]);
   const axisRef = useRef<HTMLDivElement | null>(null);
+  const chartRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [viewOffsetMs, setViewOffsetMs] = useState(0);
+  const [isPanning, setIsPanning] = useState(false);
+  const panStartRef = useRef<{ x: number; offset: number } | null>(null);
+  const snapAnimationRef = useRef<number | null>(null);
 
   const resolvedTimelineEntries: ResolvedTimelineEntry[] = useMemo(
     () =>
@@ -72,16 +90,25 @@ export default function Experience() {
       : selectedSkills.some((skill) => entry.skills.includes(skill));
 
   const parseDate = (value: string) => new Date(value);
+  const viewCenterDate = useMemo(
+    () => new Date(currentDate.getTime() + viewOffsetMs),
+    [currentDate, viewOffsetMs],
+  );
+  const viewOffsetYears = useMemo(
+    () =>
+      (viewCenterDate.getTime() - currentDate.getTime()) /
+      (1000 * 60 * 60 * 24 * 365.25),
+    [currentDate, viewCenterDate],
+  );
+  const isFarFromPresent = Math.abs(viewOffsetYears) >= 25;
+  const isViewingPast = viewOffsetYears < 0;
+  const backToPresentLabel = isViewingPast ? "Disenthral" : "Abraid";
+
   const { minDate, maxDate, dateRangeMs, years } = useMemo(() => {
-    const earliestPointDate = new Date(
-      Math.min(
-        ...pointsSnapshots.map((point) => parseDate(point.date).getTime()),
-      ),
-    );
-    const nextMinDate = new Date(earliestPointDate);
-    nextMinDate.setMonth(nextMinDate.getMonth() - 3);
-    const nextMaxDate = new Date(currentDate);
-    nextMaxDate.setFullYear(nextMaxDate.getFullYear() + 3);
+    const nextMinDate = new Date(viewCenterDate);
+    nextMinDate.setFullYear(nextMinDate.getFullYear() - 6);
+    const nextMaxDate = new Date(viewCenterDate);
+    nextMaxDate.setFullYear(nextMaxDate.getFullYear() + 6);
     const nextDateRangeMs = Math.max(
       1,
       nextMaxDate.getTime() - nextMinDate.getTime(),
@@ -96,7 +123,7 @@ export default function Experience() {
       dateRangeMs: nextDateRangeMs,
       years: nextYears,
     };
-  }, [currentDate, pointsSnapshots]);
+  }, [viewCenterDate]);
 
   const toPercent = (date: Date) =>
     clamp(((date.getTime() - minDate.getTime()) / dateRangeMs) * 100, 0, 100);
@@ -122,6 +149,13 @@ export default function Experience() {
   };
 
   const [sliderTime, setSliderTime] = useState<number>(currentDate.getTime());
+
+  const isWithinRange = useCallback(
+    (date: Date) =>
+      date.getTime() >= minDate.getTime() &&
+      date.getTime() <= maxDate.getTime(),
+    [maxDate, minDate],
+  );
 
   useEffect(() => {
     setCurrentDateIso(getTodayIso());
@@ -162,6 +196,82 @@ export default function Experience() {
       window.removeEventListener("pointerup", handleUp);
     };
   }, [isDragging, updateSliderFromClientX]);
+
+  const handleChartPointerDown = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const target = event.target as HTMLElement;
+      if (target.closest("[data-slider-handle]")) return;
+      const rect = chartRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      event.preventDefault();
+      panStartRef.current = { x: event.clientX, offset: viewOffsetMs };
+      setIsPanning(true);
+      event.currentTarget.setPointerCapture(event.pointerId);
+    },
+    [viewOffsetMs],
+  );
+
+  const handleChartPointerMove = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!isPanning || !panStartRef.current) return;
+      const rect = chartRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      const deltaX = event.clientX - panStartRef.current.x;
+      const ratio = rect.width === 0 ? 0 : deltaX / rect.width;
+      const nextOffset = panStartRef.current.offset + -ratio * dateRangeMs;
+      setViewOffsetMs(nextOffset);
+    },
+    [dateRangeMs, isPanning],
+  );
+
+  const handleChartPointerUp = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!isPanning) return;
+      setIsPanning(false);
+      panStartRef.current = null;
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    },
+    [isPanning],
+  );
+
+  const handleBackToPresent = useCallback(() => {
+    if (snapAnimationRef.current !== null) {
+      window.cancelAnimationFrame(snapAnimationRef.current);
+    }
+    const startOffset = viewOffsetMs;
+    const startSliderTime = sliderTime;
+    const targetSliderTime = currentDate.getTime();
+    const distanceYears = Math.abs(viewOffsetYears);
+    const duration = Math.min(1600, Math.max(600, distanceYears * 30));
+    const startTime = performance.now();
+    const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
+    const animate = (now: number) => {
+      const progress = Math.min(1, (now - startTime) / duration);
+      const eased = easeOutCubic(progress);
+      setViewOffsetMs(startOffset * (1 - eased));
+      setSliderTime(
+        startSliderTime + (targetSliderTime - startSliderTime) * eased,
+      );
+
+      if (progress < 1) {
+        snapAnimationRef.current = window.requestAnimationFrame(animate);
+      } else {
+        snapAnimationRef.current = null;
+      }
+    };
+
+    snapAnimationRef.current = window.requestAnimationFrame(animate);
+  }, [currentDate, sliderTime, viewOffsetMs, viewOffsetYears]);
+
+  useEffect(
+    () => () => {
+      if (snapAnimationRef.current !== null) {
+        window.cancelAnimationFrame(snapAnimationRef.current);
+      }
+    },
+    [],
+  );
 
   const interpolatedScore = (score: ScoreKey, date: Date) => {
     const snapshots = pointsSnapshots
@@ -220,21 +330,21 @@ export default function Experience() {
         EXPERIENCE
       </SectionTitle>
 
-      <div className="mt-10 rounded-[2.5rem] border border-foreground/10 bg-[color-mix(in_srgb,var(--background)_85%,var(--accent))] p-6 md:p-8 shadow-sm flex-1 min-h-[70vh]">
-        <div className="grid h-full gap-8 md:grid-cols-[240px_1fr]">
+      <div className="mt-10 rounded-[2.75rem] border border-foreground/10 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--background)_95%,var(--accent)_5%)_0%,color-mix(in_srgb,var(--background)_90%,transparent)_70%)] p-6 md:p-8 shadow-[0_30px_80px_-60px_rgba(0,0,0,0.55)] flex-1 min-h-[60vh]">
+        <div className="grid h-full gap-10 md:grid-cols-[240px_1fr]">
           <div className="flex flex-col gap-6">
             <div>
-              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/35">
+              <p className="text-[10px] uppercase tracking-[0.28em] text-foreground/45">
                 Subject(s) Selector
               </p>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => setSelectedSkills([])}
-                  className={`rounded-full border px-3 py-1 text-xs md:text-sm transition-colors ${
+                  className={`rounded-full border px-3 py-1 text-xs md:text-sm uppercase tracking-[0.18em] transition-colors ${
                     selectedSkills.length === 0
-                      ? "border-foreground/20 bg-foreground text-background"
-                      : "border-foreground/10 text-foreground/50 hover:text-foreground/70"
+                      ? "border-foreground/30 bg-foreground text-background"
+                      : "border-foreground/10 text-foreground/55 hover:border-foreground/20 hover:text-foreground/80"
                   }`}
                 >
                   All
@@ -246,10 +356,10 @@ export default function Experience() {
                       key={skill}
                       type="button"
                       onClick={() => toggleSkill(skill)}
-                      className={`rounded-full border px-3 py-1 text-xs md:text-sm transition-colors ${
+                      className={`rounded-full border px-3 py-1 text-xs md:text-sm uppercase tracking-[0.14em] transition-colors ${
                         isActive
-                          ? "border-foreground/20 bg-foreground text-background"
-                          : "border-foreground/10 text-foreground/50 hover:text-foreground/70"
+                          ? "border-foreground/30 bg-foreground text-background"
+                          : "border-foreground/10 text-foreground/55 hover:border-foreground/20 hover:text-foreground/80"
                       }`}
                     >
                       {skill}
@@ -259,8 +369,8 @@ export default function Experience() {
               </div>
             </div>
 
-            <div className="mt-auto rounded-2xl border border-foreground/10 bg-background/70 p-4">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/35">
+            <div className="mt-auto rounded-2xl border border-foreground/10 bg-background/80 p-4 shadow-[0_12px_40px_-32px_rgba(0,0,0,0.4)]">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
                 Scores
               </p>
               <div className="mt-3 flex flex-col gap-2">
@@ -271,10 +381,10 @@ export default function Experience() {
                       key={score}
                       type="button"
                       onClick={() => toggleScore(score)}
-                      className={`flex items-center gap-2 rounded-full border px-3 py-1 text-left text-[11px] md:text-xs transition-colors ${
+                      className={`flex items-center gap-2 rounded-full border px-3 py-1 text-left text-[11px] md:text-xs uppercase tracking-[0.16em] transition-colors ${
                         isActive
-                          ? "border-foreground/25 bg-foreground text-background"
-                          : "border-foreground/10 text-foreground/50 hover:text-foreground/70"
+                          ? "border-foreground/30 bg-foreground text-background"
+                          : "border-foreground/10 text-foreground/55 hover:border-foreground/20 hover:text-foreground/80"
                       }`}
                     >
                       <span
@@ -292,15 +402,44 @@ export default function Experience() {
             </div>
           </div>
 
-          <div className="flex min-h-[60vh] flex-col">
-            <div className="relative flex-1 rounded-3xl border border-foreground/10 bg-background/70 p-6 md:p-8">
+          <div className="flex min-h-[52vh] flex-col">
+            <div
+              ref={chartRef}
+              onPointerDown={handleChartPointerDown}
+              onPointerMove={handleChartPointerMove}
+              onPointerUp={handleChartPointerUp}
+              onPointerLeave={handleChartPointerUp}
+              className={`relative flex-1 rounded-[2.5rem] border border-foreground/10 bg-[color-mix(in_srgb,var(--background)_94%,var(--accent)_6%)] p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] ${
+                isPanning ? "cursor-grabbing" : "cursor-grab"
+              }`}
+            >
+              {isFarFromPresent && (
+                <button
+                  type="button"
+                  onClick={handleBackToPresent}
+                  onPointerDown={(event) => event.stopPropagation()}
+                  className={`absolute top-6 z-10 rounded-full border border-foreground/25 bg-background/90 px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] text-foreground/70 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.45)] transition hover:border-foreground/40 hover:text-foreground ${
+                    viewOffsetYears < 0 ? "right-6" : "left-6"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {!isViewingPast && (
+                      <span className="text-[12px] tracking-normal">←</span>
+                    )}
+                    <span>{backToPresentLabel}</span>
+                    {isViewingPast && (
+                      <span className="text-[12px] tracking-normal">→</span>
+                    )}
+                  </span>
+                </button>
+              )}
               <div className="absolute inset-x-6 top-28 bottom-20">
                 <div
                   className="absolute inset-y-0 left-0"
                   style={{
                     width: `${toPercent(currentDate)}%`,
                     background:
-                      "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent) 10%, transparent) 30%, color-mix(in srgb, var(--accent) 10%, transparent) 100%)",
+                      "linear-gradient(90deg, transparent 0%, color-mix(in srgb, var(--accent) 12%, transparent) 45%, color-mix(in srgb, var(--accent) 12%, transparent) 100%)",
                   }}
                   aria-hidden="true"
                 />
@@ -310,29 +449,33 @@ export default function Experience() {
                     left: `${toPercent(currentDate)}%`,
                     width: `${100 - toPercent(currentDate)}%`,
                     background:
-                      "linear-gradient(90deg, color-mix(in srgb, var(--background) 85%, transparent) 0%, color-mix(in srgb, var(--background) 85%, transparent) 70%, color-mix(in srgb, var(--accent) 10%, transparent) 100%)",
+                      "linear-gradient(90deg, color-mix(in srgb, var(--background) 90%, transparent) 0%, color-mix(in srgb, var(--background) 90%, transparent) 70%, color-mix(in srgb, var(--accent) 10%, transparent) 100%)",
                   }}
                   aria-hidden="true"
                 />
                 <div
-                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center"
+                  className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center overflow-hidden"
                   style={{ width: `${toPercent(currentDate)}%` }}
                   aria-hidden="true"
                 >
                   <span
-                    className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--accent)_55%,transparent)]"
+                    className="text-[22px] md:text-[36px] font-semibold tracking-[0.55em] uppercase text-transparent"
                     style={{
-                      textShadow: "none",
-                      filter: "none",
-                      WebkitTextStroke: "0.6px currentColor",
-                      fontWeight: 900,
+                      backgroundImage:
+                        "linear-gradient(90deg, color-mix(in srgb, var(--foreground) 30%, transparent) 0%, color-mix(in srgb, var(--accent) 60%, transparent) 45%, color-mix(in srgb, var(--foreground) 30%, transparent) 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextStroke:
+                        "0.4px color-mix(in srgb, var(--foreground) 25%, transparent)",
+                      letterSpacing: "0.6em",
+                      textShadow: "0 12px 30px rgba(0,0,0,0.18)",
                     }}
                   >
                     PAST
                   </span>
                 </div>
                 <div
-                  className="pointer-events-none absolute inset-y-0 flex items-center justify-center"
+                  className="pointer-events-none absolute inset-y-0 flex items-center justify-center overflow-hidden"
                   style={{
                     left: `${toPercent(currentDate)}%`,
                     width: `${100 - toPercent(currentDate)}%`,
@@ -340,12 +483,16 @@ export default function Experience() {
                   aria-hidden="true"
                 >
                   <span
-                    className="text-extra-bold text-[28px] md:text-[40px] font-black tracking-[0.4em] text-[color-mix(in_srgb,var(--accent)_55%,transparent)]"
+                    className="text-[22px] md:text-[36px] font-semibold tracking-[0.55em] uppercase text-transparent"
                     style={{
-                      textShadow: "none",
-                      filter: "none",
-                      WebkitTextStroke: "0.6px currentColor",
-                      fontWeight: 900,
+                      backgroundImage:
+                        "linear-gradient(90deg, color-mix(in srgb, var(--foreground) 30%, transparent) 0%, color-mix(in srgb, var(--accent) 60%, transparent) 45%, color-mix(in srgb, var(--foreground) 30%, transparent) 100%)",
+                      WebkitBackgroundClip: "text",
+                      backgroundClip: "text",
+                      WebkitTextStroke:
+                        "0.4px color-mix(in srgb, var(--foreground) 25%, transparent)",
+                      letterSpacing: "0.6em",
+                      textShadow: "0 12px 30px rgba(0,0,0,0.18)",
                     }}
                   >
                     FUTURE
@@ -362,7 +509,9 @@ export default function Experience() {
                       .map((point) => {
                         const value = point.points[score];
                         if (value === undefined) return null;
-                        const x = toPercent(parseDate(point.date));
+                        const pointDate = parseDate(point.date);
+                        if (!isWithinRange(pointDate)) return null;
+                        const x = toPercent(pointDate);
                         const y = 100 - toValuePercent(value);
                         return `${x},${y}`;
                       })
@@ -376,8 +525,8 @@ export default function Experience() {
                         <polyline
                           fill="none"
                           stroke={scoreColors[score] ?? "currentColor"}
-                          strokeOpacity="0.4"
-                          strokeWidth="1.2"
+                          strokeOpacity="0.35"
+                          strokeWidth="1"
                           strokeLinecap="round"
                           strokeLinejoin="round"
                           points={points}
@@ -391,17 +540,19 @@ export default function Experience() {
                     pointsSnapshots.map((point) => {
                       const value = point.points[score];
                       if (value === undefined) return null;
-                      const x = toPercent(parseDate(point.date));
+                      const pointDate = parseDate(point.date);
+                      if (!isWithinRange(pointDate)) return null;
+                      const x = toPercent(pointDate);
                       const y = 100 - toValuePercent(value);
                       return (
                         <span
                           key={`dot-${score}-${point.date}`}
-                          className="absolute rounded-full"
+                          className="absolute rounded-full shadow-[0_0_0_3px_color-mix(in_srgb,var(--background)_85%,transparent)]"
                           style={{
                             left: `${x}%`,
                             top: `${y}%`,
-                            width: "9px",
-                            height: "9px",
+                            width: "8px",
+                            height: "8px",
                             transform: "translate(-50%, -50%)",
                             background: scoreColors[score] ?? "currentColor",
                           }}
@@ -418,8 +569,8 @@ export default function Experience() {
                   <span className="block">E</span>
                 </div>
               </div>
-              <div className="absolute bottom-18 left-6 right-6 h-px bg-foreground/10" />
-              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-[0.15em] text-foreground/35">
+              <div className="absolute bottom-18 left-6 right-6 h-px bg-foreground/12" />
+              <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-[0.24em] text-foreground/45">
                 Time
               </div>
               <div className="absolute inset-x-6 top-0 bottom-0">
@@ -447,7 +598,7 @@ export default function Experience() {
                     return (
                       <span
                         key={year}
-                        className="absolute -translate-x-1/2 text-[9px] md:text-xs text-foreground/40"
+                        className="absolute -translate-x-1/2 text-[9px] md:text-xs text-foreground/45"
                         style={{ left }}
                       >
                         {year}
@@ -462,7 +613,7 @@ export default function Experience() {
                     return (
                       <span
                         key={`${year}-laser`}
-                        className="absolute top-0 h-full w-px bg-foreground/10"
+                        className="absolute top-0 h-full w-px bg-foreground/12"
                         style={{ left, transform: "translateX(-50%)" }}
                       />
                     );
@@ -470,19 +621,31 @@ export default function Experience() {
                 </div>
               </div>
               {resolvedTimelineEntries.length > 0 && (
-                <div className="absolute bottom-16 left-6 right-6 h-9">
+                <div className="absolute bottom-16 left-6 right-6 h-9 z-20">
                   {resolvedTimelineEntries.map((entry) => {
-                    const startPercent = toPercent(parseDate(entry.startDate));
-                    const endPercent = toPercent(parseDate(entry.endDate));
+                    const startDate = parseDate(entry.startDate);
+                    const endDate = parseDate(entry.endDate);
+                    if (endDate < minDate || startDate > maxDate) return null;
+                    const clampedStart =
+                      startDate < minDate ? minDate : startDate;
+                    const clampedEnd = endDate > maxDate ? maxDate : endDate;
+                    const startPercent = toPercent(clampedStart);
+                    const endPercent = toPercent(clampedEnd);
                     const widthPercent = Math.max(4, endPercent - startPercent);
+                    const maxChars = estimateLabelCapacity(widthPercent);
+                    const shortLabel = aliasMap[entry.id]?.[0];
+                    const label =
+                      entry.title.length > maxChars
+                        ? (shortLabel ?? toInitials(entry.title))
+                        : entry.title;
                     const highlighted = isHighlighted(entry);
                     return (
                       <div
                         key={entry.id}
-                        className={`absolute top-0 h-8 rounded-l-full rounded-r-none border px-3 shadow-none backdrop-blur-sm transition-opacity ${
+                        className={`group absolute top-0 h-8 rounded-l-full rounded-r-none border px-3 shadow-[0_6px_20px_-18px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-opacity ${
                           highlighted
-                            ? "border-foreground/10 bg-background/90 opacity-100"
-                            : "border-foreground/5 bg-background/70 opacity-35"
+                            ? "border-foreground/12 bg-background/90 opacity-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_6px_20px_-18px_rgba(0,0,0,0.35)]"
+                            : "border-foreground/5 bg-background/75 opacity-35"
                         }`}
                         style={{
                           left: `${startPercent}%`,
@@ -490,14 +653,30 @@ export default function Experience() {
                         }}
                       >
                         <div
-                          className={`flex h-full items-center justify-center gap-2 text-[9px] font-medium tracking-[0.06em] uppercase leading-none ${
+                          className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 w-max max-w-[280px] -translate-x-1/2 rounded-[18px] border border-foreground/20 bg-background/95 px-4 py-3 text-foreground/80 opacity-0 shadow-[0_18px_45px_-28px_rgba(0,0,0,0.5)] transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100"
+                          onPointerDown={(event) => event.stopPropagation()}
+                        >
+                          <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/80">
+                            {entry.title}
+                          </div>
+                          <div className="mt-1 text-[9px] uppercase tracking-[0.18em] text-foreground/50">
+                            {entry.skills[0] ??
+                              aliasMap[entry.id]?.[0] ??
+                              toInitials(entry.title)}
+                          </div>
+                          <div className="mt-2 text-[11px] leading-snug text-foreground/65">
+                            {entry.description}
+                          </div>
+                        </div>
+                        <div
+                          className={`flex h-full items-center justify-center gap-2 text-[9px] font-medium tracking-[0.12em] uppercase leading-none ${
                             highlighted
-                              ? "text-foreground/60"
-                              : "text-foreground/30"
+                              ? "text-foreground/65"
+                              : "text-foreground/35"
                           }`}
                         >
-                          <span className="inline-flex h-1 w-1 shrink-0 rounded-full bg-foreground/35" />
-                          {entry.title}
+                          <span className="inline-flex h-1.5 w-1.5 shrink-0 rotate-45 rounded-[2px] bg-foreground/50 shadow-[0_0_0_1px_color-mix(in_srgb,var(--background)_85%,transparent)]" />
+                          {label}
                         </div>
                       </div>
                     );
@@ -512,6 +691,7 @@ export default function Experience() {
                   <div className="relative h-16 w-10">
                     <div
                       role="slider"
+                      data-slider-handle="true"
                       aria-label="Timeline handle"
                       aria-valuemin={minDate.getTime()}
                       aria-valuemax={maxDate.getTime()}
@@ -519,14 +699,15 @@ export default function Experience() {
                       tabIndex={0}
                       onPointerDown={(event) => {
                         event.preventDefault();
+                        event.stopPropagation();
                         setIsDragging(true);
                         updateSliderFromClientX(event.clientX);
                       }}
-                      className="absolute left-1/2 top-0 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full bg-foreground text-background text-xs font-semibold shadow-sm ring-1 ring-foreground/10 cursor-ew-resize"
+                      className="pointer-events-auto absolute left-1/2 top-0 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-foreground/30 bg-background text-foreground text-xs font-semibold shadow-[0_10px_25px_-20px_rgba(0,0,0,0.45)] cursor-ew-resize"
                     >
                       W
                     </div>
-                    <span className="absolute left-1/2 -top-5 -translate-x-1/2 text-[10px] text-foreground/60 whitespace-nowrap">
+                    <span className="absolute left-1/2 -top-5 -translate-x-1/2 text-[10px] uppercase tracking-[0.2em] text-foreground/55 whitespace-nowrap">
                       {sliderDate.toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "short",
@@ -538,8 +719,8 @@ export default function Experience() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-foreground/10 bg-background/70 px-4 py-3 md:px-6">
-              <div className="flex flex-wrap items-center gap-3 text-[11px] text-foreground/60">
+            <div className="mt-6 rounded-2xl border border-foreground/10 bg-background/80 px-4 py-3 md:px-6 shadow-[0_12px_40px_-32px_rgba(0,0,0,0.4)]">
+              <div className="flex flex-wrap items-center gap-3 text-[11px] uppercase tracking-[0.12em] text-foreground/60">
                 <span className="font-semibold text-foreground/70">
                   {sliderDate.toLocaleDateString("en-GB", {
                     day: "2-digit",
