@@ -17,16 +17,8 @@ const getConsultancyUrl = async () => {
 
   const [hostname, port] = host.split(":");
 
-  if (hostname.includes("localhost") || hostname.includes("127.0.0.1")) {
-    const localHost = `consultancy.${hostname}${port ? `:${port}` : ""}`;
-    return `${protocol}://${localHost}`;
-  }
-
-  const hostParts = hostname.split(".");
-  const baseDomain =
-    hostParts.length >= 2 ? hostParts.slice(-2).join(".") : hostname;
-
-  return `${protocol}://consultancy.${baseDomain}`;
+  const baseHost = `${hostname}${port ? `:${port}` : ""}`;
+  return `${protocol}://${baseHost}/consultancy`;
 };
 
 export default async function InsightsPage() {
