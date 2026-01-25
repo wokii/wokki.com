@@ -174,6 +174,11 @@ export const CONSULTANCY_WOKKI = "consultancy.wokki" as const;
 const capitalizeFirst = (value: string) =>
   value ? `${value[0].toUpperCase()}${value.slice(1)}` : "";
 
+const encodeMailto = (email: string, subject: string, body: string) =>
+  `mailto:${email}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
+
 export type Zen = {
   [WOKKI_DOT_COM]: WokkiCom;
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
@@ -558,7 +563,20 @@ export const consultancyWokki: ConsultancyWokki = {
       "Private consulting across Strategy, Product, Engineering, Psychology and AI.",
     cta: {
       label: "Book your initial session",
-      href: "mailto:wokkiacross@gmail.com?subject=Wokki%20Consultancy%20Initial%20Session&body=Hi%20Wokki%2C%0A%0AI'm%20%5Bname%5D%20from%20%5Bcompany%5D%2C%20%5Bbrief%20situation%20description%5D.%20We're%20looking%20for%20help%20with%20%5Bone-line%20problem%5D.%20I%20understand%20the%20starting%20rate%20for%20Wokki%20Consultancy%20is%20%C2%A33%2C000%20per%20hour.%0A%0AThanks%2C%0A%5Bname%5D",
+      href: encodeMailto(
+        "wokkiacross@gmail.com",
+        "Wokki Consultancy Initial Session",
+        `Hi Wokki,
+
+I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £3,000 per hour.
+
+Objective: [desired outcome]
+Timeline: [rough timing, deadline]
+Budget: [total budget]
+
+Thanks,
+[name]`,
+      ),
     },
     rateNote: "Starting rate: £3,000 per hour.",
   },

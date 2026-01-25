@@ -18,7 +18,7 @@ const colorOptions = [
 ];
 
 const defaultNetworkLinks = {
-  consultancy: `https://consultancy.${WOKKI_DOT_COM}`,
+  consultancy: `https://${WOKKI_DOT_COM}/consultancy`,
   node: `https://node.${WOKKI_DOT_COM}`,
 };
 
@@ -35,7 +35,7 @@ const getNetworkLinks = (host: string) => {
     : WOKKI_DOT_COM;
 
   return {
-    consultancy: `${protocol}://consultancy.${baseDomain}`,
+    consultancy: `${protocol}://${baseDomain}/consultancy`,
     node: `${protocol}://node.${baseDomain}`,
   };
 };
