@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import ProjectCard, { type BackgroundConfig } from "./ProjectCard";
+import ProjectCard from "./ProjectCard";
 import Section from "../Section";
 import SectionTitle from "../SectionTitle";
+import { WOKKI_DOT_COM, Zen } from "../../../lib/WokkiNodes";
 
 // Tunable layout constants
 const COVERAGE_RATIO = 0.3; // portion of a card that remains covered
@@ -13,118 +14,10 @@ const HOVER_PULL_PADDING = 24; // extra space to fully reveal on hover
 const HOVER_SCALE_BUMP = 0.05; // additional scale on hover
 const CARD_GAP_PX = 12; // horizontal gap between cards for visual separation
 
-// Background configurations
-const backgroundConfigs: Record<string, BackgroundConfig> = {
-  HEART: {
-    color: "var(--accent)",
-    opacity: 0.2,
-    size: "60%",
-    path: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z",
-  },
-};
-
-type BackgroundKey = keyof typeof backgroundConfigs;
-
-type Project = {
-  id: number;
-  title: string;
-  shortIntro: string;
-  description: string;
-  link: string | null;
-  image: string;
-  background: BackgroundKey | null;
-  cardSuit: string;
-  cardRank: string;
-};
-
-// Define the project data
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "AI Coaching App",
-    shortIntro: "Psychology",
-    description:
-      "An AI-powered coaching platform that provides personalized guidance and feedback.",
-    link: "https://zera.co",
-    image: "/images/ai-coaching.jpg",
-    background: null,
-    cardSuit: "♣",
-    cardRank: "A",
-  },
-  {
-    id: 2,
-    title: "Digital Twin",
-    shortIntro: "AI, Psychology",
-    description:
-      "A digital twin of myself providing on-demand emotional support to Christine.",
-    link: "https://christine.wokki.com",
-    image: "/images/insight-system.jpg",
-    background: "HEART",
-    cardSuit: "♥",
-    cardRank: "Q",
-  },
-  {
-    id: 3,
-    title: "Wokki.com",
-    shortIntro: "Self",
-    description: "This very website you are on right now. Click to flip back.",
-    link: "https://wokki.com",
-    image: "/images/design-portfolio.jpg",
-    background: null,
-    cardSuit: "♠",
-    cardRank: "A",
-  },
-  {
-    id: 4,
-    title: "Divination App",
-    shortIntro: "Astrology",
-    description:
-      "A digital divination tool that combines classical I Ching hexagram casting with LLM-powered interpretations.",
-    link: "https://xiaoliuyao.streamlit.app/",
-    image: "/images/data-viz.jpg",
-    background: null,
-    cardSuit: "♦",
-    cardRank: "J",
-  },
-  {
-    id: 5,
-    title: "CallSense MVP",
-    shortIntro: "Prototype",
-    description:
-      "An MVP that leverages LLMs to analyze sales call transcripts, extracting objections, intent, and sentiment to enhance sales strategies.",
-    link: "https://glyphic.streamlit.app/",
-    image: "/images/sales-call-analytics.jpg",
-    background: null,
-    cardSuit: "♣",
-    cardRank: "2",
-  },
-  {
-    id: 6,
-    title: "FA Automation",
-    shortIntro: "Finance",
-    description:
-      "A concise and elegant script that automates a part of tedious and repetitive financial analysis processes for KPMG.",
-    link: "https://github.com/wokii/fa-automation/",
-    image: "/images/web-platform.jpg",
-    background: null,
-    cardSuit: "♥",
-    cardRank: "2",
-  },
-  {
-    id: 7,
-    title: "Insight System",
-    shortIntro: "Behavioral Science",
-    description:
-      "A behavior change platform that provides psychological insights based on users' authorised data.",
-    link: null,
-    image: "/images/insight-system.jpg",
-    background: null,
-    cardSuit: "♣",
-    cardRank: "K",
-  },
-];
-
 export default function Projects() {
+  const { projects } = Zen[WOKKI_DOT_COM];
+  const projectItems = projects.items;
+  const backgroundConfigs = projects.backgrounds;
   const [flippedCards, setFlippedCards] = useState<number[]>([2, 3]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [styleVariant, setStyleVariant] = useState<"classic" | "curation">(
@@ -135,7 +28,9 @@ export default function Projects() {
   const [baseWidth, setBaseWidth] = useState<number>(0);
   const [stageWidth, setStageWidth] = useState<number>(0);
   const [hoveredCardId, setHoveredCardId] = useState<number | null>(null);
-  const [order, setOrder] = useState<number[]>(projects.map((p) => p.id));
+  const [order, setOrder] = useState<number[]>(
+    projectItems.map((project) => project.id),
+  );
 
   useEffect(() => {
     const update = () => {
@@ -156,18 +51,18 @@ export default function Projects() {
     if (baseWidth > 0 && shiftWithGapPx > 0 && stageWidth > 0) {
       const maxVisible =
         Math.floor((stageWidth - baseWidth) / shiftWithGapPx) + 1;
-      return Math.max(1, Math.min(projects.length, maxVisible));
+      return Math.max(1, Math.min(projectItems.length, maxVisible));
     }
-    return projects.length;
-  }, [baseWidth, shiftWithGapPx, stageWidth]);
+    return projectItems.length;
+  }, [baseWidth, shiftWithGapPx, stageWidth, projectItems.length]);
 
   const overlap = Math.max(0, baseWidth - shiftWithGapPx);
   const hoverPullPx = overlap + HOVER_PULL_PADDING;
   const hoverEnabled = visibleCount > 1;
 
   const prevCard = () =>
-    setActiveIndex((i) => (i - 1 + projects.length) % projects.length);
-  const nextCard = () => setActiveIndex((i) => (i + 1) % projects.length);
+    setActiveIndex((i) => (i - 1 + projectItems.length) % projectItems.length);
+  const nextCard = () => setActiveIndex((i) => (i + 1) % projectItems.length);
 
   const shuffleDeck = () => {
     setOrder((prev) => {
@@ -275,8 +170,8 @@ export default function Projects() {
                   : undefined,
             }}
           >
-            {projects.map((project) => {
-              const total = projects.length;
+            {projectItems.map((project) => {
+              const total = projectItems.length;
               const position = order.indexOf(project.id);
               const offset = (position - activeIndex + total) % total; // 0 is top/left-most
               const isVisible = offset < visibleCount; // show top N cards

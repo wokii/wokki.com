@@ -1,9 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import Section from "./Section";
-import { heroTitles } from "./heroContent";
+import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
 
 export default function Hero() {
+  const { hero } = Zen[WOKKI_DOT_COM];
+  const primaryCta = hero.ctas.find((cta) => cta.variant === "primary");
+  const secondaryCta = hero.ctas.find((cta) => cta.variant === "secondary");
   return (
     <Section
       id="hero"
@@ -16,41 +19,43 @@ export default function Hero() {
     >
       <div className="relative">
         <h1 className="text-3xl md:text-6xl font-bold z-10 relative text-left">
-          {heroTitles.map((item, index) => (
+          {hero.titles.map((item, index) => (
             <React.Fragment key={item.title}>
               {item.title}
               <span className="ml-2 text-xs md:text-base text-foreground/50">
                 {item.note}
               </span>
-              {index < heroTitles.length - 1 && <br />}
+              {index < hero.titles.length - 1 && <br />}
             </React.Fragment>
           ))}
         </h1>
       </div>
       <div className="mt-3 md:mt-4">
-        <p className="text-base md:text-xl text-left">
-          I envision a world where human is elevated by technology.
-        </p>
+        <p className="text-base md:text-xl text-left">{hero.tagline}</p>
       </div>
       <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-3 md:gap-4">
-        <a
-          href="#projects"
-          className="group inline-flex items-center gap-1 md:gap-2 whitespace-nowrap rounded-md border border-accent bg-accent px-2 py-1.5 md:px-6 md:py-3 text-[10px] md:text-base font-medium tracking-wide text-background shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[30vw] md:w-auto"
-        >
-          Explore My Work
-          <span className="transition-transform duration-300 group-hover:translate-x-1">
-            →
-          </span>
-        </a>
-        <a
-          href="#about"
-          className="group inline-flex items-center gap-1 md:gap-2 whitespace-nowrap rounded-md border border-accent/60 px-2 py-1.5 md:px-6 md:py-3 text-[10px] md:text-base font-medium tracking-wide text-accent transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[30vw] md:w-auto"
-        >
-          About Me
-          <span className="transition-transform duration-300 group-hover:translate-x-1">
-            →
-          </span>
-        </a>
+        {primaryCta ? (
+          <a
+            href={primaryCta.href}
+            className="group inline-flex items-center gap-1 md:gap-2 whitespace-nowrap rounded-md border border-accent bg-accent px-2 py-1.5 md:px-6 md:py-3 text-[10px] md:text-base font-medium tracking-wide text-background shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[30vw] md:w-auto"
+          >
+            {primaryCta.label}
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
+          </a>
+        ) : null}
+        {secondaryCta ? (
+          <a
+            href={secondaryCta.href}
+            className="group inline-flex items-center gap-1 md:gap-2 whitespace-nowrap rounded-md border border-accent/60 px-2 py-1.5 md:px-6 md:py-3 text-[10px] md:text-base font-medium tracking-wide text-accent transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent hover:text-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[30vw] md:w-auto"
+          >
+            {secondaryCta.label}
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              →
+            </span>
+          </a>
+        ) : null}
       </div>
       <div className="absolute right-2 md:right-16 bottom-0 translate-y-0 md:translate-y-20 lg:translate-y-24 -z-10 pointer-events-none select-none">
         <Image

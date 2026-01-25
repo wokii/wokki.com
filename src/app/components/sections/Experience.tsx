@@ -7,146 +7,41 @@ import React, {
   useRef,
   useState,
 } from "react";
+import {
+  WOKKI_DOT_COM,
+  Zen,
+  type ExperiencePointsSnapshot,
+  type ExperienceTimelineEntry,
+} from "../../lib/WokkiNodes";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
 
-type TimelineEntry = {
-  id: string;
-  title: string;
-  role: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  skills: string[];
-};
-
-type PointsSnapshot = {
-  date: string;
-  points: {
-    health?: number;
-    overall?: number;
-    awakeningScore?: number;
-  };
-};
-
-type ScoreKey = keyof PointsSnapshot["points"];
+type ScoreKey = keyof ExperiencePointsSnapshot["points"];
 
 type AtLeastOneScore = {
-  [K in ScoreKey]: Required<Pick<PointsSnapshot["points"], K>> &
-    Partial<Omit<PointsSnapshot["points"], K>>;
+  [K in ScoreKey]: Required<Pick<ExperiencePointsSnapshot["points"], K>> &
+    Partial<Omit<ExperiencePointsSnapshot["points"], K>>;
 }[ScoreKey];
 
-type PointsSnapshotWithScore = Omit<PointsSnapshot, "points"> & {
+type PointsSnapshotWithScore = Omit<ExperiencePointsSnapshot, "points"> & {
   points: AtLeastOneScore;
 };
 
-const pointsSnapshots: PointsSnapshotWithScore[] = [
-  {
-    date: "2018-09-01",
-    points: {
-      health: 78,
-      overall: 48,
-      awakeningScore: 18,
-    },
-  },
-  {
-    date: "2020-03-03",
-    points: {
-      health: 60,
-      overall: 35,
-      awakeningScore: 20,
-    },
-  },
-  {
-    date: "2022-01-01",
-    points: {
-      health: 45,
-      overall: 30,
-      awakeningScore: 24,
-    },
-  },
-  {
-    date: "2024-02-09",
-    points: {
-      health: 58,
-      overall: 38,
-      awakeningScore: 26,
-    },
-  },
-  {
-    date: "2025-09-01",
-    points: {
-      health: 72,
-      overall: 55,
-      awakeningScore: 70,
-    },
-  },
-  {
-    date: "2026-01-07",
-    points: {
-      health: 90,
-      overall: 80,
-      awakeningScore: 88,
-    },
-  },
-  {
-    date: "2026-01-10",
-    points: {
-      health: 99,
-      overall: 95,
-      awakeningScore: 85,
-    },
-  },
-];
-
-const CURRENT_DATE_FALLBACK =
-  pointsSnapshots[pointsSnapshots.length - 1]?.date ?? "2026-01-01";
+type ResolvedTimelineEntry = Omit<ExperienceTimelineEntry, "endDate"> & {
+  endDate: string;
+};
 const getTodayIso = () => new Date().toISOString().slice(0, 10);
-
-const timelineEntries: TimelineEntry[] = [
-  {
-    id: "jpmorgan",
-    title: "JPMorgan",
-    role: "Quant Dev",
-    description:
-      "Cross-asset risk management tooling for the margin trading desk.",
-    startDate: "2025-02-09",
-    endDate: CURRENT_DATE_FALLBACK,
-    skills: ["Finance", "Mathematics", "Computer Science"],
-  },
-  {
-    id: "stealth",
-    title: "Stealth Startup",
-    role: "Lead Engineer",
-    description: "Built an AI product from concept to launch.",
-    startDate: "2024-02-11",
-    endDate: "2024-11-31",
-    skills: ["Product", "Design", "Computer Science"],
-  },
-  {
-    id: "bloomberg",
-    title: "Bloomberg",
-    role: "Software Engineer",
-    description: "Ingestion pipelines and OTC derivatives pricing infra.",
-    startDate: "2020-03-03",
-    endDate: "2024-02-09",
-    skills: ["Finance", "Computer Science", "Mathematics"],
-  },
-  {
-    id: "imperial",
-    title: "Imperial College London",
-    role: "MSc Computing",
-    description: "Machine learning specialisation.",
-    startDate: "2018-09-01",
-    endDate: "2019-11-01",
-    skills: ["Psychology", "Behavioral Science", "Computer Science"],
-  },
-];
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
 export default function Experience() {
+  const { experience } = Zen[WOKKI_DOT_COM];
+  const pointsSnapshots =
+    experience.pointsSnapshots as PointsSnapshotWithScore[];
+  const timelineEntries = experience.timelineEntries;
+  const CURRENT_DATE_FALLBACK =
+    pointsSnapshots[pointsSnapshots.length - 1]?.date ?? "2026-01-01";
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [selectedScores, setSelectedScores] = useState<ScoreKey[]>(["overall"]);
   const [currentDateIso, setCurrentDateIso] = useState(CURRENT_DATE_FALLBACK);
@@ -154,12 +49,13 @@ export default function Experience() {
   const axisRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  const resolvedTimelineEntries = useMemo(
+  const resolvedTimelineEntries: ResolvedTimelineEntry[] = useMemo(
     () =>
-      timelineEntries.map((entry) =>
-        entry.id === "jpmorgan" ? { ...entry, endDate: currentDateIso } : entry,
-      ),
-    [currentDateIso],
+      timelineEntries.map((entry) => ({
+        ...entry,
+        endDate: entry.endDate ?? currentDateIso,
+      })),
+    [currentDateIso, timelineEntries],
   );
 
   const allSkills = useMemo(() => {
@@ -170,22 +66,37 @@ export default function Experience() {
     return Array.from(set).sort();
   }, [resolvedTimelineEntries]);
 
-  const isHighlighted = (entry: TimelineEntry) =>
+  const isHighlighted = (entry: ExperienceTimelineEntry) =>
     selectedSkills.length === 0
       ? true
       : selectedSkills.some((skill) => entry.skills.includes(skill));
 
   const parseDate = (value: string) => new Date(value);
-  const earliestPointDate = new Date(
-    Math.min(
-      ...pointsSnapshots.map((point) => parseDate(point.date).getTime()),
-    ),
-  );
-  const minDate = new Date(earliestPointDate);
-  minDate.setMonth(minDate.getMonth() - 3);
-  const maxDate = new Date(currentDate);
-  maxDate.setFullYear(maxDate.getFullYear() + 3);
-  const dateRangeMs = Math.max(1, maxDate.getTime() - minDate.getTime());
+  const { minDate, maxDate, dateRangeMs, years } = useMemo(() => {
+    const earliestPointDate = new Date(
+      Math.min(
+        ...pointsSnapshots.map((point) => parseDate(point.date).getTime()),
+      ),
+    );
+    const nextMinDate = new Date(earliestPointDate);
+    nextMinDate.setMonth(nextMinDate.getMonth() - 3);
+    const nextMaxDate = new Date(currentDate);
+    nextMaxDate.setFullYear(nextMaxDate.getFullYear() + 3);
+    const nextDateRangeMs = Math.max(
+      1,
+      nextMaxDate.getTime() - nextMinDate.getTime(),
+    );
+    const nextYears = Array.from(
+      { length: nextMaxDate.getFullYear() - nextMinDate.getFullYear() + 1 },
+      (_, index) => String(nextMinDate.getFullYear() + index),
+    );
+    return {
+      minDate: nextMinDate,
+      maxDate: nextMaxDate,
+      dateRangeMs: nextDateRangeMs,
+      years: nextYears,
+    };
+  }, [currentDate, pointsSnapshots]);
 
   const toPercent = (date: Date) =>
     clamp(((date.getTime() - minDate.getTime()) / dateRangeMs) * 100, 0, 100);
@@ -197,7 +108,7 @@ export default function Experience() {
       (Object.keys(point.points) as ScoreKey[]).forEach((key) => keys.add(key));
     });
     return Array.from(keys);
-  }, []);
+  }, [pointsSnapshots]);
   const scoreLabels: Record<ScoreKey, string> = {
     health: "Health",
     overall: "Overall",
@@ -209,11 +120,6 @@ export default function Experience() {
     awakeningScore:
       "color-mix(in srgb, var(--foreground) 60%, var(--accent) 40%)",
   };
-
-  const years = Array.from(
-    { length: maxDate.getFullYear() - minDate.getFullYear() + 1 },
-    (_, index) => String(minDate.getFullYear() + index),
-  );
 
   const [sliderTime, setSliderTime] = useState<number>(currentDate.getTime());
 

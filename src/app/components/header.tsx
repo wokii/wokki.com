@@ -4,6 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
+import AuthControls from "./auth/AuthControls";
+import { WOKKI_DOT_COM } from "../lib/WokkiNodes";
+
 const colorOptions = [
   "#ef4444", // red
   "#ff5f40", // orange
@@ -14,10 +17,38 @@ const colorOptions = [
   "#8b5cf6", // violet
 ];
 
+const defaultNetworkLinks = {
+  consultancy: `https://consultancy.${WOKKI_DOT_COM}`,
+  node: `https://node.${WOKKI_DOT_COM}`,
+};
+
+const getNetworkLinks = (host: string) => {
+  const hostname = host.split(":")[0];
+  const port = host.split(":")[1];
+  const isLocalhost =
+    hostname === "localhost" ||
+    hostname === "127.0.0.1" ||
+    hostname.endsWith(".localhost");
+  const protocol = isLocalhost ? "http" : "https";
+  const baseDomain = isLocalhost
+    ? `localhost${port ? `:${port}` : ""}`
+    : WOKKI_DOT_COM;
+
+  return {
+    consultancy: `${protocol}://consultancy.${baseDomain}`,
+    node: `${protocol}://node.${baseDomain}`,
+  };
+};
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
+  const [networkLinks, setNetworkLinks] = useState(defaultNetworkLinks);
+
+  useEffect(() => {
+    setNetworkLinks(getNetworkLinks(window.location.host));
+  }, []);
 
   useEffect(() => {
     const computed = getComputedStyle(document.documentElement)
@@ -112,15 +143,36 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
         <div className="flex items-center">
-          <Link href="#hero" className="font-bold text-xl relative group">
-            <span className="text-foreground group-hover:text-accent transition-colors">
-              I&apos;m{" "}
-            </span>
-            <span className="text-accent group-hover:text-foreground transition-colors">
-              Wokki
-            </span>
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-          </Link>
+          <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
+            <Link href="#hero" className="font-bold text-xl relative group">
+              <span className="text-foreground group-hover:text-accent transition-colors">
+                I&apos;m{" "}
+              </span>
+              <span className="text-accent group-hover:text-foreground transition-colors">
+                Wokki
+              </span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+            </Link>
+            <div className="pointer-events-none absolute left-0 top-full mt-3 w-56 rounded-2xl border border-foreground/10 bg-background/90 p-3 text-xs shadow-lg backdrop-blur transition-all duration-200 opacity-0 translate-y-1 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
+                Wokki Network
+              </p>
+              <div className="mt-3 flex flex-col gap-2">
+                <a
+                  href={networkLinks.consultancy}
+                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                >
+                  Wokki Consultancy
+                </a>
+                <a
+                  href={networkLinks.node}
+                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                >
+                  Wokki Node
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Desktop color selector */}
@@ -131,13 +183,16 @@ export default function Header() {
         </div>
 
         {/* Desktop navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <NavLink href="#projects">Projects</NavLink>
-          <NavLink href="#curation">Curation</NavLink>
-          <NavLink href="#writing">Writing</NavLink>
-          <NavLink href="#experience">Experience</NavLink>
-          <NavLink href="#about">About</NavLink>
-        </nav>
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center space-x-8">
+            <NavLink href="#projects">Projects</NavLink>
+            <NavLink href="#curation">Curation</NavLink>
+            <NavLink href="#writing">Writing</NavLink>
+            <NavLink href="#experience">Experience</NavLink>
+            <NavLink href="#about">About</NavLink>
+          </nav>
+          <AuthControls />
+        </div>
 
         {/* Mobile controls */}
         <div className="md:hidden flex items-center gap-2">
@@ -226,6 +281,7 @@ export default function Header() {
             <NavLink href="#writing">Writing</NavLink>
             <NavLink href="#experience">Experience</NavLink>
             <NavLink href="#about">About</NavLink>
+            <AuthControls />
           </nav>
         </div>
       )}

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
-import { heroTitles } from "./components/sections/heroContent";
+import { WOKKI_DOT_COM, Zen } from "./lib/WokkiNodes";
 import "./globals.css";
-import ThemeProvider from "./theme-provider";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,8 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wokki.com"),
-  title: `Han Wokki – ${heroTitles.map((item) => item.title).join(", ")}`,
+  metadataBase: new URL(`https://${WOKKI_DOT_COM}`),
+  title: `Han Wokki – ${Zen[WOKKI_DOT_COM].hero.titles
+    .map((item) => item.title)
+    .join(", ")}`,
   description: "I build AI products that fuse function with form.",
 };
 
@@ -31,7 +33,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <Providers>{children}</Providers>
         <Script
           data-goatcounter="https://wokki.goatcounter.com/count"
           src="//gc.zgo.at/count.js"
