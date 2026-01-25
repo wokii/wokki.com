@@ -98,7 +98,7 @@ const resolveUserRole = (email?: string | null): UserRole => {
 
 const getRequestMeta = async () => {
   try {
-    const requestHeaders = headers();
+    const requestHeaders = await headers();
     const forwardedFor = requestHeaders.get("x-forwarded-for");
     const ip =
       forwardedFor?.split(",")[0]?.trim() ?? requestHeaders.get("x-real-ip");
