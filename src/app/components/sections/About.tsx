@@ -1,9 +1,10 @@
 import React from "react";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
-import { heroTitles } from "./heroContent";
+import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
 
 export default function About() {
+  const { about, hero } = Zen[WOKKI_DOT_COM];
   return (
     <Section id="about" minHeight="screen" paddingY="md" centerContent={false}>
       <SectionTitle>ABOUT</SectionTitle>
@@ -11,70 +12,42 @@ export default function About() {
         <div>
           <p className="text-xl mb-4">
             I&apos;m a{" "}
-            {heroTitles.map((item, index) => (
+            {hero.titles.map((item, index) => (
               <React.Fragment key={item.title}>
                 <span className="text-accent font-bold">{item.title}</span>
-                {index < heroTitles.length - 2 && ", "}
-                {index === heroTitles.length - 2 && " and "}
-                {index === heroTitles.length - 1 && " "}
+                {index < hero.titles.length - 2 && ", "}
+                {index === hero.titles.length - 2 && " and "}
+                {index === hero.titles.length - 1 && " "}
               </React.Fragment>
             ))}
-            passionate about envisioning a world where human is elevated,
-            enhanced, and empowered by technology.
+            {about.introSuffix}
           </p>
-          <p className="text-xl">
-            With experience across Mathematics, Finance, Economics, AI Startups,
-            Psychology, Music, Media, Consultancy and Design. I bring an
-            Absolutely unique perspective to solving complex problems through
-            technology and aesthetics.
-          </p>
+          <p className="text-xl">{about.summary}</p>
         </div>
         <div>
           <h3 className="text-2xl mb-4">Contact</h3>
           <p className="mb-2">
             <a
-              href="mailto:wokkiacross@gmail.com"
+              href={`mailto:${about.contact.email}`}
               className="underline hover:text-accent transition-colors"
             >
-              wokkiacross@gmail.com
+              {about.contact.email}
             </a>
           </p>
           <p>
-            <a
-              href="https://github.com/wokii"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-accent transition-colors"
-            >
-              GitHub
-            </a>
-            {" • "}
-            <a
-              href="https://www.linkedin.com/in/wokki/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-accent transition-colors"
-            >
-              LinkedIn
-            </a>
-            {" • "}
-            <a
-              href="https://www.linkedin.com/in/christine-hui-5697b2270/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-accent transition-colors"
-            >
-              Girlfriend&apos;s LinkedIn, she is an upcoming influencer.
-            </a>
-            {" • "}
-            <a
-              href="https://x.com/hanwokki"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline hover:text-accent transition-colors"
-            >
-              X
-            </a>
+            {about.contact.links.map((link, index) => (
+              <React.Fragment key={link.url}>
+                {index > 0 && " • "}
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-accent transition-colors"
+                >
+                  {link.label}
+                </a>
+              </React.Fragment>
+            ))}
           </p>
         </div>
       </div>

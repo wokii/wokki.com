@@ -1,7 +1,9 @@
-const repo = "wokii/wokki.com";
+import { WOKKI_DOT_COM } from "./WokkiNodes";
+
+const repo = `wokii/${WOKKI_DOT_COM}`;
 const apiHeaders: Record<string, string> = {
   Accept: "application/vnd.github+json",
-  "User-Agent": "wokki.com",
+  "User-Agent": WOKKI_DOT_COM,
   "X-GitHub-Api-Version": "2022-11-28",
 };
 if (process.env.GITHUB_TOKEN) {
