@@ -281,17 +281,23 @@ export default function Header() {
               </div>
             </div>
           </div>
-          {role === "妃" && accentColor === HIDDEN_PINK ? (
-            <div className="hidden max-w-[220px] text-xs font-normal leading-snug text-accent md:block">
-              You can’t find Pink in the rainbow, because I reserved it for you
-              — my dear BabyBlush.
-            </div>
-          ) : null}
         </div>
 
         {/* Desktop color selector */}
-        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 z-10">
-          {renderColorPalette("row")}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center z-10">
+          <div className="relative flex items-center">
+            {role === "妃" && accentColor === HIDDEN_PINK ? (
+              <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty">
+                You can’t find Pink in the rainbow,
+                <br />
+                Because I reserved it for you.
+                <br />- To my dear BabyBlush&nbsp;
+              </div>
+            ) : null}
+            <div className="flex items-center gap-2">
+              {renderColorPalette("row")}
+            </div>
+          </div>
         </div>
 
         {/* Desktop navigation */}
