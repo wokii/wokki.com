@@ -18,6 +18,7 @@ const colorOptions = [
 ];
 
 const defaultNetworkLinks = {
+  home: `https://${WOKKI_DOT_COM}`,
   consultancy: `https://${WOKKI_DOT_COM}/consultancy`,
   node: `https://node.${WOKKI_DOT_COM}`,
 };
@@ -35,6 +36,7 @@ const getNetworkLinks = (host: string) => {
     : WOKKI_DOT_COM;
 
   return {
+    home: `${protocol}://${baseDomain}`,
     consultancy: `${protocol}://${baseDomain}/consultancy`,
     node: `${protocol}://node.${baseDomain}`,
   };
@@ -63,6 +65,17 @@ export default function Header() {
     document.documentElement.style.setProperty("--accent", hex);
     setAccentColor(hex);
     setIsColorPaletteOpen(false);
+  };
+
+  const handleBrandClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    if (window.scrollY <= 0) {
+      window.location.reload();
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   // Keep favicon color in sync with the current accent color
@@ -144,12 +157,16 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
         <div className="flex items-center">
           <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
-            <Link href="#hero" className="font-bold text-xl relative group">
+            <Link
+              href="#hero"
+              className="font-bold text-xl relative group"
+              onClick={handleBrandClick}
+            >
               <span className="text-foreground group-hover:text-accent transition-colors">
-                I&apos;m{" "}
+                Wokki
               </span>
               <span className="text-accent group-hover:text-foreground transition-colors">
-                Wokki
+                .com
               </span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
             </Link>
@@ -158,6 +175,12 @@ export default function Header() {
                 Wokki Network
               </p>
               <div className="mt-3 flex flex-col gap-2">
+                <a
+                  href={networkLinks.home}
+                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                >
+                  I&apos;m Wokki (Here)
+                </a>
                 <a
                   href={networkLinks.consultancy}
                   className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
