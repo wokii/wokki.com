@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { headers } from "next/headers";
 
 import { authOptions } from "@/app/lib/auth";
+import { getVisitSummary } from "@/app/lib/visitStore";
 import { CONSULTANCY_WOKKI, Zen } from "@/app/lib/WokkiNodes";
 import { SignInButton, SwitchAccountButton } from "./AuthButtons";
 
@@ -61,6 +62,7 @@ export default async function InsightsPage() {
   const records = insights.records.filter(
     (record) => record.email.toLowerCase() === email,
   );
+  const visitSummary = await getVisitSummary(email);
 
   return (
     <main className="min-h-screen px-6 py-24">
@@ -87,6 +89,46 @@ export default async function InsightsPage() {
             label="Switch account"
           />
         </div>
+
+        <section className="mt-6 grid gap-4 md:grid-cols-3">
+          <div className="rounded-3xl border border-foreground/10 bg-background/60 p-5 text-foreground/70">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">
+              Visits
+            </p>
+            <p className="mt-3 text-3xl font-semibold text-foreground">
+              {visitSummary?.count ?? 0}
+            </p>
+            <p className="mt-2 text-xs text-foreground/50">
+              Total landings recorded for this Google account.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-foreground/10 bg-background/60 p-5 text-foreground/70">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">
+              First seen
+            </p>
+            <p className="mt-3 text-base font-semibold text-foreground">
+              {visitSummary?.firstVisit
+                ? new Date(visitSummary.firstVisit).toLocaleString()
+                : "Not yet"}
+            </p>
+            <p className="mt-2 text-xs text-foreground/50">
+              The earliest recorded landing.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-foreground/10 bg-background/60 p-5 text-foreground/70">
+            <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/40">
+              Latest landing
+            </p>
+            <p className="mt-3 text-base font-semibold text-foreground">
+              {visitSummary?.lastVisit
+                ? new Date(visitSummary.lastVisit).toLocaleString()
+                : "Not yet"}
+            </p>
+            <p className="mt-2 text-xs text-foreground/50">
+              Last route: {visitSummary?.lastPath ?? "N/A"}
+            </p>
+          </div>
+        </section>
 
         <div className="mt-8 space-y-4">
           {records.length === 0 ? (
