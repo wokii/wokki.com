@@ -57,30 +57,34 @@ export default function About() {
               <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">
                 WOKKI_DOT_COM
               </p>
+            </div>
+            <div className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <p className="text-2xl md:text-3xl font-semibold text-foreground/90">
+                Han Wokki
+              </p>
               <span className="text-[10px] uppercase tracking-[0.35em] text-foreground/40">
-                Contact
+                The Co-Founder
               </span>
             </div>
-            <p className="mt-4 text-2xl md:text-3xl font-semibold text-foreground/90">
-              Han Wokki
-            </p>
-            <div className="mt-4 space-y-2 text-sm md:text-base text-foreground/70">
-              <p>
-                <span className="uppercase tracking-[0.2em] text-[10px] md:text-xs text-foreground/50">
-                  Phone
-                </span>
-                <span className="ml-3 font-medium text-foreground/80">
-                  +(44) blurred_number
-                </span>
-              </p>
-              <p>
-                <span className="uppercase tracking-[0.2em] text-[10px] md:text-xs text-foreground/50">
-                  Email
-                </span>
-                <span className="ml-3 font-medium text-foreground/80">
-                  wokkiacross@gmail.com
-                </span>
-              </p>
+            <div className="mt-5 border-t border-foreground/10 pt-4 text-sm md:text-base text-foreground/70">
+              <div className="grid gap-3">
+                <div className="flex items-baseline gap-4">
+                  <span className="min-w-[64px] uppercase tracking-[0.2em] text-[10px] md:text-xs text-foreground/50">
+                    Phone
+                  </span>
+                  <span className="font-medium text-foreground/80">
+                    +(44) blurred_number
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-4">
+                  <span className="min-w-[64px] uppercase tracking-[0.2em] text-[10px] md:text-xs text-foreground/50">
+                    Email
+                  </span>
+                  <span className="font-medium text-foreground/80">
+                    wokkiacross@gmail.com
+                  </span>
+                </div>
+              </div>
             </div>
             <div className="absolute inset-x-0 bottom-0 flex items-center justify-start gap-2 border-t border-foreground/10 bg-background/85 px-6 py-4 md:px-8">
               {about.contact.links.map((link) => {
