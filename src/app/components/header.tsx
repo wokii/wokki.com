@@ -55,6 +55,7 @@ export default function Header() {
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [networkLinks, setNetworkLinks] = useState(defaultNetworkLinks);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [didApplyHiddenAccent, setDidApplyHiddenAccent] = useState(false);
 
   useEffect(() => {
     setNetworkLinks(getNetworkLinks(window.location.host));
@@ -168,10 +169,25 @@ export default function Header() {
   const restColors = colorOptions.slice(1);
 
   useEffect(() => {
-    if (hiddenAccent && accentColor !== hiddenAccent) {
+    if (!hiddenAccent || didApplyHiddenAccent) {
+      return;
+    }
+    applyAccent(hiddenAccent);
+    setDidApplyHiddenAccent(true);
+  }, [hiddenAccent, didApplyHiddenAccent]);
+
+  useEffect(() => {
+    if (
+      role !== "元" ||
+      !hiddenAccent ||
+      (accentColor !== HIDDEN_BLACK && accentColor !== HIDDEN_WHITE)
+    ) {
+      return;
+    }
+    if (accentColor !== hiddenAccent) {
       applyAccent(hiddenAccent);
     }
-  }, [hiddenAccent, accentColor]);
+  }, [role, hiddenAccent, accentColor]);
 
   const renderColorPalette = (direction: "row" | "column") => {
     const separatorClass =
