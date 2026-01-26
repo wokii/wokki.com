@@ -95,7 +95,7 @@ export type Curation = {
   entries: CuratedEntry[];
 };
 
-export type ExperienceTimelineEntry = {
+export type ScrollTimelineEntry = {
   id: string;
   title: string;
   role: string;
@@ -106,7 +106,7 @@ export type ExperienceTimelineEntry = {
   link?: string;
 };
 
-export type ExperiencePointsSnapshot = {
+export type ScrollPointsSnapshot = {
   date: string;
   points: {
     health?: number;
@@ -115,9 +115,9 @@ export type ExperiencePointsSnapshot = {
   };
 };
 
-export type Experience = {
-  timelineEntries: ExperienceTimelineEntry[];
-  pointsSnapshots: ExperiencePointsSnapshot[];
+export type Scroll = {
+  timelineEntries: ScrollTimelineEntry[];
+  pointsSnapshots: ScrollPointsSnapshot[];
 };
 
 export type InsightRecord = {
@@ -166,7 +166,7 @@ export type WokkiCom = {
   about: About;
   projects: Projects;
   curation: Curation;
-  experience: Experience;
+  scroll: Scroll;
   writing: Writing;
 };
 
@@ -478,7 +478,7 @@ export const wokkiCom: WokkiCom = {
       },
     ],
   },
-  experience: {
+  scroll: {
     pointsSnapshots: [
       {
         date: "2018-09-01",

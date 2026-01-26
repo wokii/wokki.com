@@ -6,7 +6,7 @@ import Hero from "./components/sections/Hero";
 import Projects from "./components/sections/Projects";
 import Curation from "./components/sections/Curation";
 import Writing from "./components/sections/Writing";
-import Experience from "./components/sections/Experience";
+import Scroll from "./components/sections/Scroll";
 import About from "./components/sections/About";
 
 export default function Home() {
@@ -18,7 +18,7 @@ export default function Home() {
       <Projects />
       <Curation />
       <Writing />
-      <Experience />
+      <Scroll />
       <About />
       <Footer />
     </main>

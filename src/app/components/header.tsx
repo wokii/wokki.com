@@ -188,7 +188,7 @@ export default function Header() {
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#curation">Curation</NavLink>
             <NavLink href="#writing">Writing</NavLink>
-            <NavLink href="#experience">Experience</NavLink>
+            <NavLink href="#scroll">Scroll</NavLink>
             <NavLink href="#about">About</NavLink>
           </nav>
           <AuthControls />
@@ -279,7 +279,7 @@ export default function Header() {
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="#curation">Curation</NavLink>
             <NavLink href="#writing">Writing</NavLink>
-            <NavLink href="#experience">Experience</NavLink>
+            <NavLink href="#scroll">Scroll</NavLink>
             <NavLink href="#about">About</NavLink>
             <AuthControls />
           </nav>

@@ -11,24 +11,24 @@ import {
   WOKKI_DOT_COM,
   Zen,
   aliasMap,
-  type ExperiencePointsSnapshot,
-  type ExperienceTimelineEntry,
+  type ScrollPointsSnapshot,
+  type ScrollTimelineEntry,
 } from "../../lib/WokkiNodes";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
 
-type ScoreKey = keyof ExperiencePointsSnapshot["points"];
+type ScoreKey = keyof ScrollPointsSnapshot["points"];
 
 type AtLeastOneScore = {
-  [K in ScoreKey]: Required<Pick<ExperiencePointsSnapshot["points"], K>> &
-    Partial<Omit<ExperiencePointsSnapshot["points"], K>>;
+  [K in ScoreKey]: Required<Pick<ScrollPointsSnapshot["points"], K>> &
+    Partial<Omit<ScrollPointsSnapshot["points"], K>>;
 }[ScoreKey];
 
-type PointsSnapshotWithScore = Omit<ExperiencePointsSnapshot, "points"> & {
+type PointsSnapshotWithScore = Omit<ScrollPointsSnapshot, "points"> & {
   points: AtLeastOneScore;
 };
 
-type ResolvedTimelineEntry = Omit<ExperienceTimelineEntry, "endDate"> & {
+type ResolvedTimelineEntry = Omit<ScrollTimelineEntry, "endDate"> & {
   endDate: string;
 };
 const getTodayIso = () => new Date().toISOString().slice(0, 10);
@@ -48,11 +48,10 @@ const toInitials = (value: string) => {
 const estimateLabelCapacity = (widthPercent: number) =>
   Math.max(6, Math.floor(widthPercent * 0.8));
 
-export default function Experience() {
-  const { experience } = Zen[WOKKI_DOT_COM];
-  const pointsSnapshots =
-    experience.pointsSnapshots as PointsSnapshotWithScore[];
-  const timelineEntries = experience.timelineEntries;
+export default function Scroll() {
+  const { scroll } = Zen[WOKKI_DOT_COM];
+  const pointsSnapshots = scroll.pointsSnapshots as PointsSnapshotWithScore[];
+  const timelineEntries = scroll.timelineEntries;
   const CURRENT_DATE_FALLBACK =
     pointsSnapshots[pointsSnapshots.length - 1]?.date ?? "2026-01-01";
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
@@ -84,7 +83,7 @@ export default function Experience() {
     return Array.from(set).sort();
   }, [resolvedTimelineEntries]);
 
-  const isHighlighted = (entry: ExperienceTimelineEntry) =>
+  const isHighlighted = (entry: ScrollTimelineEntry) =>
     selectedSkills.length === 0
       ? true
       : selectedSkills.some((skill) => entry.skills.includes(skill));
@@ -319,15 +318,18 @@ export default function Experience() {
 
   return (
     <Section
-      id="experience"
+      id="scroll"
       minHeight="screen"
       maxHeight="none"
       paddingY="md"
       centerContent={false}
       containerClassName="flex h-full flex-col"
     >
-      <SectionTitle className="relative top-4" subtitle="(Under Construction)">
-        EXPERIENCE
+      <SectionTitle
+        className="relative top-4"
+        subtitle="(A.K.A. Timeline, Timeseries, Chart, Graph, etc.)"
+      >
+        SCROLL
       </SectionTitle>
 
       <div className="mt-10 rounded-[2.75rem] border border-foreground/10 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--background)_95%,var(--accent)_5%)_0%,color-mix(in_srgb,var(--background)_90%,transparent)_70%)] p-6 md:p-8 shadow-[0_30px_80px_-60px_rgba(0,0,0,0.55)] flex-1 min-h-[60vh]">
