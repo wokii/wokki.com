@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { useSession } from "next-auth/react";
 
 import AuthControls from "./auth/AuthControls";
 import { WOKKI_DOT_COM } from "../lib/WokkiNodes";
+import { useTheme } from "../theme-provider";
 
 const colorOptions = [
   "#ef4444", // red
@@ -16,6 +18,9 @@ const colorOptions = [
   "#6366f1", // indigo
   "#8b5cf6", // violet
 ];
+const HIDDEN_PINK = "#f9c5d1";
+const HIDDEN_BLACK = "#111111";
+const HIDDEN_WHITE = "#ffffff";
 
 const defaultNetworkLinks = {
   home: `https://${WOKKI_DOT_COM}`,
@@ -43,14 +48,28 @@ const getNetworkLinks = (host: string) => {
 };
 
 export default function Header() {
+  const { data: session } = useSession();
+  const { theme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [networkLinks, setNetworkLinks] = useState(defaultNetworkLinks);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
   useEffect(() => {
     setNetworkLinks(getNetworkLinks(window.location.host));
   }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const updateTheme = () => {
+      setIsDarkTheme(root.classList.contains("dark"));
+    };
+    updateTheme();
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, [theme]);
 
   useEffect(() => {
     const computed = getComputedStyle(document.documentElement)
@@ -135,6 +154,55 @@ export default function Header() {
     />
   );
 
+  const role = session?.user?.role;
+  const hiddenAccent =
+    role === "元"
+      ? isDarkTheme
+        ? HIDDEN_WHITE
+        : HIDDEN_BLACK
+      : role === "妃"
+        ? HIDDEN_PINK
+        : null;
+  const hasHiddenAccent = Boolean(hiddenAccent);
+  const baseRed = colorOptions[0];
+  const restColors = colorOptions.slice(1);
+
+  useEffect(() => {
+    if (hiddenAccent && accentColor !== hiddenAccent) {
+      applyAccent(hiddenAccent);
+    }
+  }, [hiddenAccent, accentColor]);
+
+  const renderColorPalette = (direction: "row" | "column") => {
+    const separatorClass =
+      direction === "row"
+        ? "h-5 w-px bg-foreground/15"
+        : "h-px w-6 bg-foreground/15";
+
+    return (
+      <>
+        {hasHiddenAccent ? (
+          <>
+            <ColorButton
+              key={hiddenAccent}
+              hex={hiddenAccent ?? baseRed}
+              isSelected={accentColor === hiddenAccent}
+            />
+            <div className={separatorClass} aria-hidden="true" />
+          </>
+        ) : null}
+        <ColorButton
+          key={baseRed}
+          hex={baseRed}
+          isSelected={accentColor === baseRed}
+        />
+        {restColors.map((hex) => (
+          <ColorButton key={hex} hex={hex} isSelected={accentColor === hex} />
+        ))}
+      </>
+    );
+  };
+
   const NavLink = ({
     href,
     children,
@@ -201,9 +269,7 @@ export default function Header() {
 
         {/* Desktop color selector */}
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center gap-2 z-10">
-          {colorOptions.map((hex) => (
-            <ColorButton key={hex} hex={hex} isSelected={accentColor === hex} />
-          ))}
+          {renderColorPalette("row")}
         </div>
 
         {/* Desktop navigation */}
@@ -249,13 +315,7 @@ export default function Header() {
               aria-hidden={!isColorPaletteOpen}
             >
               <div className="flex flex-col items-center gap-2">
-                {colorOptions.map((hex) => (
-                  <ColorButton
-                    key={hex}
-                    hex={hex}
-                    isSelected={accentColor === hex}
-                  />
-                ))}
+                {renderColorPalette("column")}
               </div>
             </div>
           </div>
