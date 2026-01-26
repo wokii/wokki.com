@@ -66,6 +66,34 @@ body {
   color: var(--foreground);
 }
 
+:root:not(.dark) .reverse-selection-light::selection {
+  background: transparent;
+  color: var(--foreground);
+}
+
+:root:not(.dark) .reverse-selection-light::-moz-selection {
+  background: transparent;
+  color: var(--foreground);
+}
+
+:root:not(.dark) .reverse-selection-light .reverse-highlight {
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+  color: var(--background);
+  padding: 0 0.25em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+:root:not(.dark) .reverse-selection-light .reverse-highlight::selection {
+  background: transparent;
+  color: var(--foreground);
+}
+
+:root:not(.dark) .reverse-selection-light .reverse-highlight::-moz-selection {
+  background: transparent;
+  color: var(--foreground);
+}
+
 .dark .social-icon {
   filter: invert(1);
 }

@@ -287,11 +287,18 @@ export default function Header() {
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center z-10">
           <div className="relative flex items-center">
             {role === "妃" && accentColor === HIDDEN_PINK ? (
-              <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty">
-                You can’t find Pink in the rainbow,
+              <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty reverse-selection-light">
+                <span className="reverse-highlight">
+                  You can’t find Pink in the rainbow,
+                </span>
                 <br />
-                Because I reserved it for you.
-                <br />- To my dear BabyBlush&nbsp;
+                <span className="reverse-highlight">
+                  Because I reserved it for you.
+                </span>
+                <br />
+                <span className="reverse-highlight">
+                  - To my dear BabyBlush&nbsp;
+                </span>
               </div>
             ) : null}
             <div className="flex items-center gap-2">
