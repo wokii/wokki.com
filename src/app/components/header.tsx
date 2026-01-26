@@ -67,7 +67,7 @@ export default function Header() {
     setIsColorPaletteOpen(false);
   };
 
-  const handleBrandClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleBrandClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     if (window.scrollY <= 0) {
@@ -157,10 +157,11 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
         <div className="flex items-center">
           <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
-            <Link
-              href="#hero"
-              className="font-bold text-xl relative group"
+            <button
+              type="button"
+              className="font-bold text-xl relative"
               onClick={handleBrandClick}
+              aria-label="Go to top"
             >
               <span className="text-foreground group-hover:text-accent transition-colors">
                 Wokki
@@ -169,7 +170,7 @@ export default function Header() {
                 .com
               </span>
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </Link>
+            </button>
             <div className="pointer-events-none absolute left-0 top-full mt-3 w-56 rounded-2xl border border-foreground/10 bg-background/90 p-3 text-xs shadow-lg backdrop-blur transition-all duration-200 opacity-0 translate-y-1 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0">
               <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
                 Wokki Network
