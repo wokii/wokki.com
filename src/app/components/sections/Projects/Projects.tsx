@@ -13,6 +13,7 @@ const MIN_SCALE = 0.6; // never scale smaller than this
 const HOVER_PULL_PADDING = 24; // extra space to fully reveal on hover
 const HOVER_SCALE_BUMP = 0.05; // additional scale on hover
 const CARD_GAP_PX = 12; // horizontal gap between cards for visual separation
+const GLOBAL_CARD_SCALE = 0.9; // scale all cards down slightly
 
 export default function Projects() {
   const { projects } = Zen[WOKKI_DOT_COM];
@@ -44,19 +45,20 @@ export default function Projects() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  const horizontalShiftPx = Math.round(baseWidth * SHIFT_RATIO);
+  const scaledBaseWidth = baseWidth * GLOBAL_CARD_SCALE;
+  const horizontalShiftPx = Math.round(scaledBaseWidth * SHIFT_RATIO);
   const shiftWithGapPx = horizontalShiftPx + CARD_GAP_PX;
 
   const visibleCount = useMemo(() => {
-    if (baseWidth > 0 && shiftWithGapPx > 0 && stageWidth > 0) {
+    if (scaledBaseWidth > 0 && shiftWithGapPx > 0 && stageWidth > 0) {
       const maxVisible =
-        Math.floor((stageWidth - baseWidth) / shiftWithGapPx) + 1;
+        Math.floor((stageWidth - scaledBaseWidth) / shiftWithGapPx) + 1;
       return Math.max(1, Math.min(projectItems.length, maxVisible));
     }
     return projectItems.length;
-  }, [baseWidth, shiftWithGapPx, stageWidth, projectItems.length]);
+  }, [scaledBaseWidth, shiftWithGapPx, stageWidth, projectItems.length]);
 
-  const overlap = Math.max(0, baseWidth - shiftWithGapPx);
+  const overlap = Math.max(0, scaledBaseWidth - shiftWithGapPx);
   const hoverPullPx = overlap + HOVER_PULL_PADDING;
   const hoverEnabled = visibleCount > 1;
 
@@ -162,10 +164,10 @@ export default function Projects() {
             className="relative h-96 overflow-visible"
             style={{
               width:
-                baseWidth && horizontalShiftPx
+                scaledBaseWidth && horizontalShiftPx
                   ? Math.min(
-                      baseWidth + shiftWithGapPx * (visibleCount - 1),
-                      stageWidth || baseWidth,
+                      scaledBaseWidth + shiftWithGapPx * (visibleCount - 1),
+                      stageWidth || scaledBaseWidth,
                     )
                   : undefined,
             }}
@@ -182,10 +184,11 @@ export default function Projects() {
               const baseTranslateX = offset * shiftWithGapPx;
               const translateX = baseTranslateX + (isHovered ? hoverPullPx : 0);
               const baseScale = 1 - offset * SCALE_STEP;
-              const scale = Math.max(
-                MIN_SCALE,
-                baseScale + (isHovered ? HOVER_SCALE_BUMP : 0),
-              );
+              const scale =
+                Math.max(
+                  MIN_SCALE,
+                  baseScale + (isHovered ? HOVER_SCALE_BUMP : 0),
+                ) * GLOBAL_CARD_SCALE;
 
               return (
                 <ProjectCard
@@ -223,7 +226,16 @@ export default function Projects() {
           </div>
         </div>
         {/* Shuffle button */}
-        <div className="mt-16 md:mt-24 flex justify-center col-start-2 row-start-2">
+        <div className="mt-8 md:mt-12 flex flex-col items-center gap-2.5 col-start-2 row-start-2">
+          <div className="inline-flex items-baseline gap-1 text-xs text-foreground/60 md:text-sm leading-none">
+            <span
+              className="font-semibold text-accent"
+              style={{ fontSize: "2.1em" }}
+            >
+              {visibleCount}
+            </span>{" "}
+            / {projectItems.length}
+          </div>
           <button
             onClick={shuffleDeck}
             className="rounded-full border border-foreground/10 bg-background/70 px-5 py-2.5 text-sm text-foreground shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-[color-mix(in_srgb,var(--accent)_18%,var(--background))] hover:text-foreground hover:shadow-md md:px-6 md:py-3 md:text-base"
