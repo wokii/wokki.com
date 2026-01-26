@@ -1,6 +1,6 @@
 import type { CookieOption, NextAuthOptions } from "next-auth";
 import { headers } from "next/headers";
-import GoogleProvider from "next-auth/providers/google";
+import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
 import { Resend } from "resend";
 import { WOKKI_DOT_COM } from "./WokkiNodes";
 
@@ -217,8 +217,9 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, profile }) {
       const email = token.email ?? user?.email ?? null;
       token.role = resolveUserRole(email);
-      if (profile && typeof profile.locale === "string") {
-        token.locale = profile.locale;
+      const googleProfile = profile as GoogleProfile | undefined;
+      if (googleProfile?.locale) {
+        token.locale = googleProfile.locale;
       }
       return token;
     },
