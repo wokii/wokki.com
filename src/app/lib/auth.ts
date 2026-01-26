@@ -214,14 +214,19 @@ export const authOptions: NextAuthOptions = {
     ),
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, profile }) {
       const email = token.email ?? user?.email ?? null;
       token.role = resolveUserRole(email);
+      if (profile && typeof profile.locale === "string") {
+        token.locale = profile.locale;
+      }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.role = (token.role as UserRole) ?? "outsider";
+        session.user.locale =
+          typeof token.locale === "string" ? token.locale : undefined;
       }
       return session;
     },
