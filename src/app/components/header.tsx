@@ -223,7 +223,7 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
           <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
             <button
               type="button"
@@ -265,6 +265,12 @@ export default function Header() {
               </div>
             </div>
           </div>
+          {role === "妃" && accentColor === HIDDEN_PINK ? (
+            <div className="hidden max-w-[220px] text-xs font-normal leading-snug text-accent md:block">
+              You can’t find Pink in the rainbow, because I reserved it for you
+              — my dear BabyBlush.
+            </div>
+          ) : null}
         </div>
 
         {/* Desktop color selector */}
