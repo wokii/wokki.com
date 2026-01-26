@@ -66,6 +66,10 @@ body {
   color: var(--foreground);
 }
 
+.dark .social-icon {
+  filter: invert(1);
+}
+
 /* Card flip styles */
 .perspective-1000 {
   perspective: 1000px;

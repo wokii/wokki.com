@@ -16,8 +16,9 @@ export type Hero = {
 };
 
 export type ContactLink = {
-  label: string;
-  url: string;
+  platform: string;
+  description: string;
+  url: string | null;
 };
 
 export type About = {
@@ -204,7 +205,7 @@ export const wokkiCom: WokkiCom = {
       { title: "Systems Thinker", note: "(doer: e.m.)" },
       { title: "aesthetics exprorer", note: "(visionary: s.j.)" },
     ],
-    tagline: "I envision a world where human is elevated by technology.",
+    tagline: '"I envision a world where human is elevated by technology."',
     ctas: [
       { label: "Explore My Work", href: "#projects", variant: "primary" },
       { label: "About Me", href: "#about", variant: "secondary" },
@@ -219,20 +220,39 @@ export const wokkiCom: WokkiCom = {
       email: "wokkiacross@gmail.com",
       links: [
         {
-          label: "GitHub",
+          platform: "github",
+          description: "GitHub",
           url: "https://github.com/wokii",
         },
         {
-          label: "LinkedIn",
+          platform: "linkedin",
+          description: "LinkedIn",
           url: "https://www.linkedin.com/in/wokki/",
         },
+        // {
+        //   platform: "linkedin",
+        //   description: "Girlfriend's LinkedIn, she is an upcoming influencer.",
+        //   url: "https://www.linkedin.com/in/christine-hui-5697b2270/",
+        // },
         {
-          label: "Girlfriend's LinkedIn, she is an upcoming influencer.",
-          url: "https://www.linkedin.com/in/christine-hui-5697b2270/",
+          platform: "x",
+          description: "X",
+          url: "https://x.com/hanwokki",
         },
         {
-          label: "X",
-          url: "https://x.com/hanwokki",
+          platform: "instagram",
+          description: "Instagram",
+          url: null,
+        },
+        {
+          platform: "tiktok",
+          description: "TikTok",
+          url: null,
+        },
+        {
+          platform: "tiktokCn",
+          description: "TikTok (Chinese)",
+          url: null,
         },
       ],
     },
