@@ -99,7 +99,6 @@ export default function Scroll() {
       (1000 * 60 * 60 * 24 * 365.25),
     [currentDate, viewCenterDate],
   );
-  const isFarFromPresent = Math.abs(viewOffsetYears) >= 25;
   const isViewingPast = viewOffsetYears < 0;
   const backToPresentLabel = isViewingPast ? "Disenthral" : "Abraid";
 
@@ -123,6 +122,21 @@ export default function Scroll() {
       years: nextYears,
     };
   }, [viewCenterDate]);
+
+  const isTodayOutOfBoard =
+    currentDate.getTime() < minDate.getTime() ||
+    currentDate.getTime() > maxDate.getTime();
+  const yearsInMs = 1000 * 60 * 60 * 24 * 365.25;
+  const boardHalfRangeYears =
+    (maxDate.getTime() - minDate.getTime()) / (yearsInMs * 2);
+  const distanceFromTodayYears = Math.abs(viewOffsetYears);
+  const opacityProgress = clamp(
+    (distanceFromTodayYears - boardHalfRangeYears) /
+      Math.max(1, 99 - boardHalfRangeYears),
+    0,
+    1,
+  );
+  const backToPresentOpacity = 0.2 + 0.8 * opacityProgress;
 
   const toPercent = (date: Date) =>
     clamp(((date.getTime() - minDate.getTime()) / dateRangeMs) * 100, 0, 100);
@@ -415,7 +429,7 @@ export default function Scroll() {
                 isPanning ? "cursor-grabbing" : "cursor-grab"
               }`}
             >
-              {isFarFromPresent && (
+              {isTodayOutOfBoard && (
                 <button
                   type="button"
                   onClick={handleBackToPresent}
@@ -423,6 +437,7 @@ export default function Scroll() {
                   className={`absolute top-6 z-10 rounded-full border border-foreground/25 bg-background/90 px-4 py-1.5 text-[10px] uppercase tracking-[0.2em] text-foreground/70 shadow-[0_12px_30px_-20px_rgba(0,0,0,0.45)] transition hover:border-foreground/40 hover:text-foreground ${
                     viewOffsetYears < 0 ? "right-6" : "left-6"
                   }`}
+                  style={{ opacity: backToPresentOpacity }}
                 >
                   <span className="flex items-center gap-2">
                     {!isViewingPast && (
