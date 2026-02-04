@@ -438,13 +438,13 @@ export const wokkiCom: WokkiCom = {
         imageUrl: "/curation/like-jennie.jpg",
       },
       {
-        title: "God, Zen, Dao",
+        title: "Dao, God, Zen, Deism...",
         shortIntro: "The One",
         description: "This is 'The Origin'.",
         links: [
           {
             label: "Self",
-            url: `https://node.${WOKKI_DOT_COM}/00000000000000001`,
+            url: `https://en.wikipedia.org/wiki/Perennial_philosophy`,
           },
         ],
         creator: "",
