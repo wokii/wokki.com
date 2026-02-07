@@ -140,7 +140,7 @@ export default function ConsultancyHome() {
               {
                 key: "initial",
                 title: "Initial Consultation",
-                price: "£1,111 / over a week",
+                price: "£1,111.00 / over a week",
                 description:
                   "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
                 cta: "Book initial session",
@@ -150,7 +150,7 @@ export default function ConsultancyHome() {
               {
                 key: "subscription",
                 title: "Insight Subscription",
-                price: "£111.1 / month",
+                price: "£111.10 / month",
                 description: "Ongoing customized insight delivery.",
                 cta: "Start subscription",
                 href: null,
@@ -159,7 +159,7 @@ export default function ConsultancyHome() {
               {
                 key: "tenMinute",
                 title: "10-Minute Session",
-                price: "£111.1 / 10 minutes",
+                price: "£111.10 / 10 minutes",
                 description: "Focused answers in a short call.",
                 cta: "Book 10 minutes",
                 href: null,
