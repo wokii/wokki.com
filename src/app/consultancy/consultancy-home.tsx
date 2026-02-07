@@ -17,22 +17,38 @@ const MAIN_SITE_URL =
 
 export default function ConsultancyHome() {
   const { hero } = Zen[CONSULTANCY_WOKKI];
-  const [serviceStats, setServiceStats] = useState({
-    initial: { paid: "—", completed: "—" },
-    subscription: { paid: "—", completed: "—" },
-    tenMinute: { paid: "—", completed: "—" },
+  const formatStat = (value: number | null | undefined) =>
+    typeof value === "number" ? value.toLocaleString() : "—";
+  const formatDenominator = (value: number | null | undefined) =>
+    value === 0 ? "NaN" : formatStat(value);
+  const [serviceStats, setServiceStats] = useState<{
+    initial: { paid: number | null; completed: number | null };
+    subscription: { paid: number | null; completed: number | null };
+    tenMinute: { paid: number | null; completed: number | null };
+  }>({
+    initial: { paid: null, completed: null },
+    subscription: { paid: null, completed: null },
+    tenMinute: { paid: null, completed: null },
   });
 
   useEffect(() => {
     let isActive = true;
 
-    const formatStat = (value: number | null | undefined) =>
-      typeof value === "number" ? value.toLocaleString() : "—";
+    const applyFallbackStats = () => {
+      setServiceStats({
+        initial: { paid: 0, completed: 0 },
+        subscription: { paid: 0, completed: 0 },
+        tenMinute: { paid: 0, completed: 0 },
+      });
+    };
 
     const loadStats = async () => {
       try {
         const response = await fetch("/api/consultancy/stats");
-        if (!response.ok) return;
+        if (!response.ok) {
+          if (isActive) applyFallbackStats();
+          return;
+        }
         const data = (await response.json()) as {
           services?: {
             initial?: { paid?: number; completed?: number };
@@ -40,23 +56,26 @@ export default function ConsultancyHome() {
             tenMinute?: { paid?: number; completed?: number };
           };
         };
-        if (!isActive || !data?.services) return;
+        if (!isActive || !data?.services) {
+          if (isActive) applyFallbackStats();
+          return;
+        }
         setServiceStats({
           initial: {
-            paid: formatStat(data.services.initial?.paid),
-            completed: formatStat(data.services.initial?.completed),
+            paid: data.services.initial?.paid ?? null,
+            completed: data.services.initial?.completed ?? null,
           },
           subscription: {
-            paid: formatStat(data.services.subscription?.paid),
-            completed: formatStat(data.services.subscription?.completed),
+            paid: data.services.subscription?.paid ?? null,
+            completed: data.services.subscription?.completed ?? null,
           },
           tenMinute: {
-            paid: formatStat(data.services.tenMinute?.paid),
-            completed: formatStat(data.services.tenMinute?.completed),
+            paid: data.services.tenMinute?.paid ?? null,
+            completed: data.services.tenMinute?.completed ?? null,
           },
         });
       } catch {
-        // Keep placeholders on failure.
+        if (isActive) applyFallbackStats();
       }
     };
 
@@ -119,6 +138,7 @@ export default function ConsultancyHome() {
           <div className="grid gap-6 md:grid-cols-3">
             {[
               {
+                key: "initial",
                 title: "Initial Consultation",
                 price: "£1,111 / over a week",
                 description:
@@ -128,6 +148,7 @@ export default function ConsultancyHome() {
                 stats: serviceStats.initial,
               },
               {
+                key: "subscription",
                 title: "Insight Subscription",
                 price: "£111.1 / month",
                 description: "Ongoing customized insight delivery.",
@@ -136,6 +157,7 @@ export default function ConsultancyHome() {
                 stats: serviceStats.subscription,
               },
               {
+                key: "tenMinute",
                 title: "10-Minute Session",
                 price: "£111.1 / 10 minutes",
                 description: "Focused answers in a short call.",
@@ -143,43 +165,60 @@ export default function ConsultancyHome() {
                 href: null,
                 stats: serviceStats.tenMinute,
               },
-            ].map((item) => (
-              <div key={item.title} className="flex flex-col gap-3">
-                <div className="flex h-full flex-col rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/80 via-background/60 to-background/40 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
-                  <h3 className="text-lg font-semibold tracking-tight">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm font-semibold text-foreground/80">
-                    {item.price}
-                  </p>
-                  <p className="mt-3 text-sm text-foreground/65">
-                    {item.description}
-                  </p>
-                  <div className="mt-auto pt-6">
-                    <a
-                      href={item.href ?? undefined}
-                      aria-disabled={item.href ? undefined : true}
-                      tabIndex={item.href ? undefined : -1}
-                      className={`inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 ${
-                        item.href
-                          ? "hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
-                          : "cursor-not-allowed opacity-50 pointer-events-none shadow-none"
-                      }`}
-                    >
-                      {item.href ? item.cta : "Init' Session Required"}
-                    </a>
+            ].map((item) => {
+              const paidTarget =
+                item.key === "initial"
+                  ? 11
+                  : item.key === "tenMinute"
+                    ? 11
+                    : serviceStats.initial.completed;
+
+              return (
+                <div key={item.title} className="flex flex-col gap-3">
+                  <div className="flex h-full flex-col rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/80 via-background/60 to-background/40 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+                    <h3 className="text-lg font-semibold tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm font-semibold text-foreground/80">
+                      {item.price}
+                    </p>
+                    <p className="mt-3 text-sm text-foreground/65">
+                      {item.description}
+                    </p>
+                    <div className="mt-auto pt-6">
+                      <a
+                        href={item.href ?? undefined}
+                        aria-disabled={item.href ? undefined : true}
+                        tabIndex={item.href ? undefined : -1}
+                        className={`inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 ${
+                          item.href
+                            ? "hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
+                            : "cursor-not-allowed opacity-50 pointer-events-none shadow-none"
+                        }`}
+                      >
+                        {item.href ? item.cta : "Init' Session Required"}
+                      </a>
+                    </div>
                   </div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+                    <span className="block">
+                      {formatStat(item.stats.paid)} /{" "}
+                      <span className="text-accent">
+                        {formatDenominator(paidTarget)}
+                      </span>{" "}
+                      have paid for {item.title}(s).
+                    </span>
+                    <span className="block">
+                      {formatStat(item.stats.completed)} /{" "}
+                      <span className="text-accent">
+                        {formatDenominator(item.stats.paid)}
+                      </span>{" "}
+                      have concluded their {item.title}(s).
+                    </span>
+                  </p>
                 </div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/50">
-                  <span className="block">
-                    {item.stats.paid} have paid for {item.title}(s).
-                  </span>
-                  <span className="block">
-                    {item.stats.completed} have concluded their {item.title}(s).
-                  </span>
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

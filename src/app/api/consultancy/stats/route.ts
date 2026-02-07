@@ -41,10 +41,21 @@ const addLineItems = (
   }
 };
 
-const fetchPaidCounts = async (): Promise<PaidCounts> => {
-  if (!stripe) return { ...emptyCounts };
+const DEBUG_SESSION_LIMIT = 5;
+
+type DebugSession = {
+  id: string;
+  payment_status: Stripe.Checkout.Session.PaymentStatus | null;
+  line_items: Array<{ price_id: string | null; quantity: number }>;
+};
+
+const fetchPaidCounts = async (
+  withDebug = false,
+): Promise<{ counts: PaidCounts; debugSessions?: DebugSession[] }> => {
+  if (!stripe) return { counts: { ...emptyCounts } };
 
   const counts: PaidCounts = { ...emptyCounts };
+  const debugSessions: DebugSession[] | undefined = withDebug ? [] : undefined;
   let startingAfter: string | undefined;
 
   do {
@@ -56,6 +67,17 @@ const fetchPaidCounts = async (): Promise<PaidCounts> => {
     });
 
     for (const session of sessions.data) {
+      if (debugSessions && debugSessions.length < DEBUG_SESSION_LIMIT) {
+        debugSessions.push({
+          id: session.id,
+          payment_status: session.payment_status ?? null,
+          line_items:
+            session.line_items?.data?.map((item) => ({
+              price_id: item.price?.id ?? null,
+              quantity: item.quantity ?? 1,
+            })) ?? [],
+        });
+      }
       if (session.payment_status !== "paid") {
         continue;
       }
@@ -68,6 +90,16 @@ const fetchPaidCounts = async (): Promise<PaidCounts> => {
         session.id,
         { limit: 100 },
       );
+      if (debugSessions && debugSessions.length < DEBUG_SESSION_LIMIT) {
+        debugSessions.push({
+          id: session.id,
+          payment_status: session.payment_status ?? null,
+          line_items: lineItems.data.map((item) => ({
+            price_id: item.price?.id ?? null,
+            quantity: item.quantity ?? 1,
+          })),
+        });
+      }
       addLineItems(counts, lineItems.data);
     }
 
@@ -78,10 +110,10 @@ const fetchPaidCounts = async (): Promise<PaidCounts> => {
     }
   } while (startingAfter);
 
-  return counts;
+  return { counts, debugSessions };
 };
 
-export async function GET() {
+export async function GET(request: Request) {
   if (!stripe) {
     return NextResponse.json(
       {
@@ -96,7 +128,9 @@ export async function GET() {
     );
   }
 
-  const paidCounts = await fetchPaidCounts();
+  const { counts: paidCounts, debugSessions } = await fetchPaidCounts(
+    new URL(request.url).searchParams.get("debug") === "1",
+  );
 
   return NextResponse.json({
     services: {
@@ -105,5 +139,13 @@ export async function GET() {
       tenMinute: { paid: paidCounts.tenMinute, completed: 0 },
     },
     updatedAt: new Date().toISOString(),
+    ...(debugSessions
+      ? {
+          debug: {
+            priceIds,
+            sessions: debugSessions,
+          },
+        }
+      : {}),
   });
 }
