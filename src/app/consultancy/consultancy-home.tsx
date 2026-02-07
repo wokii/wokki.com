@@ -29,10 +29,21 @@ export default function ConsultancyHome() {
     const formatStat = (value: number | null | undefined) =>
       typeof value === "number" ? value.toLocaleString() : "—";
 
+    const applyFallbackStats = () => {
+      setServiceStats({
+        initial: { paid: formatStat(0), completed: formatStat(0) },
+        subscription: { paid: formatStat(0), completed: formatStat(0) },
+        tenMinute: { paid: formatStat(0), completed: formatStat(0) },
+      });
+    };
+
     const loadStats = async () => {
       try {
         const response = await fetch("/api/consultancy/stats");
-        if (!response.ok) return;
+        if (!response.ok) {
+          if (isActive) applyFallbackStats();
+          return;
+        }
         const data = (await response.json()) as {
           services?: {
             initial?: { paid?: number; completed?: number };
@@ -40,7 +51,10 @@ export default function ConsultancyHome() {
             tenMinute?: { paid?: number; completed?: number };
           };
         };
-        if (!isActive || !data?.services) return;
+        if (!isActive || !data?.services) {
+          if (isActive) applyFallbackStats();
+          return;
+        }
         setServiceStats({
           initial: {
             paid: formatStat(data.services.initial?.paid),
@@ -56,7 +70,7 @@ export default function ConsultancyHome() {
           },
         });
       } catch {
-        // Keep placeholders on failure.
+        if (isActive) applyFallbackStats();
       }
     };
 
