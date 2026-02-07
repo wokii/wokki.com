@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
 
 const stripe = stripeSecretKey
-  ? new Stripe(stripeSecretKey, { apiVersion: "2024-06-20" })
+  ? new Stripe(stripeSecretKey, { apiVersion: "2026-01-28.clover" })
   : null;
 
 const priceIds = {
@@ -52,11 +52,13 @@ const fetchPaidCounts = async (): Promise<PaidCounts> => {
       limit: 100,
       starting_after: startingAfter,
       status: "complete",
-      payment_status: "paid",
       expand: ["data.line_items"],
     });
 
     for (const session of sessions.data) {
+      if (session.payment_status !== "paid") {
+        continue;
+      }
       if (session.line_items?.data?.length) {
         addLineItems(counts, session.line_items.data);
         continue;
