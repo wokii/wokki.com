@@ -1,4 +1,13 @@
-import { CONSULTANCY_WOKKI, WOKKI_DOT_COM, Zen } from "../lib/WokkiNodes";
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+  CONSULTANCY_WOKKI,
+  consultancyInitialSessionEmail,
+  WOKKI_DOT_COM,
+  Zen,
+} from "../lib/WokkiNodes";
+import ConsultancyHeader from "./consultancy-header";
 
 const MAIN_SITE_URL =
   process.env.NEXT_PUBLIC_MAIN_URL ??
@@ -8,36 +17,64 @@ const MAIN_SITE_URL =
 
 export default function ConsultancyHome() {
   const { hero } = Zen[CONSULTANCY_WOKKI];
+  const [serviceStats, setServiceStats] = useState({
+    initial: { paid: "—", completed: "—" },
+    subscription: { paid: "—", completed: "—" },
+    tenMinute: { paid: "—", completed: "—" },
+  });
+
+  useEffect(() => {
+    let isActive = true;
+
+    const formatStat = (value: number | null | undefined) =>
+      typeof value === "number" ? value.toLocaleString() : "—";
+
+    const loadStats = async () => {
+      try {
+        const response = await fetch("/api/consultancy/stats");
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          services?: {
+            initial?: { paid?: number; completed?: number };
+            subscription?: { paid?: number; completed?: number };
+            tenMinute?: { paid?: number; completed?: number };
+          };
+        };
+        if (!isActive || !data?.services) return;
+        setServiceStats({
+          initial: {
+            paid: formatStat(data.services.initial?.paid),
+            completed: formatStat(data.services.initial?.completed),
+          },
+          subscription: {
+            paid: formatStat(data.services.subscription?.paid),
+            completed: formatStat(data.services.subscription?.completed),
+          },
+          tenMinute: {
+            paid: formatStat(data.services.tenMinute?.paid),
+            completed: formatStat(data.services.tenMinute?.completed),
+          },
+        });
+      } catch {
+        // Keep placeholders on failure.
+      }
+    };
+
+    loadStats();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-20">
+      <ConsultancyHeader mainSiteUrl={MAIN_SITE_URL} />
+      <section
+        id="consultancy"
+        className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 pb-20 pt-28"
+      >
         <div className="relative w-fit">
-          <div className="relative group mb-3">
-            <a
-              href={MAIN_SITE_URL}
-              className="group/button relative flex h-9 w-9 items-center justify-center rounded-full border border-foreground/20 bg-background/80 text-foreground/70 transition-all hover:border-transparent hover:bg-transparent hover:text-accent"
-              aria-label="Back to Wokki.com"
-            >
-              <span className="text-sm transition-opacity group-hover/button:opacity-0">
-                ↖
-              </span>
-              <span className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover/button:opacity-100">
-                <span className="absolute left-1/2 top-1/2 h-[1px] w-4 -translate-x-1/2 -translate-y-1/2 bg-current" />
-                <span className="absolute left-1/2 top-1/2 h-4 w-[1px] -translate-x-1/2 -translate-y-1/2 bg-current" />
-                <span className="absolute left-1/2 top-[calc(50%-8px)] h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 border-t border-l border-current" />
-                <span className="absolute left-[calc(50%-8px)] top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 -rotate-45 border-t border-l border-current" />
-              </span>
-            </a>
-            <div className="pointer-events-none absolute left-1/2 top-1/2 opacity-0 transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
-              <a
-                href={MAIN_SITE_URL}
-                className="absolute left-0 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-foreground/15 bg-background/90 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-foreground/70 transition-all duration-200 hover:-translate-y-[52px] hover:border-accent hover:text-accent group-hover:-translate-y-[52px]"
-              >
-                Wokki.com
-              </a>
-            </div>
-          </div>
           {hero.eyebrow ? (
             <p className="text-xs uppercase tracking-[0.4em] text-foreground/50">
               {hero.eyebrow}
@@ -60,6 +97,142 @@ export default function ConsultancyHome() {
           <span className="text-xs uppercase tracking-[0.2em] text-foreground/50">
             {hero.rateNote}
           </span>
+        </div>
+      </section>
+      <section
+        id="pricing"
+        className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-24"
+      >
+        <div className="flex flex-col gap-10">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
+              Pricing
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+              Consulting Services
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-foreground/60">
+              Three focused ways to work together, designed for clarity and
+              momentum.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                title: "Initial Consultation",
+                price: "£1,111 / over a week",
+                description:
+                  "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
+                cta: "Book initial session",
+                href: "https://buy.stripe.com/fZu28s9074OP7aF0Fq3Je00",
+                stats: serviceStats.initial,
+              },
+              {
+                title: "Insight Subscription",
+                price: "£111.1 / month",
+                description: "Ongoing customized insight delivery.",
+                cta: "Start subscription",
+                href: null,
+                stats: serviceStats.subscription,
+              },
+              {
+                title: "10-Minute Session",
+                price: "£111.1 / 10 minutes",
+                description: "Focused answers in a short call.",
+                cta: "Book 10 minutes",
+                href: null,
+                stats: serviceStats.tenMinute,
+              },
+            ].map((item) => (
+              <div key={item.title} className="flex flex-col gap-3">
+                <div className="flex h-full flex-col rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/80 via-background/60 to-background/40 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+                  <h3 className="text-lg font-semibold tracking-tight">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm font-semibold text-foreground/80">
+                    {item.price}
+                  </p>
+                  <p className="mt-3 text-sm text-foreground/65">
+                    {item.description}
+                  </p>
+                  <div className="mt-auto pt-6">
+                    <a
+                      href={item.href ?? undefined}
+                      aria-disabled={item.href ? undefined : true}
+                      tabIndex={item.href ? undefined : -1}
+                      className={`inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 ${
+                        item.href
+                          ? "hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
+                          : "cursor-not-allowed opacity-50 pointer-events-none shadow-none"
+                      }`}
+                    >
+                      {item.href ? item.cta : "Init' Session Required"}
+                    </a>
+                  </div>
+                </div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-foreground/50">
+                  <span className="block">
+                    {item.stats.paid} have paid for {item.title}(s).
+                  </span>
+                  <span className="block">
+                    {item.stats.completed} have concluded their {item.title}(s).
+                  </span>
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section
+        id="contact"
+        className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-24"
+      >
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,260px)_1fr] lg:items-center">
+          <div className="flex flex-col gap-3">
+            <div className="rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/80 via-background/60 to-background/40 px-6 py-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
+                Contact
+              </p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
+                Let&apos;s talk.
+              </h2>
+              <p className="mt-3 text-sm text-foreground/60">
+                Choose your preferred path and we&apos;ll take it from there.
+              </p>
+            </div>
+          </div>
+          <div className="relative flex flex-col gap-6 pl-10 before:absolute before:left-4 before:top-4 before:bottom-4 before:w-px before:bg-foreground/20 before:content-['']">
+            <div className="relative flex flex-wrap items-center gap-4 rounded-3xl border border-foreground/10 bg-background/60 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur">
+              <span
+                aria-hidden
+                className="absolute -left-8 top-1/2 h-px w-8 -translate-y-1/2 bg-foreground/20"
+              />
+              <span className="text-sm uppercase tracking-[0.25em] text-foreground/50">
+                Ready to chat?
+              </span>
+              <a
+                href="https://buy.stripe.com/fZu28s9074OP7aF0Fq3Je00"
+                className="inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
+              >
+                Book initial session
+              </a>
+            </div>
+            <div className="relative flex flex-wrap items-center gap-4 rounded-3xl border border-foreground/10 bg-background/60 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur">
+              <span
+                aria-hidden
+                className="absolute -left-8 top-1/2 h-px w-8 -translate-y-1/2 bg-foreground/20"
+              />
+              <span className="text-sm uppercase tracking-[0.25em] text-foreground/50">
+                Prefer email?
+              </span>
+              <a
+                href={consultancyInitialSessionEmail}
+                className="inline-flex items-center justify-center rounded-full border border-foreground/15 bg-background/60 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+              >
+                Email sales
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>
