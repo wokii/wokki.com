@@ -193,6 +193,21 @@ const encodeMailto = (email: string, subject: string, body: string) =>
     subject,
   )}&body=${encodeURIComponent(body)}`;
 
+export const consultancyInitialSessionEmail = encodeMailto(
+  "wokkiacross@gmail.com",
+  "Wokki Consultancy Initial Session",
+  `Hi Wokki,
+
+I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £3,000 per hour.
+
+Objective: [desired outcome]
+Timeline: [rough timing, deadline]
+Budget: [total budget]
+
+Thanks,
+[name]`,
+);
+
 export type Zen = {
   [WOKKI_DOT_COM]: WokkiCom;
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
@@ -604,21 +619,8 @@ export const consultancyWokki: ConsultancyWokki = {
     subtitle:
       "Private consulting across Strategy, Product, Engineering, Psychology and AI.",
     cta: {
-      label: "Book your initial session",
-      href: encodeMailto(
-        "wokkiacross@gmail.com",
-        "Wokki Consultancy Initial Session",
-        `Hi Wokki,
-
-I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £3,000 per hour.
-
-Objective: [desired outcome]
-Timeline: [rough timing, deadline]
-Budget: [total budget]
-
-Thanks,
-[name]`,
-      ),
+      label: "Check Pricing",
+      href: "#pricing",
     },
     rateNote: "Starting rate: £3,000 per hour.",
   },
