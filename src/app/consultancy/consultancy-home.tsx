@@ -140,7 +140,7 @@ export default function ConsultancyHome() {
               {
                 key: "initial",
                 title: "Initial Consultation",
-                price: "£1,111.00 / over a week",
+                price: "£1,111 / over a week",
                 description:
                   "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
                 cta: "Book initial session",
