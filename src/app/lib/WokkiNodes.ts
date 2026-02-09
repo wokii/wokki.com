@@ -25,7 +25,7 @@ export type About = {
   introSuffix: string;
   summary: string;
   contact: {
-    email: string;
+    emails: string[];
     links: ContactLink[];
   };
 };
@@ -198,7 +198,7 @@ export const consultancyInitialSessionEmail = encodeMailto(
   "Wokki Consultancy Initial Session",
   `Hi Wokki,
 
-I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £3,000 per hour.
+I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £1,111 per hour.
 
 Objective: [desired outcome]
 Timeline: [rough timing, deadline]
@@ -232,7 +232,11 @@ export const wokkiCom: WokkiCom = {
     summary:
       "With experience across Mathematics, Finance, Economics, AI Startups, Psychology, Music, Media, Consultancy and Design. I bring an Absolutely unique perspective to solving complex problems through technology and aesthetics.",
     contact: {
-      email: "wokkiacross@gmail.com",
+      emails: [
+        "self@wokki.com",
+        "christine@wokki.com",
+        "wokkiacross@gmail.com",
+      ],
       links: [
         {
           platform: "github",
@@ -622,7 +626,7 @@ export const consultancyWokki: ConsultancyWokki = {
       label: "Check Pricing",
       href: "#pricing",
     },
-    rateNote: "Starting rate: £3,000 per hour.",
+    rateNote: "Starting rate: £1,111 per hour.",
   },
   insights: {
     records: [
