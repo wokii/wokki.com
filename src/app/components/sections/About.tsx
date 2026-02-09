@@ -1,11 +1,19 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
+import ImageModal from "../ImageModal";
 import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
+
+const encodeMailto = (emails: string[], subject: string, body: string) =>
+  `mailto:${emails.join(",")}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
 
 export default function About() {
   const { about, hero } = Zen[WOKKI_DOT_COM];
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const iconForLink = (platform: string) => {
     const icons: Record<string, string> = {
       github: "/social-media-svg/004-github.svg",
@@ -77,9 +85,26 @@ export default function About() {
                 <span className="uppercase tracking-[0.2em] text-[10px] md:text-xs text-foreground/50">
                   Email
                 </span>
-                <span className="ml-3 font-medium text-foreground/80">
-                  wokkiacross@gmail.com
-                </span>
+                <a
+                  href={encodeMailto(
+                    about.contact.emails,
+                    "",
+                    `Hi,
+
+I'm [name] from [company], [brief situation description]. We're looking for help with [one-line problem]. I agree in principle that the starting rate for Wokki Consultancy is £1,111 per hour.
+
+Objective: [desired outcome]
+Timeline: [rough timing, deadline]
+Budget: [total budget]
+
+Thanks,
+[name]
+`,
+                  )}
+                  className="ml-3 font-medium text-foreground/80 hover:text-accent transition-colors duration-200 underline-offset-2 hover:underline"
+                >
+                  {about.contact.emails.join(", ")}
+                </a>
               </p>
             </div>
             <div className="absolute inset-x-0 bottom-0 flex items-center justify-start gap-2 border-t border-foreground/10 bg-background/85 px-6 py-4 md:px-8">
@@ -94,6 +119,24 @@ export default function About() {
                     aria-hidden="true"
                   />
                 );
+
+                // Special handling for Instagram - open modal instead of external link
+                if (link.platform === "instagram") {
+                  return (
+                    <a
+                      key={`${link.platform}-${link.description}`}
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsImageModalOpen(true);
+                      }}
+                      aria-label={`${link.platform}: ${link.description}`}
+                      className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-foreground/15 bg-background/70 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-background cursor-pointer"
+                    >
+                      {icon}
+                    </a>
+                  );
+                }
 
                 if (!link.url) {
                   return (
@@ -124,6 +167,12 @@ export default function About() {
           </div>
         </div>
       </div>
+      <ImageModal
+        isOpen={isImageModalOpen}
+        onClose={() => setIsImageModalOpen(false)}
+        imageSrc="/instagram-image.png"
+        imageAlt="Instagram image"
+      />
     </Section>
   );
 }
