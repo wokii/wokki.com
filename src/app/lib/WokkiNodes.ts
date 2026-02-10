@@ -401,8 +401,8 @@ export const wokkiCom: WokkiCom = {
       },
       {
         name: "Richard Boyne",
-        shortIntro: "The Humble Software Engineer",
-        description: "richard-boyne-description",
+        shortIntro: "The Humble Engineer",
+        description: "The humble engineer who works at Jane Street.",
         links: [
           {
             label: "LinkedIn",
@@ -462,7 +462,7 @@ export const wokkiCom: WokkiCom = {
         description: "This is 'The Origin'.",
         links: [
           {
-            label: "Self",
+            label: "Perennial Philosophy",
             url: `https://en.wikipedia.org/wiki/Perennial_philosophy`,
           },
         ],

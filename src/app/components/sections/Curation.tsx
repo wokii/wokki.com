@@ -126,6 +126,14 @@ export default function Curation() {
               />
             ))}
           </ul>
+          <a
+            href="https://pay.wokki.com/b/bJe00k3FN0yzfHb2Ny3Je01"
+            target="_blank"
+            rel="noreferrer"
+            className="mt-6 inline-flex items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_30%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent/20 hover:text-accent hover:shadow-[0_0_32px_color-mix(in_srgb,var(--accent)_45%,transparent)]"
+          >
+            Tap into the Network by donating £1,1110
+          </a>
         </div>
 
         <div>
