@@ -150,7 +150,7 @@ export default function ConsultancyHome() {
               {
                 key: "subscription",
                 title: "Insight Subscription",
-                price: "£111.1 / month",
+                price: "£111.10 / month",
                 description: "Ongoing customized insight delivery.",
                 cta: "Start subscription",
                 href: null,
@@ -159,7 +159,7 @@ export default function ConsultancyHome() {
               {
                 key: "tenMinute",
                 title: "10-Minute Session",
-                price: "£111.1 / 10 minutes",
+                price: "£111.10 / 10 minutes",
                 description: "Focused answers in a short call.",
                 cta: "Book 10 minutes",
                 href: null,
