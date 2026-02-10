@@ -144,7 +144,7 @@ export default function ConsultancyHome() {
                 description:
                   "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
                 cta: "Book initial session",
-                href: "https://pay.wokki.com/fZu28s9074OP7aF0Fq3Je00",
+                href: "https://pay.wokki.com/b/fZu28s9074OP7aF0Fq3Je00",
                 stats: serviceStats.initial,
               },
               {
@@ -250,7 +250,7 @@ export default function ConsultancyHome() {
                 Ready to chat?
               </span>
               <a
-                href="https://pay.wokki.com/fZu28s9074OP7aF0Fq3Je00"
+                href="https://pay.wokki.com/b/fZu28s9074OP7aF0Fq3Je00"
                 className="inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
               >
                 Book initial session
