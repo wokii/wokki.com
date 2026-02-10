@@ -163,6 +163,14 @@ Thanks,
                   </a>
                 );
               })}
+              <a
+                href="https://pay.wokki.com/b/28E00kdgndll8eJdsc3Je03"
+                target="_blank"
+                rel="noreferrer"
+                className="ml-auto inline-flex items-center justify-center rounded-full border border-accent/40 bg-accent/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-accent shadow-[0_0_18px_color-mix(in_srgb,var(--accent)_30%,transparent)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent/20 hover:text-accent hover:shadow-[0_0_32px_color-mix(in_srgb,var(--accent)_45%,transparent)]"
+              >
+                Wokki&apos;s Lunch
+              </a>
             </div>
           </div>
         </div>
