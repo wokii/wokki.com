@@ -261,17 +261,17 @@ export const wokkiCom: WokkiCom = {
         {
           platform: "instagram",
           description: "Instagram",
-          url: null,
+          url: "https://www.instagram.com/hanwokii/",
         },
         {
           platform: "tiktok",
           description: "TikTok",
-          url: null,
+          url: "https://www.tiktok.com/@hanwokki",
         },
         {
           platform: "tiktokCn",
-          description: "TikTok (Chinese)",
-          url: null,
+          description: "抖音(CN TikTok)",
+          url: "https://www.douyin.com/user/MS4wLjABAAAA6dlxf0baWEWZ4VQl8tuhWY-J8l4PreD1OkEHzCZS9gw",
         },
       ],
     },

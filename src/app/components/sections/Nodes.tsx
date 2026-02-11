@@ -572,6 +572,7 @@ export default function Nodes() {
     .map((parentId) => visibleNodes.find((node) => node.id === parentId))
     .filter((node): node is KnowledgeNode => Boolean(node));
   const rootNode = visibleNodes.find((node) => node.id === 0) ?? null;
+  const rootNodeId = rootNode?.id ?? null;
   const siblingNodes = selectedNode
     ? visibleNodes
         .filter(
@@ -590,14 +591,14 @@ export default function Nodes() {
   const middleNodes = selectedNode
     ? [...siblingNodes, selectedNode].sort((a, b) => a.id - b.id)
     : siblingNodes;
-  const rootStartIds = rootNode ? [rootNode.id] : privilegedRootIds;
   const rootDescendants = React.useMemo(() => {
+    const rootStartIds = rootNodeId !== null ? [rootNodeId] : privilegedRootIds;
     if (visibleNodes.length === 0 || rootStartIds.length === 0) {
       return new Set<number>();
     }
     const maxDepth = Math.max(0, rootDepth);
     return collectDescendants(visibleNodes, rootStartIds, maxDepth);
-  }, [rootDepth, rootStartIds, visibleNodes]);
+  }, [privilegedRootIds, rootDepth, rootNodeId, visibleNodes]);
   const rootViewNodes = visibleNodes.filter((node) =>
     rootDescendants.has(node.id),
   );
