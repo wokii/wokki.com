@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import Section from "./Section";
 import SectionTitle from "./SectionTitle";
 import { WOKKI_DOT_COM, Zen, type CurationLink } from "../../lib/WokkiNodes";
@@ -32,19 +33,21 @@ function CurationCard({
           rel="noreferrer"
           className="shrink-0"
         >
-          <img
+          <Image
             src={imageUrl}
             alt={imageAlt}
+            width={48}
+            height={48}
             className="h-12 w-12 rounded-full object-cover border border-foreground/10"
-            loading="lazy"
           />
         </a>
       ) : (
-        <img
+        <Image
           src={imageUrl}
           alt={imageAlt}
+          width={48}
+          height={48}
           className="h-12 w-12 rounded-full object-cover border border-foreground/10"
-          loading="lazy"
         />
       )}
       <div>

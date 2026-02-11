@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
@@ -95,7 +95,6 @@ const getNetworkLinks = (host: string) => {
 };
 
 export default function Header() {
-  const headerRef = useRef<HTMLElement | null>(null);
   const { data: session } = useSession();
   const { theme } = useTheme();
   const pathname = usePathname();
@@ -107,31 +106,7 @@ export default function Header() {
   const [didApplyHiddenAccent, setDidApplyHiddenAccent] = useState(false);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setNetworkLinks(getNetworkLinks(window.location.host));
-    }, 0);
-    return () => window.clearTimeout(timeoutId);
-  }, []);
-
-  // Keep --header-height synced to actual header height.
-  useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-
-    const root = document.documentElement;
-    const update = () => {
-      root.style.setProperty("--header-height", `${el.offsetHeight}px`);
-    };
-
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    window.addEventListener("resize", update);
-
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", update);
-    };
+    setNetworkLinks(getNetworkLinks(window.location.host));
   }, []);
 
   useEffect(() => {
@@ -139,25 +114,21 @@ export default function Header() {
     const updateTheme = () => {
       setIsDarkTheme(root.classList.contains("dark"));
     };
-    const timeoutId = window.setTimeout(updateTheme, 0);
+    updateTheme();
     const observer = new MutationObserver(updateTheme);
     observer.observe(root, { attributes: true, attributeFilter: ["class"] });
     return () => {
-      window.clearTimeout(timeoutId);
       observer.disconnect();
     };
   }, [theme]);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      const computed = getComputedStyle(document.documentElement)
-        .getPropertyValue("--accent")
-        .trim();
-      if (computed) {
-        setAccentColor(computed);
-      }
-    }, 0);
-    return () => window.clearTimeout(timeoutId);
+    const computed = getComputedStyle(document.documentElement)
+      .getPropertyValue("--accent")
+      .trim();
+    if (computed) {
+      setAccentColor(computed);
+    }
   }, []);
 
   const applyAccent = (hex: string) => {
@@ -231,11 +202,8 @@ export default function Header() {
     if (!hiddenAccent || didApplyHiddenAccent) {
       return;
     }
-    const timeoutId = window.setTimeout(() => {
-      applyAccent(hiddenAccent);
-      setDidApplyHiddenAccent(true);
-    }, 0);
-    return () => window.clearTimeout(timeoutId);
+    applyAccent(hiddenAccent);
+    setDidApplyHiddenAccent(true);
   }, [hiddenAccent, didApplyHiddenAccent]);
 
   useEffect(() => {
@@ -247,10 +215,7 @@ export default function Header() {
       return;
     }
     if (accentColor === hiddenAccent) return;
-    const timeoutId = window.setTimeout(() => {
-      applyAccent(hiddenAccent);
-    }, 0);
-    return () => window.clearTimeout(timeoutId);
+    applyAccent(hiddenAccent);
   }, [role, hiddenAccent, accentColor]);
 
   const renderColorPalette = (direction: "row" | "column") => {
@@ -292,11 +257,8 @@ export default function Header() {
 
   return (
     <>
-      <header
-        ref={headerRef}
-        className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10"
-      >
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center relative overflow-visible">
+      <header className="fixed top-0 left-0 w-full z-[9999] bg-background/81 backdrop-blur-sm border-b border-foreground/10">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center relative z-10 overflow-visible">
           <div className="flex items-center gap-3">
             <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
               <button
@@ -342,23 +304,8 @@ export default function Header() {
           </div>
 
           {/* Desktop color selector */}
-          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center z-10">
+          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center z-10">
             <div className="relative flex items-center">
-              {role === "妃" && accentColor === HIDDEN_PINK ? (
-                <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty reverse-selection-light">
-                  <span className="reverse-highlight">
-                    You can’t find Pink in the rainbow,
-                  </span>
-                  <br />
-                  <span className="reverse-highlight">
-                    Because I reserved it for you.
-                  </span>
-                  <br />
-                  <span className="reverse-highlight">
-                    - To my dear BabyBlush&nbsp;
-                  </span>
-                </div>
-              ) : null}
               <div className="flex items-center gap-2">
                 {renderColorPalette("row")}
               </div>
@@ -517,7 +464,7 @@ export default function Header() {
       {pathname === "/" && !isMenuOpen ? (
         <div className="fixed left-1/2 top-[calc(var(--header-height)-1px)] -translate-x-1/2 z-40">
           <div className="group relative">
-            <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform translate-y-[calc(-100%+6px)] group-hover:translate-y-0 group-has-[:focus-visible]:translate-y-0 hover:translate-y-0">
+            <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform translate-y-[calc(-100%+6px)] group-hover:translate-y-0 group-has-[:focus-visible]:translate-y-0">
               <SocialLinksBar
                 links={Zen[WOKKI_DOT_COM].about.contact.links}
                 label=""
