@@ -120,8 +120,8 @@ Thanks,
                   />
                 );
 
-                // Special handling for Instagram - open modal instead of external link
-                if (link.platform === "instagram") {
+                // Instagram: only use modal preview when URL is missing.
+                if (link.platform === "instagram" && !link.url) {
                   return (
                     <a
                       key={`${link.platform}-${link.description}`}

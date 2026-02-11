@@ -1,13 +1,60 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 import AuthControls from "./auth/AuthControls";
-import { WOKKI_DOT_COM } from "../lib/WokkiNodes";
+import SocialLinksBar from "./SocialLinksBar";
+import { WOKKI_DOT_COM, Zen } from "../lib/WokkiNodes";
 import { useTheme } from "../theme-provider";
+
+function HeaderNavLink({
+  href,
+  children,
+  onNavigate,
+}: {
+  href: string;
+  children: ReactNode;
+  onNavigate: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      className="inline-block hover:text-accent transition-colors relative group py-1"
+      onClick={onNavigate}
+    >
+      {children}
+      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+    </Link>
+  );
+}
+
+function AccentColorButton({
+  hex,
+  isSelected,
+  onSelect,
+}: {
+  hex: string;
+  isSelected: boolean;
+  onSelect: (hex: string) => void;
+}) {
+  return (
+    <button
+      onClick={() => onSelect(hex)}
+      className={`h-5 w-5 rounded-full border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-accent ${
+        isSelected
+          ? "ring-2 ring-accent -translate-y-0.5 opacity-100"
+          : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
+      }`}
+      style={{ backgroundColor: hex, borderColor: "rgba(0,0,0,0.2)" }}
+      aria-label={`Set accent color ${hex}`}
+      title={`Accent ${hex}`}
+    />
+  );
+}
 
 const colorOptions = [
   "#ef4444", // red
@@ -48,8 +95,10 @@ const getNetworkLinks = (host: string) => {
 };
 
 export default function Header() {
+  const headerRef = useRef<HTMLElement | null>(null);
   const { data: session } = useSession();
   const { theme } = useTheme();
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
@@ -58,7 +107,31 @@ export default function Header() {
   const [didApplyHiddenAccent, setDidApplyHiddenAccent] = useState(false);
 
   useEffect(() => {
-    setNetworkLinks(getNetworkLinks(window.location.host));
+    const timeoutId = window.setTimeout(() => {
+      setNetworkLinks(getNetworkLinks(window.location.host));
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  // Keep --header-height synced to actual header height.
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const root = document.documentElement;
+    const update = () => {
+      root.style.setProperty("--header-height", `${el.offsetHeight}px`);
+    };
+
+    update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    window.addEventListener("resize", update);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   useEffect(() => {
@@ -66,19 +139,25 @@ export default function Header() {
     const updateTheme = () => {
       setIsDarkTheme(root.classList.contains("dark"));
     };
-    updateTheme();
+    const timeoutId = window.setTimeout(updateTheme, 0);
     const observer = new MutationObserver(updateTheme);
     observer.observe(root, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
+    return () => {
+      window.clearTimeout(timeoutId);
+      observer.disconnect();
+    };
   }, [theme]);
 
   useEffect(() => {
-    const computed = getComputedStyle(document.documentElement)
-      .getPropertyValue("--accent")
-      .trim();
-    if (computed) {
-      setAccentColor(computed);
-    }
+    const timeoutId = window.setTimeout(() => {
+      const computed = getComputedStyle(document.documentElement)
+        .getPropertyValue("--accent")
+        .trim();
+      if (computed) {
+        setAccentColor(computed);
+      }
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   const applyAccent = (hex: string) => {
@@ -135,26 +214,6 @@ export default function Header() {
     updateFaviconWithAccent(accentColor);
   }, [accentColor]);
 
-  const ColorButton = ({
-    hex,
-    isSelected,
-  }: {
-    hex: string;
-    isSelected: boolean;
-  }) => (
-    <button
-      onClick={() => applyAccent(hex)}
-      className={`h-5 w-5 rounded-full border transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-accent ${
-        isSelected
-          ? "ring-2 ring-accent -translate-y-0.5 opacity-100"
-          : "opacity-40 hover:opacity-100 focus-visible:opacity-100"
-      }`}
-      style={{ backgroundColor: hex, borderColor: "rgba(0,0,0,0.2)" }}
-      aria-label={`Set accent color ${hex}`}
-      title={`Accent ${hex}`}
-    />
-  );
-
   const role = session?.user?.role;
   const hiddenAccent =
     role === "元"
@@ -172,8 +231,11 @@ export default function Header() {
     if (!hiddenAccent || didApplyHiddenAccent) {
       return;
     }
-    applyAccent(hiddenAccent);
-    setDidApplyHiddenAccent(true);
+    const timeoutId = window.setTimeout(() => {
+      applyAccent(hiddenAccent);
+      setDidApplyHiddenAccent(true);
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, [hiddenAccent, didApplyHiddenAccent]);
 
   useEffect(() => {
@@ -184,9 +246,11 @@ export default function Header() {
     ) {
       return;
     }
-    if (accentColor !== hiddenAccent) {
+    if (accentColor === hiddenAccent) return;
+    const timeoutId = window.setTimeout(() => {
       applyAccent(hiddenAccent);
-    }
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, [role, hiddenAccent, accentColor]);
 
   const renderColorPalette = (direction: "row" | "column") => {
@@ -199,211 +263,270 @@ export default function Header() {
       <>
         {hasHiddenAccent ? (
           <>
-            <ColorButton
+            <AccentColorButton
               key={hiddenAccent}
               hex={hiddenAccent ?? baseRed}
               isSelected={accentColor === hiddenAccent}
+              onSelect={applyAccent}
             />
             <div className={separatorClass} aria-hidden="true" />
           </>
         ) : null}
-        <ColorButton
+        <AccentColorButton
           key={baseRed}
           hex={baseRed}
           isSelected={accentColor === baseRed}
+          onSelect={applyAccent}
         />
         {restColors.map((hex) => (
-          <ColorButton key={hex} hex={hex} isSelected={accentColor === hex} />
+          <AccentColorButton
+            key={hex}
+            hex={hex}
+            isSelected={accentColor === hex}
+            onSelect={applyAccent}
+          />
         ))}
       </>
     );
   };
 
-  const NavLink = ({
-    href,
-    children,
-  }: {
-    href: string;
-    children: ReactNode;
-  }) => (
-    <Link
-      href={href}
-      className="inline-block hover:text-accent transition-colors relative group py-1"
-      onClick={() => setIsMenuOpen(false)}
-    >
-      {children}
-      <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-    </Link>
-  );
-
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center relative">
-        <div className="flex items-center gap-3">
-          <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
-            <button
-              type="button"
-              className="font-bold text-xl relative"
-              onClick={handleBrandClick}
-              aria-label="Go to top"
-            >
-              <span className="text-foreground group-hover:text-accent transition-colors">
-                Wokki
-              </span>
-              <span className="text-accent group-hover:text-foreground transition-colors">
-                .com
-              </span>
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
-            </button>
-            <div className="pointer-events-none absolute left-0 top-full mt-3 w-56 rounded-2xl border border-foreground/10 bg-background/90 p-3 text-xs shadow-lg backdrop-blur transition-all duration-200 opacity-0 translate-y-1 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:pointer-events-auto group-focus-within:opacity-100 group-focus-within:translate-y-0">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
-                Wokki Network
-              </p>
-              <div className="mt-3 flex flex-col gap-2">
-                <a
-                  href={networkLinks.home}
-                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
-                >
-                  I&apos;m Wokki (Here)
-                </a>
-                <a
-                  href={networkLinks.consultancy}
-                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
-                >
-                  Wokki Consultancy
-                </a>
-                <a
-                  href={networkLinks.node}
-                  className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
-                >
-                  Wokki Node
-                </a>
+    <>
+      <header
+        ref={headerRef}
+        className="fixed top-0 left-0 w-full z-50 bg-background/81 backdrop-blur-sm border-b border-foreground/10"
+      >
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center relative overflow-visible">
+          <div className="flex items-center gap-3">
+            <div className="relative group before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
+              <button
+                type="button"
+                className="font-bold text-xl relative"
+                onClick={handleBrandClick}
+                aria-label="Go to top"
+              >
+                <span className="text-foreground group-hover:text-accent transition-colors">
+                  Wokki
+                </span>
+                <span className="text-accent group-hover:text-foreground transition-colors">
+                  .com
+                </span>
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-accent group-hover:w-full transition-all duration-300"></span>
+              </button>
+              <div className="pointer-events-none absolute left-0 top-full mt-3 w-56 rounded-2xl border border-foreground/10 bg-background/90 p-3 text-xs shadow-lg backdrop-blur transition-all duration-200 opacity-0 translate-y-1 group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-has-[:focus-visible]:pointer-events-auto group-has-[:focus-visible]:opacity-100 group-has-[:focus-visible]:translate-y-0">
+                <p className="text-[10px] uppercase tracking-[0.3em] text-foreground/45">
+                  Wokki Network
+                </p>
+                <div className="mt-3 flex flex-col gap-2">
+                  <a
+                    href={networkLinks.home}
+                    className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                  >
+                    I&apos;m Wokki (Here)
+                  </a>
+                  <a
+                    href={networkLinks.consultancy}
+                    className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                  >
+                    Wokki Consultancy
+                  </a>
+                  <a
+                    href={networkLinks.node}
+                    className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
+                  >
+                    Wokki Node
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Desktop color selector */}
-        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center z-10">
-          <div className="relative flex items-center">
-            {role === "妃" && accentColor === HIDDEN_PINK ? (
-              <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty reverse-selection-light">
-                <span className="reverse-highlight">
-                  You can’t find Pink in the rainbow,
-                </span>
-                <br />
-                <span className="reverse-highlight">
-                  Because I reserved it for you.
-                </span>
-                <br />
-                <span className="reverse-highlight">
-                  - To my dear BabyBlush&nbsp;
-                </span>
+          {/* Desktop color selector */}
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 items-center z-10">
+            <div className="relative flex items-center">
+              {role === "妃" && accentColor === HIDDEN_PINK ? (
+                <div className="absolute right-full mr-6 w-[min(32vw,360px)] text-right text-xs font-normal leading-snug text-accent text-pretty reverse-selection-light">
+                  <span className="reverse-highlight">
+                    You can’t find Pink in the rainbow,
+                  </span>
+                  <br />
+                  <span className="reverse-highlight">
+                    Because I reserved it for you.
+                  </span>
+                  <br />
+                  <span className="reverse-highlight">
+                    - To my dear BabyBlush&nbsp;
+                  </span>
+                </div>
+              ) : null}
+              <div className="flex items-center gap-2">
+                {renderColorPalette("row")}
               </div>
-            ) : null}
-            <div className="flex items-center gap-2">
-              {renderColorPalette("row")}
             </div>
           </div>
-        </div>
 
-        {/* Desktop navigation */}
-        <div className="hidden md:flex items-center gap-6">
-          <nav className="flex items-center space-x-8">
-            <NavLink href="#projects">Projects</NavLink>
-            <NavLink href="#curation">Curation</NavLink>
-            <NavLink href="#writing">Writing</NavLink>
-            <NavLink href="#scroll">Scroll</NavLink>
-            <NavLink href="#about">About</NavLink>
-          </nav>
-          <AuthControls />
-        </div>
+          {/* Desktop navigation */}
+          <div className="hidden md:flex items-center gap-6">
+            <nav className="flex items-center space-x-8">
+              <HeaderNavLink
+                href="#projects"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Projects
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#curation"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Curation
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#writing"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Writing
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#scroll"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Scroll
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#about"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                About
+              </HeaderNavLink>
+            </nav>
+            <AuthControls />
+          </div>
 
-        {/* Mobile controls */}
-        <div className="md:hidden flex items-center gap-2">
-          {/* Color palette */}
-          <div className="relative">
+          {/* Mobile controls */}
+          <div className="md:hidden flex items-center gap-2">
+            {/* Color palette */}
+            <div className="relative">
+              <button
+                className="p-2"
+                onClick={() => {
+                  setIsColorPaletteOpen(!isColorPaletteOpen);
+                  setIsMenuOpen(false);
+                }}
+                aria-label="Toggle color palette"
+                aria-expanded={isColorPaletteOpen}
+                aria-controls="mobile-color-palette"
+              >
+                <div
+                  className="w-6 h-6 rounded-full border-2 border-foreground/20"
+                  style={{ backgroundColor: accentColor }}
+                />
+              </button>
+
+              {/* Color palette dropdown */}
+              <div
+                id="mobile-color-palette"
+                className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-background border border-foreground/10 rounded-2xl shadow-lg z-20 overflow-hidden transition-all duration-200 ease-out transform-gpu origin-top px-3 py-2 ${
+                  isColorPaletteOpen
+                    ? "opacity-100 translate-y-0 scale-100"
+                    : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
+                }`}
+                aria-hidden={!isColorPaletteOpen}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  {renderColorPalette("column")}
+                </div>
+              </div>
+            </div>
+
+            {/* Menu button */}
             <button
               className="p-2"
               onClick={() => {
-                setIsColorPaletteOpen(!isColorPaletteOpen);
-                setIsMenuOpen(false);
+                setIsMenuOpen(!isMenuOpen);
+                setIsColorPaletteOpen(false);
               }}
-              aria-label="Toggle color palette"
-              aria-expanded={isColorPaletteOpen}
-              aria-controls="mobile-color-palette"
+              aria-label="Toggle menu"
             >
-              <div
-                className="w-6 h-6 rounded-full border-2 border-foreground/20"
-                style={{ backgroundColor: accentColor }}
-              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                {isMenuOpen ? (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                ) : (
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
+                )}
+              </svg>
             </button>
+          </div>
+        </div>
 
-            {/* Color palette dropdown */}
-            <div
-              id="mobile-color-palette"
-              className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-background border border-foreground/10 rounded-2xl shadow-lg z-20 overflow-hidden transition-all duration-200 ease-out transform-gpu origin-top px-3 py-2 ${
-                isColorPaletteOpen
-                  ? "opacity-100 translate-y-0 scale-100"
-                  : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
-              }`}
-              aria-hidden={!isColorPaletteOpen}
-            >
-              <div className="flex flex-col items-center gap-2">
-                {renderColorPalette("column")}
-              </div>
+        {/* Mobile navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-background p-4 border-b border-foreground/10">
+            <nav className="flex flex-col space-y-4 items-end">
+              <HeaderNavLink
+                href="#projects"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Projects
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#curation"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Curation
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#writing"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Writing
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#scroll"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                Scroll
+              </HeaderNavLink>
+              <HeaderNavLink
+                href="#about"
+                onNavigate={() => setIsMenuOpen(false)}
+              >
+                About
+              </HeaderNavLink>
+              <AuthControls />
+            </nav>
+          </div>
+        )}
+      </header>
+
+      {pathname === "/" && !isMenuOpen ? (
+        <div className="fixed left-1/2 top-[calc(var(--header-height)-1px)] -translate-x-1/2 z-40">
+          <div className="group relative">
+            <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform translate-y-[calc(-100%+6px)] group-hover:translate-y-0 group-has-[:focus-visible]:translate-y-0 hover:translate-y-0">
+              <SocialLinksBar
+                links={Zen[WOKKI_DOT_COM].about.contact.links}
+                label=""
+                className="justify-center"
+              />
             </div>
           </div>
-
-          {/* Menu button */}
-          <button
-            className="p-2"
-            onClick={() => {
-              setIsMenuOpen(!isMenuOpen);
-              setIsColorPaletteOpen(false);
-            }}
-            aria-label="Toggle menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              {isMenuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
         </div>
-      </div>
-
-      {/* Mobile navigation */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-background p-4 border-b border-foreground/10">
-          <nav className="flex flex-col space-y-4 items-end">
-            <NavLink href="#projects">Projects</NavLink>
-            <NavLink href="#curation">Curation</NavLink>
-            <NavLink href="#writing">Writing</NavLink>
-            <NavLink href="#scroll">Scroll</NavLink>
-            <NavLink href="#about">About</NavLink>
-            <AuthControls />
-          </nav>
-        </div>
-      )}
-    </header>
+      ) : null}
+    </>
   );
 }
