@@ -59,7 +59,9 @@ export default function ConsultancyHome() {
     fallbackOneTimeDuration?: string,
   ) => {
     const price = servicePrices[key];
-    if (!price?.currency || price.unitAmount == null) return null;
+    if (!price?.currency || price.unitAmount == null) {
+      return fallbackOneTimeDuration ? `— / ${fallbackOneTimeDuration}` : "—";
+    }
 
     const amount = formatAmount(price.unitAmount, price.currency);
     if (price.recurring) {
@@ -206,6 +208,7 @@ export default function ConsultancyHome() {
                 {
                   key: "subscription",
                   title: "Insight Subscription",
+                  oneTimeDuration: "month",
                   description: "Ongoing customized insight delivery.",
                   cta: "Start subscription",
                   href: null,
@@ -213,10 +216,10 @@ export default function ConsultancyHome() {
                 },
                 {
                   key: "tenMinute",
-                  title: "10-Minute Session",
-                  oneTimeDuration: "10 minutes",
+                  title: "11.11-Minute Session",
+                  oneTimeDuration: "11.11 minutes",
                   description: "Focused answers in a short call.",
-                  cta: "Book 10 minutes",
+                  cta: "Book 11.11 minutes",
                   href: null,
                   stats: serviceStats.tenMinute,
                 },
@@ -244,8 +247,7 @@ export default function ConsultancyHome() {
                       {item.title}
                     </h3>
                     <p className="mt-2 text-sm font-semibold text-foreground/80">
-                      {formatServicePrice(item.key, item.oneTimeDuration) ??
-                        "—"}
+                      {formatServicePrice(item.key, item.oneTimeDuration)}
                     </p>
                     <p className="mt-3 text-sm text-foreground/65">
                       {item.description}

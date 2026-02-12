@@ -12,6 +12,12 @@ const stripe = stripeSecretKey
 const initialPaymentLinkUrl =
   process.env.STRIPE_INITIAL_PAYMENT_LINK_URL ??
   "https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04";
+const subscriptionPaymentLinkUrl =
+  process.env.STRIPE_SUBSCRIPTION_PAYMENT_LINK_URL ??
+  "https://pay.wokki.com/b/bJeeVegsza99gLf73O3Je05";
+const tenMinutePaymentLinkUrl =
+  process.env.STRIPE_TEN_MINUTE_PAYMENT_LINK_URL ??
+  "https://pay.wokki.com/b/dRm6oI3FN6WX9iNfAk3Je06";
 
 const serviceConfig = {
   initial: { priceId: process.env.STRIPE_PRICE_INITIAL ?? null },
@@ -189,55 +195,54 @@ const fetchServicePrices = async (
   };
 };
 
-const fetchInitialPriceFromPaymentLink =
-  async (): Promise<ServicePrice | null> => {
-    if (!stripe) return null;
+const fetchPriceFromPaymentLink = async (
+  paymentLinkUrl: string,
+): Promise<ServicePrice | null> => {
+  if (!stripe) return null;
 
-    let startingAfter: string | undefined;
-    do {
-      const links = await stripe.paymentLinks.list({
-        limit: 100,
-        starting_after: startingAfter,
+  let startingAfter: string | undefined;
+  do {
+    const links = await stripe.paymentLinks.list({
+      limit: 100,
+      starting_after: startingAfter,
+    });
+    const match = links.data.find((link) => link.url === paymentLinkUrl);
+    if (match) {
+      const fullLink = await stripe.paymentLinks.retrieve(match.id, {
+        expand: ["line_items.data.price"],
       });
-      const match = links.data.find(
-        (link) => link.url === initialPaymentLinkUrl,
-      );
-      if (match) {
-        const fullLink = await stripe.paymentLinks.retrieve(match.id, {
-          expand: ["line_items.data.price"],
-        });
-        const item = fullLink.line_items?.data?.[0];
-        if (!item) return null;
+      const item = fullLink.line_items?.data?.[0];
+      if (!item) return null;
 
-        const quantity = item.quantity ?? 1;
-        const amountFromLineItem =
-          typeof item.amount_subtotal === "number"
-            ? Math.round(item.amount_subtotal / Math.max(quantity, 1))
-            : typeof item.amount_total === "number"
-              ? Math.round(item.amount_total / Math.max(quantity, 1))
-              : null;
+      const quantity = item.quantity ?? 1;
+      const amountFromLineItem =
+        typeof item.amount_subtotal === "number"
+          ? Math.round(item.amount_subtotal / Math.max(quantity, 1))
+          : typeof item.amount_total === "number"
+            ? Math.round(item.amount_total / Math.max(quantity, 1))
+            : null;
 
-        const expandedPrice =
-          item.price && typeof item.price !== "string" ? item.price : null;
+      const expandedPrice =
+        item.price && typeof item.price !== "string" ? item.price : null;
 
-        return {
-          unitAmount: expandedPrice?.unit_amount ?? amountFromLineItem,
-          currency: expandedPrice?.currency ?? item.currency ?? null,
-          recurring: expandedPrice?.recurring
-            ? {
-                interval: expandedPrice.recurring.interval,
-                intervalCount: expandedPrice.recurring.interval_count ?? 1,
-              }
-            : null,
-        };
-      }
+      return {
+        unitAmount: expandedPrice?.unit_amount ?? amountFromLineItem,
+        currency: expandedPrice?.currency ?? item.currency ?? null,
+        recurring: expandedPrice?.recurring
+          ? {
+              interval: expandedPrice.recurring.interval,
+              intervalCount: expandedPrice.recurring.interval_count ?? 1,
+            }
+          : null,
+      };
+    }
 
-      if (!links.has_more || links.data.length === 0) break;
-      startingAfter = links.data[links.data.length - 1]?.id;
-    } while (startingAfter);
+    if (!links.has_more || links.data.length === 0) break;
+    startingAfter = links.data[links.data.length - 1]?.id;
+  } while (startingAfter);
 
-    return null;
-  };
+  return null;
+};
 
 export async function GET(request: Request) {
   if (!stripe) {
@@ -261,15 +266,20 @@ export async function GET(request: Request) {
       fetchPaidCounts(isDebugMode),
       fetchServicePrices(isDebugMode),
     ]);
-    let paymentLinkInitialPrice: ServicePrice | null = null;
-    try {
-      paymentLinkInitialPrice = await fetchInitialPriceFromPaymentLink();
-    } catch {
-      paymentLinkInitialPrice = null;
-    }
+    const [
+      paymentLinkInitialPrice,
+      paymentLinkSubscriptionPrice,
+      paymentLinkTenMinutePrice,
+    ] = await Promise.all([
+      fetchPriceFromPaymentLink(initialPaymentLinkUrl).catch(() => null),
+      fetchPriceFromPaymentLink(subscriptionPaymentLinkUrl).catch(() => null),
+      fetchPriceFromPaymentLink(tenMinutePaymentLinkUrl).catch(() => null),
+    ]);
     const resolvedPrices: ServicePrices = {
       ...servicePrices,
       initial: paymentLinkInitialPrice ?? servicePrices.initial,
+      subscription: paymentLinkSubscriptionPrice ?? servicePrices.subscription,
+      tenMinute: paymentLinkTenMinutePrice ?? servicePrices.tenMinute,
     };
 
     return NextResponse.json({
@@ -289,6 +299,12 @@ export async function GET(request: Request) {
               paymentLink: {
                 initialUrl: initialPaymentLinkUrl,
                 initialPriceResolved: Boolean(paymentLinkInitialPrice),
+                subscriptionUrl: subscriptionPaymentLinkUrl,
+                subscriptionPriceResolved: Boolean(
+                  paymentLinkSubscriptionPrice,
+                ),
+                tenMinuteUrl: tenMinutePaymentLinkUrl,
+                tenMinutePriceResolved: Boolean(paymentLinkTenMinutePrice),
               },
               sessions: debugSessions,
               ...(priceErrors ? { priceErrors } : {}),
