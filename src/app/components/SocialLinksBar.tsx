@@ -56,17 +56,17 @@ export default function SocialLinksBar({
     <>
       <div className={`flex items-center gap-2 ${className}`}>
         {label ? (
-          <span className="text-[10px] md:text-[11px] uppercase tracking-[0.42em] text-foreground/45">
+          <span className="text-[11px] uppercase tracking-[0.32em] text-foreground/45">
             {label}
           </span>
         ) : null}
 
-        <div className="relative isolate flex items-center gap-1 rounded-full border border-foreground/10 bg-background/50 p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.10)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/70 before:to-transparent before:opacity-50 after:pointer-events-none after:absolute after:inset-[1px] after:rounded-full after:border after:border-white/25">
+        <div className="relative isolate flex max-w-full items-center gap-1 rounded-full border border-foreground/10 bg-background/50 p-1.5 shadow-[0_22px_70px_rgba(0,0,0,0.10)] backdrop-blur-xl before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:bg-gradient-to-b before:from-white/70 before:to-transparent before:opacity-50 after:pointer-events-none after:absolute after:inset-[1px] after:rounded-full after:border after:border-white/25">
           {normalized.map((link) => {
             const iconSrc = iconForPlatform(link.platform);
             const key = `${link.platform}-${link.description}`;
             const itemClassName =
-              "group/icon relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 bg-background/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_26px_rgba(0,0,0,0.08)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-background/90 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_16px_40px_rgba(0,0,0,0.12)] active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+              "group/icon relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-foreground/10 bg-background/75 shadow-[inset_0_1px_0_rgba(255,255,255,0.35),0_10px_26px_rgba(0,0,0,0.08)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:bg-background/90 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.45),0_16px_40px_rgba(0,0,0,0.12)] active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
             const icon = (
               <Image
@@ -106,7 +106,7 @@ export default function SocialLinksBar({
                 <span
                   key={key}
                   aria-label={`${link.platform} (coming soon)`}
-                  className="relative inline-flex h-10 w-10 items-center justify-center rounded-full border border-foreground/10 bg-background/60 opacity-30 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_10px_24px_rgba(0,0,0,0.06)] backdrop-blur"
+                  className="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-foreground/10 bg-background/60 opacity-30 shadow-[inset_0_1px_0_rgba(255,255,255,0.25),0_10px_24px_rgba(0,0,0,0.06)] backdrop-blur"
                 >
                   {icon}
                 </span>
