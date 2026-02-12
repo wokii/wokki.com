@@ -14,7 +14,7 @@ export default function Hero() {
       paddingY="none"
       withTopBorder={false}
       centerContent={true}
-      className="relative overflow-x-hidden w-screen max-w-[100vw]"
+      className="relative w-full overflow-x-clip"
       containerClassName="md:relative -mt-6 md:mt-0"
     >
       <div className="relative">
@@ -35,11 +35,11 @@ export default function Hero() {
           {hero.tagline}
         </p>
       </div>
-      <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-3 md:gap-4">
+      <div className="mt-6 md:mt-8 flex max-w-xs flex-col gap-3 md:max-w-none md:flex-row md:gap-4">
         {primaryCta ? (
           <a
             href={primaryCta.href}
-            className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-accent/80 bg-accent px-4 py-2.5 md:px-7 md:py-3 text-xs md:text-sm font-medium tracking-wide text-background shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[42vw] md:w-auto"
+            className="group inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-accent/80 bg-accent px-4 py-2.5 text-xs font-medium tracking-wide text-background shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-accent/90 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background md:w-auto md:px-7 md:py-3 md:text-sm"
           >
             {primaryCta.label}
             <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -50,7 +50,7 @@ export default function Hero() {
         {secondaryCta ? (
           <a
             href={secondaryCta.href}
-            className="group inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full border border-foreground/15 bg-background/40 px-4 py-2.5 md:px-7 md:py-3 text-xs md:text-sm font-medium tracking-wide text-foreground/80 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background w-[42vw] md:w-auto"
+            className="group inline-flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-full border border-foreground/15 bg-background/40 px-4 py-2.5 text-xs font-medium tracking-wide text-foreground/80 shadow-sm backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background md:w-auto md:px-7 md:py-3 md:text-sm"
           >
             {secondaryCta.label}
             <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -59,14 +59,14 @@ export default function Hero() {
           </a>
         ) : null}
       </div>
-      <div className="absolute right-2 md:right-16 bottom-0 translate-y-0 md:translate-y-20 lg:translate-y-24 -z-10 pointer-events-none select-none">
+      <div className="pointer-events-none absolute bottom-0 right-0 -z-10 translate-y-0 select-none md:right-16 md:translate-y-20 lg:translate-y-24">
         <Image
           src="/hero.png"
           alt=""
           width={560}
           height={560}
           sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 75vw"
-          className="w-[clamp(240px,75vw,600px)] md:w-[clamp(240px,45vw,560px)] h-auto drop-shadow-lg scale-[0.81] origin-bottom-right"
+          className="h-auto w-[clamp(210px,68vw,600px)] origin-bottom-right drop-shadow-lg scale-[0.81] md:w-[clamp(240px,45vw,560px)]"
           priority
           aria-hidden="true"
         />

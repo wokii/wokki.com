@@ -354,7 +354,7 @@ export default function Header() {
             {/* Color palette */}
             <div className="relative">
               <button
-                className="p-2"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 onClick={() => {
                   setIsColorPaletteOpen(!isColorPaletteOpen);
                   setIsMenuOpen(false);
@@ -372,7 +372,7 @@ export default function Header() {
               {/* Color palette dropdown */}
               <div
                 id="mobile-color-palette"
-                className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-background border border-foreground/10 rounded-2xl shadow-lg z-20 overflow-hidden transition-all duration-200 ease-out transform-gpu origin-top px-3 py-2 ${
+                className={`absolute right-0 top-full mt-2 bg-background border border-foreground/10 rounded-2xl shadow-lg z-20 overflow-hidden transition-all duration-200 ease-out transform-gpu origin-top-right px-3 py-2 ${
                   isColorPaletteOpen
                     ? "opacity-100 translate-y-0 scale-100"
                     : "opacity-0 -translate-y-1 scale-95 pointer-events-none"
@@ -387,7 +387,7 @@ export default function Header() {
 
             {/* Menu button */}
             <button
-              className="p-2"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               onClick={() => {
                 setIsMenuOpen(!isMenuOpen);
                 setIsColorPaletteOpen(false);
@@ -462,9 +462,9 @@ export default function Header() {
       </header>
 
       {pathname === "/" && !isMenuOpen ? (
-        <div className="fixed left-1/2 top-[calc(var(--header-height)-1px)] -translate-x-1/2 z-40">
+        <div className="fixed left-1/2 top-[calc(var(--header-height)-1px)] z-40 w-[min(34rem,calc(100vw-1rem))] -translate-x-1/2">
           <div className="group relative">
-            <div className="transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform translate-y-[calc(-100%+6px)] group-hover:translate-y-0 group-has-[:focus-visible]:translate-y-0">
+            <div className="translate-y-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform md:translate-y-[calc(-100%+6px)] md:group-hover:translate-y-0 md:group-has-[:focus-visible]:translate-y-0">
               <SocialLinksBar
                 links={Zen[WOKKI_DOT_COM].about.contact.links}
                 label=""

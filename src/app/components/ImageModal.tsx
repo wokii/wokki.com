@@ -58,7 +58,7 @@ export default function ImageModal({
       >
         <button
           onClick={onClose}
-          className="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors duration-200 text-sm uppercase tracking-wider"
+          className="absolute right-2 top-2 inline-flex min-h-11 items-center rounded-full border border-white/20 bg-black/55 px-3 text-xs uppercase tracking-[0.2em] text-white/85 transition-colors duration-200 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           aria-label="Close modal"
         >
           Close

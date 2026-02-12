@@ -17,10 +17,15 @@ const MAIN_SITE_URL =
 
 export default function ConsultancyHome() {
   const { hero } = Zen[CONSULTANCY_WOKKI];
-  const formatStat = (value: number | null | undefined) =>
-    typeof value === "number" ? value.toLocaleString() : "—";
-  const formatDenominator = (value: number | null | undefined) =>
-    value === 0 ? "NaN" : formatStat(value);
+  type ServiceKey = "initial" | "subscription" | "tenMinute";
+  type ServicePrice = {
+    unitAmount: number | null;
+    currency: string | null;
+    recurring: {
+      interval: "day" | "week" | "month" | "year";
+      intervalCount: number;
+    } | null;
+  };
   const [serviceStats, setServiceStats] = useState<{
     initial: { paid: number | null; completed: number | null };
     subscription: { paid: number | null; completed: number | null };
@@ -30,6 +35,48 @@ export default function ConsultancyHome() {
     subscription: { paid: null, completed: null },
     tenMinute: { paid: null, completed: null },
   });
+  const [servicePrices, setServicePrices] = useState<{
+    initial: ServicePrice | null;
+    subscription: ServicePrice | null;
+    tenMinute: ServicePrice | null;
+  }>({
+    initial: null,
+    subscription: null,
+    tenMinute: null,
+  });
+  const formatStat = (value: number | null | undefined) =>
+    typeof value === "number" ? value.toLocaleString() : "—";
+  const formatDenominator = (value: number | null | undefined) =>
+    value === 0 ? "0" : formatStat(value);
+  const formatAmount = (unitAmount: number, currency: string) =>
+    new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: currency.toUpperCase(),
+    }).format(unitAmount / 100);
+
+  const formatServicePrice = (
+    key: ServiceKey,
+    fallbackOneTimeDuration?: string,
+  ) => {
+    const price = servicePrices[key];
+    if (!price?.currency || price.unitAmount == null) return null;
+
+    const amount = formatAmount(price.unitAmount, price.currency);
+    if (price.recurring) {
+      const { interval, intervalCount } = price.recurring;
+      const cadence =
+        intervalCount > 1 ? `${intervalCount} ${interval}s` : interval;
+      return `${amount} / ${cadence}`;
+    }
+
+    return fallbackOneTimeDuration
+      ? `${amount} / ${fallbackOneTimeDuration}`
+      : amount;
+  };
+  const initialServicePrice = formatServicePrice("initial", "over a week");
+  const dynamicRateNote = initialServicePrice
+    ? `Starting rate: ${initialServicePrice}.`
+    : null;
 
   useEffect(() => {
     let isActive = true;
@@ -45,15 +92,16 @@ export default function ConsultancyHome() {
     const loadStats = async () => {
       try {
         const response = await fetch("/api/consultancy/stats");
-        if (!response.ok) {
-          if (isActive) applyFallbackStats();
-          return;
-        }
         const data = (await response.json()) as {
           services?: {
             initial?: { paid?: number; completed?: number };
             subscription?: { paid?: number; completed?: number };
             tenMinute?: { paid?: number; completed?: number };
+          };
+          prices?: {
+            initial?: ServicePrice | null;
+            subscription?: ServicePrice | null;
+            tenMinute?: ServicePrice | null;
           };
         };
         if (!isActive || !data?.services) {
@@ -73,6 +121,11 @@ export default function ConsultancyHome() {
             paid: data.services.tenMinute?.paid ?? null,
             completed: data.services.tenMinute?.completed ?? null,
           },
+        });
+        setServicePrices({
+          initial: data.prices?.initial ?? null,
+          subscription: data.prices?.subscription ?? null,
+          tenMinute: data.prices?.tenMinute ?? null,
         });
       } catch {
         if (isActive) applyFallbackStats();
@@ -113,9 +166,11 @@ export default function ConsultancyHome() {
           >
             {hero.cta.label}
           </a>
-          <span className="text-xs uppercase tracking-[0.2em] text-foreground/50">
-            {hero.rateNote}
-          </span>
+          {dynamicRateNote ? (
+            <span className="text-xs uppercase tracking-[0.2em] text-foreground/50">
+              {dynamicRateNote}
+            </span>
+          ) : null}
         </div>
       </section>
       <section
@@ -136,36 +191,45 @@ export default function ConsultancyHome() {
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                key: "initial",
-                title: "Initial Consultation",
-                price: "£1,111 / over a week",
-                description:
-                  "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
-                cta: "Book initial session",
-                href: "https://pay.wokki.com/b/fZu28s9074OP7aF0Fq3Je00",
-                stats: serviceStats.initial,
-              },
-              {
-                key: "subscription",
-                title: "Insight Subscription",
-                price: "£111.1 / month",
-                description: "Ongoing customized insight delivery.",
-                cta: "Start subscription",
-                href: null,
-                stats: serviceStats.subscription,
-              },
-              {
-                key: "tenMinute",
-                title: "10-Minute Session",
-                price: "£111.1 / 10 minutes",
-                description: "Focused answers in a short call.",
-                cta: "Book 10 minutes",
-                href: null,
-                stats: serviceStats.tenMinute,
-              },
-            ].map((item) => {
+            {(
+              [
+                {
+                  key: "initial",
+                  title: "Initial Consultation",
+                  oneTimeDuration: "over a week",
+                  description:
+                    "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
+                  cta: "Book initial session",
+                  href: "https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04",
+                  stats: serviceStats.initial,
+                },
+                {
+                  key: "subscription",
+                  title: "Insight Subscription",
+                  description: "Ongoing customized insight delivery.",
+                  cta: "Start subscription",
+                  href: null,
+                  stats: serviceStats.subscription,
+                },
+                {
+                  key: "tenMinute",
+                  title: "10-Minute Session",
+                  oneTimeDuration: "10 minutes",
+                  description: "Focused answers in a short call.",
+                  cta: "Book 10 minutes",
+                  href: null,
+                  stats: serviceStats.tenMinute,
+                },
+              ] as Array<{
+                key: ServiceKey;
+                title: string;
+                oneTimeDuration?: string;
+                description: string;
+                cta: string;
+                href: string | null;
+                stats: { paid: number | null; completed: number | null };
+              }>
+            ).map((item) => {
               const paidTarget =
                 item.key === "initial"
                   ? 11
@@ -180,7 +244,8 @@ export default function ConsultancyHome() {
                       {item.title}
                     </h3>
                     <p className="mt-2 text-sm font-semibold text-foreground/80">
-                      {item.price}
+                      {formatServicePrice(item.key, item.oneTimeDuration) ??
+                        "—"}
                     </p>
                     <p className="mt-3 text-sm text-foreground/65">
                       {item.description}
@@ -250,7 +315,7 @@ export default function ConsultancyHome() {
                 Ready to chat?
               </span>
               <a
-                href="https://pay.wokki.com/b/fZu28s9074OP7aF0Fq3Je00"
+                href="https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04"
                 className="inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
               >
                 Book initial session
