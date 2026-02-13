@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useTheme } from "../theme-provider";
 
 type WokkiThemeImageProps = {
   daySrc: string;
@@ -14,9 +13,6 @@ export default function WokkiThemeImage({
   nightSrc,
   alt,
 }: WokkiThemeImageProps) {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-
   return (
     <>
       <Image
@@ -24,11 +20,7 @@ export default function WokkiThemeImage({
         alt={alt}
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className={`object-cover object-top transition-all duration-700 ease-out ${
-          isDark
-            ? "opacity-0 scale-[1.14]"
-            : "opacity-100 scale-[1.14] group-hover:scale-[1.16]"
-        }`}
+        className="object-cover object-top transition-all duration-700 ease-out opacity-100 scale-[1.14] group-hover:scale-[1.16] dark:opacity-0"
       />
       <Image
         src={nightSrc}
@@ -36,11 +28,7 @@ export default function WokkiThemeImage({
         aria-hidden="true"
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className={`object-cover object-top transition-all duration-700 ease-out ${
-          isDark
-            ? "opacity-100 scale-[1.26] group-hover:scale-[1.28]"
-            : "opacity-0 scale-[1.16]"
-        }`}
+        className="object-cover object-top transition-all duration-700 ease-out opacity-0 scale-[1.16] dark:opacity-100 dark:scale-[1.26] dark:group-hover:scale-[1.28]"
       />
     </>
   );

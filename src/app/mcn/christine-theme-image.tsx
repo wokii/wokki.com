@@ -1,12 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useTheme } from "../theme-provider";
 
 export default function ChristineThemeImage() {
-  const { theme } = useTheme();
-  const isDark = theme === "dark";
-
   return (
     <>
       <Image
@@ -14,9 +10,7 @@ export default function ChristineThemeImage() {
         alt="Christine Hui full-body portrait"
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className={`object-cover object-top transition-all duration-700 ease-out group-hover:scale-[1.03] ${
-          isDark ? "opacity-0 scale-[1.01]" : "opacity-100 scale-100"
-        }`}
+        className="object-cover object-top transition-all duration-700 ease-out group-hover:scale-[1.03] opacity-100 scale-100 dark:opacity-0 dark:scale-[1.01]"
       />
       <Image
         src="/mcn/christine-night.JPG"
@@ -24,9 +18,7 @@ export default function ChristineThemeImage() {
         aria-hidden="true"
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className={`object-cover object-top transition-all duration-700 ease-out group-hover:scale-[1.03] ${
-          isDark ? "opacity-100 scale-100" : "opacity-0 scale-[1.01]"
-        }`}
+        className="object-cover object-top transition-all duration-700 ease-out group-hover:scale-[1.03] opacity-0 scale-[1.01] dark:opacity-100 dark:scale-100"
       />
     </>
   );
