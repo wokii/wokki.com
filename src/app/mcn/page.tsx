@@ -179,10 +179,6 @@ export default function MCNPage() {
                 {roster.title}
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-relaxed text-foreground/62 md:text-base">
-              Signed profiles and emerging talent curated with precision
-              storytelling.
-            </p>
           </div>
           <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             <article className={`group ${rosterCardClass}`}>
