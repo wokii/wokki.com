@@ -532,7 +532,7 @@ export const wokkiCom: WokkiCom = {
         imageUrl: "/curation/dao.png",
       },
       {
-        title: "Snow in the Spring Garden",
+        title: "等什么君 - Snow in the Spring Garden",
         shortIntro: "The Chinese Music Video",
         description: "chinese-music-video-description",
         links: [
@@ -541,7 +541,7 @@ export const wokkiCom: WokkiCom = {
             url: "https://www.youtube.com/watch?v=Tj34AFR3YK0",
           },
         ],
-        creator: "Waiting for Mr. Who (Singer)",
+        creator: "等什么君",
         imageUrl: "/curation/chinese-music-video.jpg",
       },
       {
