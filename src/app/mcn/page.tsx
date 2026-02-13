@@ -39,7 +39,7 @@ export default function MCNPage() {
   const socialIconClass =
     "inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent transition-all duration-300 hover:-translate-y-0.5";
   const socialTooltipClass =
-    "pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-foreground/20 bg-background/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.22em] text-foreground/80 opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-md transition-all duration-300 group-hover/icon:opacity-100 group-hover/icon:-translate-y-0.5 group-focus-within/icon:opacity-100 group-focus-within/icon:-translate-y-0.5";
+    "pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-foreground/20 bg-background/85 px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.22em] text-foreground/80 opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.2)] backdrop-blur-md transition-all duration-300 group-hover/icon:opacity-100 group-hover/icon:-translate-y-0.5 peer-focus-visible:opacity-100 peer-focus-visible:-translate-y-0.5";
   const wokkiSocials = wokkiCom.about.contact.links
     .filter((link) => Boolean(link.url))
     .map((link) => ({
@@ -213,7 +213,7 @@ export default function MCNPage() {
                             href={social.url}
                             target="_blank"
                             rel="noreferrer"
-                            className={`${socialIconClass} text-white/85 hover:text-white`}
+                            className={`peer ${socialIconClass} text-white/85 hover:text-white`}
                             aria-label={social.label}
                           >
                             <Image
@@ -266,7 +266,7 @@ export default function MCNPage() {
                             href={social.url}
                             target="_blank"
                             rel="noreferrer"
-                            className={`${socialIconClass} text-white/85 hover:text-white`}
+                            className={`peer ${socialIconClass} text-white/85 hover:text-white`}
                             aria-label={social.label}
                           >
                             <Image
