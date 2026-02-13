@@ -34,51 +34,60 @@ export default function NextSigningCameraCard({
     }
   }, []);
 
-  const startCamera = useCallback(async () => {
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setCameraState("unavailable");
-      setErrorText("This browser does not support camera capture.");
-      return;
-    }
-
-    setCameraState("requesting");
-    setErrorText("Requesting camera permission...");
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "user" },
-        audio: false,
-      });
-
-      stopCamera();
-      streamRef.current = stream;
-
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play().catch(() => undefined);
-      }
-
-      setCameraState("live");
-      setErrorText("Yep, that's you.");
-    } catch (error) {
-      const errorName =
-        error instanceof DOMException ? error.name : "UnknownError";
-
-      if (
-        errorName === "NotAllowedError" ||
-        errorName === "PermissionDeniedError"
-      ) {
-        setCameraState("blocked");
-        setErrorText(
-          "Camera permission is blocked. Enable it to preview your face.",
-        );
+  const startCamera = useCallback(
+    async (userInitiated = false) => {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setCameraState("unavailable");
+        setErrorText("This browser does not support camera capture.");
         return;
       }
 
-      setCameraState("unavailable");
-      setErrorText("Camera is unavailable on this device right now.");
-    }
-  }, [stopCamera]);
+      setCameraState("requesting");
+      setErrorText("Requesting camera permission...");
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" },
+          audio: false,
+        });
+
+        stopCamera();
+        streamRef.current = stream;
+
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play().catch(() => undefined);
+        }
+
+        setCameraState("live");
+        setErrorText("Yep, that's you.");
+      } catch (error) {
+        const errorName =
+          error instanceof DOMException ? error.name : "UnknownError";
+
+        if (
+          errorName === "NotAllowedError" ||
+          errorName === "PermissionDeniedError"
+        ) {
+          if (!userInitiated) {
+            setCameraState("idle");
+            setErrorText("Tap the button to allow camera access.");
+            return;
+          }
+
+          setCameraState("blocked");
+          setErrorText(
+            "Camera permission is blocked. Allow camera in your browser, then press the button again.",
+          );
+          return;
+        }
+
+        setCameraState("unavailable");
+        setErrorText("Camera is unavailable on this device right now.");
+      }
+    },
+    [stopCamera],
+  );
 
   const revokeCameraAccess = useCallback(() => {
     stopCamera();
@@ -87,7 +96,7 @@ export default function NextSigningCameraCard({
   }, [stopCamera]);
 
   useEffect(() => {
-    void startCamera();
+    void startCamera(false);
 
     return () => {
       stopCamera();
@@ -154,7 +163,7 @@ export default function NextSigningCameraCard({
             <button
               type="button"
               onClick={() => {
-                void startCamera();
+                void startCamera(true);
               }}
               className="relative rounded-full border border-white/45 bg-white/20 px-4 py-2 text-xs font-semibold tracking-[0.08em] text-white shadow-[0_0_0_1px_rgba(255,255,255,0.15),0_0_28px_rgba(255,255,255,0.24),0_10px_30px_rgba(0,0,0,0.35)] transition-all duration-300 before:pointer-events-none before:absolute before:-inset-1 before:rounded-full before:border before:border-white/25 before:opacity-70 before:blur-[1.5px] before:content-[''] hover:-translate-y-0.5 hover:bg-white/28 hover:shadow-[0_0_0_1px_rgba(255,255,255,0.24),0_0_36px_rgba(255,255,255,0.34),0_14px_38px_rgba(0,0,0,0.4)] active:translate-y-0"
             >
@@ -164,6 +173,16 @@ export default function NextSigningCameraCard({
           <p className="mt-3 text-xs leading-relaxed text-white/70">
             {errorText}
           </p>
+          {cameraState === "blocked" ? (
+            <a
+              href="https://support.google.com/chrome/answer/2693767?hl=en-GB&co=GENIE.Platform%3DDesktop"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex text-[11px] font-medium tracking-[0.04em] text-white/85 underline decoration-white/45 underline-offset-4 transition-colors hover:text-white"
+            >
+              Detailed permission guide
+            </a>
+          ) : null}
         </div>
       </div>
     </article>
