@@ -173,6 +173,16 @@ export default function NextSigningCameraCard({
           <p className="mt-3 text-xs leading-relaxed text-white/70">
             {errorText}
           </p>
+          {cameraState === "blocked" ? (
+            <a
+              href="https://support.google.com/chrome/answer/2693767?hl=en-GB&co=GENIE.Platform%3DDesktop"
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex text-[11px] font-medium tracking-[0.04em] text-white/85 underline decoration-white/45 underline-offset-4 transition-colors hover:text-white"
+            >
+              Detailed permission guide
+            </a>
+          ) : null}
         </div>
       </div>
     </article>
