@@ -13,6 +13,38 @@ type CurationCardProps = {
   links?: CurationLink[];
 };
 
+const platformFromLink = (link: CurationLink) => {
+  const label = link.label.trim();
+  const lowerLabel = label.toLowerCase();
+  const url = (link.url ?? "").toLowerCase();
+
+  if (
+    lowerLabel.includes("youtube") ||
+    url.includes("youtube.com") ||
+    url.includes("youtu.be")
+  ) {
+    return "YouTube";
+  }
+
+  if (
+    lowerLabel.includes("tiktok") ||
+    url.includes("tiktok.com") ||
+    url.includes("douyin.com")
+  ) {
+    return "TikTok";
+  }
+
+  if (lowerLabel.includes("instagram") || url.includes("instagram.com")) {
+    return "Instagram";
+  }
+
+  if (lowerLabel.includes("linkedin") || url.includes("linkedin.com")) {
+    return "LinkedIn";
+  }
+
+  return label;
+};
+
 function CurationCard({
   imageUrl,
   imageAlt,
@@ -24,8 +56,18 @@ function CurationCard({
   const hasLinks = links.length > 0;
   const primaryLink = links.find((link) => Boolean(link.url));
   const hasPrimaryLink = Boolean(primaryLink?.url);
+  const linkedPlatforms = Array.from(
+    new Set(links.filter((link) => Boolean(link.url)).map(platformFromLink)),
+  );
+  const linkedPlatformsText = linkedPlatforms.join(" · ");
+  const hoverLabel = linkedPlatformsText
+    ? `${title} · ${linkedPlatformsText}`
+    : title;
   return (
-    <li className="flex items-center gap-4 rounded-2xl border border-foreground/10 bg-background/60 p-4 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md">
+    <li className="group relative flex items-center gap-4 rounded-2xl border border-foreground/10 bg-background/60 p-4 shadow-sm transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-md">
+      <div className="pointer-events-none absolute left-4 right-4 top-0 z-20 -translate-y-2 rounded-lg border border-foreground/12 bg-background/92 px-3 py-1.5 text-xs text-foreground/75 opacity-0 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all duration-200 group-hover:-translate-y-full group-hover:opacity-100">
+        {hoverLabel}
+      </div>
       {hasPrimaryLink ? (
         <a
           href={primaryLink?.url}
@@ -50,7 +92,7 @@ function CurationCard({
           className="h-12 w-12 rounded-full object-cover border border-foreground/10"
         />
       )}
-      <div>
+      <div className="min-w-0">
         <p className="text-xs uppercase tracking-[0.2em] text-foreground/50">
           {shortIntro}
         </p>
@@ -59,16 +101,20 @@ function CurationCard({
             href={primaryLink?.url}
             target="_blank"
             rel="noreferrer"
-            className="mt-1 block text-lg font-semibold hover:text-accent transition-colors"
+            className="mt-1 block truncate whitespace-nowrap text-lg font-semibold transition-colors hover:text-accent"
           >
             {title}
           </a>
         ) : (
-          <p className="mt-1 text-lg font-semibold">{title}</p>
+          <p className="mt-1 truncate whitespace-nowrap text-lg font-semibold">
+            {title}
+          </p>
         )}
-        <p className="mt-2 text-sm text-foreground/60">{description}</p>
+        <p className="mt-2 truncate whitespace-nowrap text-sm text-foreground/60">
+          {description}
+        </p>
         {hasLinks ? (
-          <div className="mt-2 flex flex-wrap items-center text-sm">
+          <div className="mt-2 flex items-center overflow-hidden whitespace-nowrap text-sm">
             {links.map((link, index) => (
               <React.Fragment key={`${link.label}-${link.url ?? "nolink"}`}>
                 {index > 0 ? (
@@ -79,12 +125,14 @@ function CurationCard({
                     href={link.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-accent hover:underline"
+                    className="truncate text-accent hover:underline"
                   >
                     {link.label}
                   </a>
                 ) : (
-                  <span className="text-foreground/50">{link.label}</span>
+                  <span className="truncate text-foreground/50">
+                    {link.label}
+                  </span>
                 )}
               </React.Fragment>
             ))}
