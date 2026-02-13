@@ -3,11 +3,32 @@ import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "../components/theme-toggle";
 import ChristineThemeImage from "./christine-theme-image";
+import HeaderYoutubePlayer, {
+  type PlaylistItem,
+} from "./header-youtube-player";
 import NextSigningCameraCard from "./next-signing-camera-card";
 import WokkiThemeImage from "./wokki-theme-image";
 import { MCN_WOKKI, WOKKI_DOT_COM, Zen } from "../lib/WokkiNodes";
 
 const mcn = Zen[MCN_WOKKI];
+const getYoutubeVideoId = (url: string) => {
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes("youtube.com")) {
+      return parsed.searchParams.get("v");
+    }
+
+    if (parsed.hostname.includes("youtu.be")) {
+      return parsed.pathname.replace("/", "");
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+};
+
 const iconForPlatform = (platform: string) => {
   const icons: Record<string, string> = {
     github: "/social-media-svg/004-github.svg",
@@ -56,6 +77,29 @@ export default function MCNPage() {
         platform: link.label === "抖音" ? "tiktokCn" : link.label.toLowerCase(),
         url: link.url as string,
       })) ?? [];
+  const youtubePlaylist: PlaylistItem[] = wokkiCom.curation.entries
+    .map((entry) => {
+      const youtubeLink = entry.links.find(
+        (link) => link.label.toLowerCase() === "youtube" && Boolean(link.url),
+      );
+
+      if (!youtubeLink?.url) {
+        return null;
+      }
+
+      const videoId = getYoutubeVideoId(youtubeLink.url);
+
+      if (!videoId) {
+        return null;
+      }
+
+      return {
+        id: `${entry.title}-${videoId}`.toLowerCase().replace(/\s+/g, "-"),
+        title: entry.title,
+        videoId,
+      };
+    })
+    .filter((item): item is PlaylistItem => item !== null);
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
@@ -68,7 +112,7 @@ export default function MCNPage() {
       </div>
 
       <header className="fixed top-0 left-0 z-50 w-full border-b border-foreground/10 bg-background/65 backdrop-blur-2xl">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 md:px-10">
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center px-6 py-3 md:px-10">
           <div className="group relative w-64 before:absolute before:left-0 before:right-0 before:top-full before:h-3 before:content-['']">
             <div className="inline-flex h-10 w-full items-center justify-center rounded-full border border-foreground/15 bg-background/40 px-5 text-[11px] font-medium uppercase tracking-[0.24em] text-foreground/70 transition-colors duration-200 group-hover:border-accent/35 group-hover:text-accent">
               {header.networkLabel}
@@ -103,20 +147,25 @@ export default function MCNPage() {
               </div>
             </div>
           </div>
-          <nav className="inline-flex items-center gap-1 rounded-full border border-foreground/12 bg-background/45 p-1 text-[10px] uppercase tracking-[0.28em] text-foreground/60">
-            <a
-              href="#roster"
-              className="rounded-full px-4 py-2 transition-colors hover:bg-foreground/[0.06] hover:text-accent"
-            >
-              {header.nav.roster}
-            </a>
-            <a
-              href="#contact"
-              className="rounded-full px-4 py-2 transition-colors hover:bg-foreground/[0.06] hover:text-accent"
-            >
-              {header.nav.contact}
-            </a>
-          </nav>
+          <div className="justify-self-center">
+            <HeaderYoutubePlayer playlist={youtubePlaylist} />
+          </div>
+          <div className="justify-self-end">
+            <nav className="inline-flex items-center gap-1 rounded-full border border-foreground/12 bg-background/45 p-1 text-[10px] uppercase tracking-[0.28em] text-foreground/60">
+              <a
+                href="#roster"
+                className="rounded-full px-4 py-2 transition-colors hover:bg-foreground/[0.06] hover:text-accent"
+              >
+                {header.nav.roster}
+              </a>
+              <a
+                href="#contact"
+                className="rounded-full px-4 py-2 transition-colors hover:bg-foreground/[0.06] hover:text-accent"
+              >
+                {header.nav.contact}
+              </a>
+            </nav>
+          </div>
         </div>
       </header>
 
