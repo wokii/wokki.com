@@ -14,8 +14,8 @@ export default function WokkiThemeImage({
   nightSrc,
   alt,
 }: WokkiThemeImageProps) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <>

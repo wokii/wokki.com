@@ -4,9 +4,8 @@ import Image from "next/image";
 import { useTheme } from "../theme-provider";
 
 export default function ChristineThemeImage() {
-  const { resolvedTheme } = useTheme();
-
-  const isDark = resolvedTheme === "dark";
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <>

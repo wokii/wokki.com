@@ -11,8 +11,8 @@ type SocialLink = {
   url: string | null;
 };
 
-const iconForPlatform = (platform: string, resolvedTheme: "light" | "dark") => {
-  const glyphThemeSuffix = resolvedTheme === "dark" ? "white" : "black";
+const iconForPlatform = (platform: string, theme: "light" | "dark") => {
+  const glyphThemeSuffix = theme === "dark" ? "white" : "black";
   const icons: Record<string, string> = {
     github: "/social-media-svg/004-github.svg",
     linkedin: "/social-media-svg/002-linkedin.svg",
@@ -52,7 +52,7 @@ export default function SocialLinksBar({
   instagramImageAlt?: string;
 }) {
   const [isInstagramModalOpen, setIsInstagramModalOpen] = useState(false);
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
 
   const normalized = useMemo(
     () =>
@@ -76,7 +76,7 @@ export default function SocialLinksBar({
 
         <div className="liquid-glass relative isolate flex max-w-full items-center gap-1 rounded-full p-1.5">
           {normalized.map((link) => {
-            const iconSrc = iconForPlatform(link.platform, resolvedTheme);
+            const iconSrc = iconForPlatform(link.platform, theme);
             const key = `${link.platform}-${link.description}`;
             const itemClassName =
               "liquid-glass-item group/icon relative inline-flex h-11 w-11 items-center justify-center rounded-full active:translate-y-0 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background";

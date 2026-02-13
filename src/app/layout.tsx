@@ -18,7 +18,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <Script id="theme-init" strategy="beforeInteractive">{`(() => {
+  try {
+    var root = document.documentElement;
+    var THEME_KEY = "theme";
+
+    var saved = localStorage.getItem(THEME_KEY);
+    var theme = (saved === "light" || saved === "dark") ? saved : null;
+
+    if (!theme) {
+      var prefersDark = false;
+      try {
+        prefersDark =
+          window.matchMedia &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches;
+      } catch {}
+      theme = prefersDark ? "dark" : "light";
+    }
+
+    root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
+  } catch {}
+})();`}</Script>
+      </head>
       <body className="antialiased">
         <Providers>{children}</Providers>
         <Script

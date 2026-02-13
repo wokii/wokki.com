@@ -102,25 +102,11 @@ export default function Header() {
   const [accentColor, setAccentColor] = useState<string>("#ff5f40");
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [networkLinks, setNetworkLinks] = useState(defaultNetworkLinks);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [didApplyHiddenAccent, setDidApplyHiddenAccent] = useState(false);
 
   useEffect(() => {
     setNetworkLinks(getNetworkLinks(window.location.host));
   }, []);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    const updateTheme = () => {
-      setIsDarkTheme(root.classList.contains("dark"));
-    };
-    updateTheme();
-    const observer = new MutationObserver(updateTheme);
-    observer.observe(root, { attributes: true, attributeFilter: ["class"] });
-    return () => {
-      observer.disconnect();
-    };
-  }, [theme]);
 
   useEffect(() => {
     const computed = getComputedStyle(document.documentElement)
@@ -188,7 +174,7 @@ export default function Header() {
   const role = session?.user?.role;
   const hiddenAccent =
     role === "元"
-      ? isDarkTheme
+      ? theme === "dark"
         ? HIDDEN_WHITE
         : HIDDEN_BLACK
       : role === "妃"

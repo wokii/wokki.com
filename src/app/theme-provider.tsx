@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -10,14 +10,14 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
-  resolvedTheme: "light" | "dark";
   setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
 };
 
 const initialState: ThemeProviderState = {
-  theme: "system",
-  resolvedTheme: "light",
+  theme: "light",
   setTheme: () => null,
+  toggleTheme: () => null,
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
@@ -26,55 +26,60 @@ export function useTheme() {
   return useContext(ThemeProviderContext);
 }
 
+const THEME_STORAGE_KEY = "theme";
+
+function readSavedTheme(): Theme | null {
+  if (typeof window === "undefined") return null;
+  const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+  return saved === "light" || saved === "dark" ? saved : null;
+}
+
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "system";
-    const savedTheme = localStorage.getItem("theme");
-    if (
-      savedTheme === "light" ||
-      savedTheme === "dark" ||
-      savedTheme === "system"
-    ) {
-      return savedTheme;
-    }
-    return "system";
-  });
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") return "light";
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
+  const [theme, setThemeState] = useState<Theme>(() => {
+    // `layout.tsx` runs a `beforeInteractive` script that sets the `dark` class
+    // on `<html>` before React hydrates. Use that as the initial source of truth
+    // to avoid hydration mismatch / flashes.
+    if (typeof document === "undefined") return "light";
+    return document.documentElement.classList.contains("dark")
       ? "dark"
       : "light";
   });
 
   useEffect(() => {
     const root = window.document.documentElement;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const applyTheme = () => {
-      root.classList.remove("light", "dark");
-      const nextResolvedTheme =
-        theme === "system" ? (mediaQuery.matches ? "dark" : "light") : theme;
-      root.classList.add(nextResolvedTheme);
-      setResolvedTheme(nextResolvedTheme);
-    };
-
-    applyTheme();
-    mediaQuery.addEventListener("change", applyTheme);
-    return () => {
-      mediaQuery.removeEventListener("change", applyTheme);
-    };
+    root.classList.toggle("dark", theme === "dark");
+    root.style.colorScheme = theme;
   }, [theme]);
+
+  // If the visitor hasn't chosen a theme explicitly, stay in sync with system
+  // preference changes.
+  useEffect(() => {
+    const saved = readSavedTheme();
+    if (saved) return;
+    if (!("matchMedia" in window)) return;
+
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => {
+      // If the user later picks a theme explicitly, don't keep overriding it.
+      if (readSavedTheme()) return;
+      setThemeState(mql.matches ? "dark" : "light");
+    };
+    onChange();
+
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   const value = {
     theme,
-    resolvedTheme,
-    setTheme: (theme: Theme) => {
-      setTheme(theme);
-      localStorage.setItem("theme", theme);
+    setTheme: (next: Theme) => {
+      setThemeState(next);
+      window.localStorage.setItem(THEME_STORAGE_KEY, next);
+    },
+    toggleTheme: () => {
+      const next: Theme = theme === "light" ? "dark" : "light";
+      setThemeState(next);
+      window.localStorage.setItem(THEME_STORAGE_KEY, next);
     },
   };
 
