@@ -767,7 +767,7 @@ export const mcnWokki: MCNWokki = {
   },
   roster: {
     eyebrow: "Roster",
-    title: "Selected talent in motion.",
+    title: "Check out the Crazy Ones",
     signedBadge: "Signed",
     signedAlias: "Baby-Blush",
     signedAliasColor: "#f9c5d1",
