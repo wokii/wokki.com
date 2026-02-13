@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import { useTheme } from "../theme-provider";
 import {
   CONSULTANCY_WOKKI,
   consultancyInitialSessionEmail,
@@ -14,9 +16,11 @@ const MAIN_SITE_URL =
   (process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
     : `https://${WOKKI_DOT_COM}`);
+const LINKEDIN_PROFILE_URL = "https://www.linkedin.com/in/wokki/";
 
 export default function ConsultancyHome() {
   const { hero } = Zen[CONSULTANCY_WOKKI];
+  const { theme, setTheme } = useTheme();
   type ServiceKey = "initial" | "subscription" | "tenMinute";
   type ServicePrice = {
     unitAmount: number | null;
@@ -44,6 +48,8 @@ export default function ConsultancyHome() {
     subscription: null,
     tenMinute: null,
   });
+  const [mounted, setMounted] = useState(false);
+  const [currentTime, setCurrentTime] = useState("");
   const formatStat = (value: number | null | undefined) =>
     typeof value === "number" ? value.toLocaleString() : "—";
   const formatDenominator = (value: number | null | undefined) =>
@@ -79,6 +85,50 @@ export default function ConsultancyHome() {
   const dynamicRateNote = initialServicePrice
     ? `Starting rate: ${initialServicePrice}.`
     : null;
+  const recommendations: Array<{
+    author: string;
+    role: string;
+    text: string;
+    avatarSrc?: string;
+    profileUrl?: string;
+    profileCategory?: string;
+  }> = [
+    {
+      author: "Patrick Fagan",
+      role: "Behavioural psychologist | Sunday Times bestselling author | University lecturer | Founder",
+      text: "Han is a genius and very good at what he does. We built some very cool AI products together. He's great to work with (just gets stuff done and to a high standard) and is always very intelligent and insightful to talk to. I thoroughly recommend!",
+      avatarSrc: "/kindreds/patrick-fagan.png",
+      profileUrl: "https://www.linkedin.com/in/pfagan87/",
+      profileCategory: "LinkedIn",
+    },
+    {
+      author: "Christine Hui",
+      role: "Events Executive at Financial Times | Delivering Global B2B Events with Impact | Strategic Marketing",
+      text: "Han is a standout leader and a phenomenal empowerer. In helping me build my personal brand, he demonstrated a remarkable talent for simplifying the complex, turning dense strategy into a clear path for growth. He pairs an obsession with excellence with a genuine trust in his partners. More than just a consultant, Han is someone who deeply invests in the success of those he works with-he is truly a catalyst for achievement.",
+      avatarSrc: "/kindreds/Christine.png",
+      profileUrl: "https://www.linkedin.com/in/christine-huingaman/",
+      profileCategory: "LinkedIn",
+    },
+  ];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
+    const formatNow = () =>
+      new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+
+    setCurrentTime(formatNow());
+    const timer = window.setInterval(() => setCurrentTime(formatNow()), 1000);
+    return () => window.clearInterval(timer);
+  }, [mounted]);
 
   useEffect(() => {
     let isActive = true;
@@ -140,6 +190,14 @@ export default function ConsultancyHome() {
       isActive = false;
     };
   }, []);
+
+  const resolvedTheme = mounted
+    ? theme === "system"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : theme
+    : "dark";
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -290,6 +348,128 @@ export default function ConsultancyHome() {
         </div>
       </section>
       <section
+        id="testimonials"
+        className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-24"
+      >
+        <div className="flex flex-col gap-10">
+          <div>
+            <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
+              Testimony
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+              Recommendations
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-foreground/60">
+              Selected recommendations from LinkedIn, presented as concise
+              endorsements.
+            </p>
+          </div>
+          {recommendations.length ? (
+            <div className="grid gap-6 md:grid-cols-2">
+              {recommendations.map((recommendation) => (
+                <article
+                  key={`${recommendation.author}-${recommendation.role}`}
+                  className="flex h-full flex-col rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/85 via-background/70 to-background/45 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+                >
+                  <p className="text-2xl leading-none text-foreground/30">
+                    &ldquo;
+                  </p>
+                  <p className="mt-4 text-sm leading-relaxed text-foreground/75">
+                    {recommendation.text}
+                  </p>
+                  <p className="mt-3 text-right text-2xl leading-none text-foreground/30">
+                    &rdquo;
+                  </p>
+                  <div className="mt-auto border-t border-foreground/10 pt-4">
+                    {recommendation.profileUrl ? (
+                      <a
+                        href={recommendation.profileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="group relative inline-flex items-center gap-3 rounded-2xl px-1 py-1 transition-all duration-300 hover:-translate-y-0.5 hover:bg-foreground/5"
+                      >
+                        {recommendation.profileCategory ? (
+                          <span className="pointer-events-none absolute -top-8 left-1/2 inline-flex -translate-x-1/2 items-center rounded-full border border-foreground/15 bg-background/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-foreground/75 opacity-0 shadow-[0_12px_30px_rgba(0,0,0,0.25)] transition-all duration-200 group-hover:-translate-y-0.5 group-hover:opacity-100">
+                            {recommendation.profileCategory}
+                          </span>
+                        ) : null}
+                        {recommendation.avatarSrc ? (
+                          <Image
+                            src={recommendation.avatarSrc}
+                            alt={recommendation.author}
+                            width={40}
+                            height={40}
+                            className="h-10 w-10 rounded-full object-cover ring-1 ring-foreground/20 transition-all duration-300 group-hover:scale-[1.03] group-hover:ring-accent/50"
+                          />
+                        ) : (
+                          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-foreground/10 text-xs font-semibold uppercase tracking-[0.15em] text-foreground/70 ring-1 ring-foreground/20 transition-all duration-300 group-hover:scale-[1.03] group-hover:ring-accent/50 group-hover:text-accent">
+                            {recommendation.author
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)}
+                          </span>
+                        )}
+                        <div>
+                          <p className="text-sm font-semibold text-foreground/90 transition-colors duration-300 group-hover:text-accent">
+                            {recommendation.author}
+                          </p>
+                          <p className="text-xs uppercase tracking-[0.18em] text-foreground/55">
+                            {recommendation.role}
+                          </p>
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-3">
+                        {recommendation.avatarSrc ? (
+                          <Image
+                            src={recommendation.avatarSrc}
+                            alt={recommendation.author}
+                            width={40}
+                            height={40}
+                            className="h-10 w-10 rounded-full object-cover ring-1 ring-foreground/20"
+                          />
+                        ) : (
+                          <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-foreground/10 text-xs font-semibold uppercase tracking-[0.15em] text-foreground/70 ring-1 ring-foreground/20">
+                            {recommendation.author
+                              .split(" ")
+                              .map((part) => part[0])
+                              .join("")
+                              .slice(0, 2)}
+                          </span>
+                        )}
+                        <div>
+                          <p className="text-sm font-semibold text-foreground/90">
+                            {recommendation.author}
+                          </p>
+                          <p className="text-xs uppercase tracking-[0.18em] text-foreground/55">
+                            {recommendation.role}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/85 via-background/70 to-background/45 p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
+              <p className="text-sm text-foreground/70">
+                No public LinkedIn recommendations are visible yet.
+              </p>
+              <a
+                href={LINKEDIN_PROFILE_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+              >
+                View LinkedIn Profile
+              </a>
+            </div>
+          )}
+        </div>
+      </section>
+      <section
         id="contact"
         className="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-24"
       >
@@ -341,6 +521,26 @@ export default function ConsultancyHome() {
           </div>
         </div>
       </section>
+      {mounted ? (
+        <button
+          onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+          className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full border border-foreground/20 bg-background/80 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/85 shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
+          aria-label="Toggle light mode"
+        >
+          <span className="text-foreground/60">{currentTime}</span>
+          <span className="text-foreground/35">|</span>
+          <span className="text-foreground/60">Light</span>
+          <span
+            className={`rounded-full border px-2 py-0.5 transition-colors ${
+              resolvedTheme === "light"
+                ? "border-accent/60 text-accent"
+                : "border-foreground/20 text-foreground/70"
+            }`}
+          >
+            {resolvedTheme === "light" ? "On" : "Off"}
+          </span>
+        </button>
+      ) : null}
     </main>
   );
 }

@@ -4,7 +4,7 @@ import { useTheme } from "../theme-provider";
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
@@ -15,13 +15,6 @@ export default function ThemeToggle() {
   if (!mounted) {
     return null;
   }
-
-  const resolvedTheme =
-    theme === "system"
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"
-      : theme;
 
   return (
     <button

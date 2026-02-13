@@ -72,7 +72,7 @@ const HIDDEN_WHITE = "#ffffff";
 const defaultNetworkLinks = {
   home: `https://${WOKKI_DOT_COM}`,
   consultancy: `https://${WOKKI_DOT_COM}/consultancy`,
-  node: `https://node.${WOKKI_DOT_COM}`,
+  node: `https://${WOKKI_DOT_COM}/mcn`,
 };
 
 const getNetworkLinks = (host: string) => {
@@ -90,7 +90,7 @@ const getNetworkLinks = (host: string) => {
   return {
     home: `${protocol}://${baseDomain}`,
     consultancy: `${protocol}://${baseDomain}/consultancy`,
-    node: `${protocol}://node.${baseDomain}`,
+    node: `${protocol}://${baseDomain}/mcn`,
   };
 };
 
@@ -296,7 +296,7 @@ export default function Header() {
                     href={networkLinks.node}
                     className="rounded-xl px-3 py-2 text-sm transition-colors hover:bg-foreground/5 hover:text-accent"
                   >
-                    Wokki Node
+                    Wokki MCN
                   </a>
                 </div>
               </div>

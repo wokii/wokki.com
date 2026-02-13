@@ -161,6 +161,66 @@ export type ConsultancyWokki = {
   };
 };
 
+export type MCNWokki = {
+  meta: {
+    title: string;
+    description: string;
+  };
+  header: {
+    networkLabel: string;
+    links: Array<{
+      label: string;
+      tag: string;
+      href: string;
+      featured?: boolean;
+    }>;
+    nav: {
+      roster: string;
+      contact: string;
+    };
+  };
+  hero: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    cta: {
+      label: string;
+      href: string;
+    };
+  };
+  roster: {
+    eyebrow: string;
+    title: string;
+    signedBadge: string;
+    signedAlias: string;
+    signedAliasColor: string;
+    profileName: string;
+    profileDescription: string;
+    profileStatus: string;
+    profileCtaLabel: string;
+    profileUrl: string;
+    nextCardEyebrow: string;
+    nextCardTitle: string;
+    nextCardDescription: string;
+    nextCardSocials: string[];
+    wokkiCardEyebrow: string;
+    wokkiCardEyebrowColor: string;
+    wokkiCardTitle: string;
+    wokkiCardDescription: string;
+    wokkiCardImageDay: string;
+    wokkiCardImageNight: string;
+  };
+  contact: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    cta: {
+      label: string;
+      href: string;
+    };
+  };
+};
+
 export type WokkiCom = {
   hero: Hero;
   about: About;
@@ -172,6 +232,7 @@ export type WokkiCom = {
 
 export const WOKKI_DOT_COM = "wokki.com" as const;
 export const CONSULTANCY_WOKKI = "consultancy.wokki" as const;
+export const MCN_WOKKI = "mcn.wokki" as const;
 
 export type AliasMap = Record<string, string[]>;
 
@@ -211,6 +272,7 @@ Thanks,
 export type Zen = {
   [WOKKI_DOT_COM]: WokkiCom;
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
+  [MCN_WOKKI]: MCNWokki;
 };
 
 export const wokkiCom: WokkiCom = {
@@ -662,7 +724,85 @@ export const consultancyWokki: ConsultancyWokki = {
   },
 };
 
+export const mcnWokki: MCNWokki = {
+  meta: {
+    title: "Wokki MCN",
+    description:
+      "Wokki MCN is the largest MCNetwork on the planet. If you are talented and under-positioned, get in touch with Han Wokki.",
+  },
+  header: {
+    networkLabel: "Wokki Network",
+    links: [
+      {
+        label: "Wokki.com",
+        tag: "Main Site",
+        href: "/",
+        featured: true,
+      },
+      {
+        label: "Wokki Consultancy",
+        tag: "Enlightenment",
+        href: "/consultancy",
+      },
+      {
+        label: "Wokki MCN",
+        tag: "Creator Network",
+        href: "/mcn",
+      },
+    ],
+    nav: {
+      roster: "Roster",
+      contact: "Contact",
+    },
+  },
+  hero: {
+    eyebrow: "Wokki MCN",
+    title: "The world’s most prestigious influencer network",
+    subtitle:
+      "If you are talented and think you are under-positioned, get in touch with Wokki.",
+    cta: {
+      label: "Get in touch",
+      href: "https://www.linkedin.com/in/wokki/",
+    },
+  },
+  roster: {
+    eyebrow: "Roster",
+    title: "Selected talent in motion.",
+    signedBadge: "Signed",
+    signedAlias: "Baby-Blush",
+    signedAliasColor: "#f9c5d1",
+    profileName: "Christine",
+    profileDescription:
+      "Editorial-grade brand operator. Strategic marketing, category-level events, and global B2B narrative impact.",
+    profileStatus: "Signed Influencer",
+    profileCtaLabel: "View profile",
+    profileUrl: "https://www.linkedin.com/in/christine-huingaman/",
+    nextCardEyebrow: "Roster",
+    nextCardTitle: "Next Signing",
+    nextCardDescription: "More talent profiles to be added soon.",
+    nextCardSocials: ["linkedin", "instagram", "tiktok"],
+    wokkiCardEyebrow: "Founder",
+    wokkiCardEyebrowColor: "#10b981",
+    wokkiCardTitle: "Wokki",
+    wokkiCardDescription:
+      "Founder of Wokki.com, Wokki Consultancy and Wokki MCN.",
+    wokkiCardImageDay: "/mcn/wokki-day.JPG",
+    wokkiCardImageNight: "/mcn/wokki-night.JPG",
+  },
+  contact: {
+    eyebrow: "Contact",
+    title: "Think you should be positioned higher?",
+    description:
+      "Reach out directly to Han Wokki and share your profile, your work, and where you want to go next.",
+    cta: {
+      label: "Contact Han Wokki",
+      href: "https://www.linkedin.com/in/wokki/",
+    },
+  },
+};
+
 export const Zen: Zen = {
   [WOKKI_DOT_COM]: wokkiCom,
   [CONSULTANCY_WOKKI]: consultancyWokki,
+  [MCN_WOKKI]: mcnWokki,
 };
