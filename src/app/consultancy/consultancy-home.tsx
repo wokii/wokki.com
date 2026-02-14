@@ -20,7 +20,7 @@ const LINKEDIN_PROFILE_URL = "https://www.linkedin.com/in/wokki/";
 
 export default function ConsultancyHome() {
   const { hero } = Zen[CONSULTANCY_WOKKI];
-  const { theme, setTheme } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   type ServiceKey = "initial" | "subscription" | "tenMinute";
   type ServicePrice = {
     unitAmount: number | null;
@@ -190,14 +190,6 @@ export default function ConsultancyHome() {
       isActive = false;
     };
   }, []);
-
-  const resolvedTheme = mounted
-    ? theme === "system"
-      ? window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"
-      : theme
-    : "dark";
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -523,7 +515,7 @@ export default function ConsultancyHome() {
       </section>
       {mounted ? (
         <button
-          onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+          onClick={toggleTheme}
           className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full border border-foreground/20 bg-background/80 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-foreground/85 shadow-[0_16px_40px_rgba(0,0,0,0.28)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
           aria-label="Toggle light mode"
         >
@@ -532,12 +524,12 @@ export default function ConsultancyHome() {
           <span className="text-foreground/60">Light</span>
           <span
             className={`rounded-full border px-2 py-0.5 transition-colors ${
-              resolvedTheme === "light"
+              theme === "light"
                 ? "border-accent/60 text-accent"
                 : "border-foreground/20 text-foreground/70"
             }`}
           >
-            {resolvedTheme === "light" ? "On" : "Off"}
+            {theme === "light" ? "On" : "Off"}
           </span>
         </button>
       ) : null}

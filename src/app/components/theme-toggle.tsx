@@ -4,7 +4,7 @@ import { useTheme } from "../theme-provider";
 import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   // Avoid hydration mismatch
@@ -18,7 +18,7 @@ export default function ThemeToggle() {
 
   return (
     <button
-      onClick={() => setTheme(resolvedTheme === "light" ? "dark" : "light")}
+      onClick={toggleTheme}
       className="fixed bottom-4 right-4 p-3 rounded-full bg-foreground text-background z-[100] group transition duration-200 ease-out shadow-md hover:shadow-lg hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-background focus-visible:ring-offset-foreground"
       aria-label="Toggle theme"
     >

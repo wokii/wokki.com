@@ -1,8 +1,8 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+type Theme = "light" | "dark";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -10,14 +10,14 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
-  resolvedTheme: "light" | "dark";
   setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
 };
 
 const initialState: ThemeProviderState = {
-  theme: "system",
-  resolvedTheme: "light",
+  theme: "light",
   setTheme: () => null,
+  toggleTheme: () => null,
 };
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
@@ -27,54 +27,42 @@ export function useTheme() {
 }
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "system";
-    const savedTheme = localStorage.getItem("theme");
-    if (
-      savedTheme === "light" ||
-      savedTheme === "dark" ||
-      savedTheme === "system"
-    ) {
-      return savedTheme;
-    }
-    return "system";
-  });
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(() => {
-    if (typeof window === "undefined") return "light";
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light" || savedTheme === "dark") {
-      return savedTheme;
-    }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  });
+  const [overrideTheme, setOverrideTheme] = useState<Theme | null>(null);
+  const [systemTheme, setSystemTheme] = useState<Theme>("light");
+
+  const theme = useMemo<Theme>(() => {
+    return overrideTheme ?? systemTheme;
+  }, [overrideTheme, systemTheme]);
+
+  useEffect(() => {
+    if (!("matchMedia" in window)) return;
+    const mql = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => setSystemTheme(mql.matches ? "dark" : "light");
+    onChange();
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const root = window.document.documentElement;
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
-    const applyTheme = () => {
-      root.classList.remove("light", "dark");
-      const nextResolvedTheme =
-        theme === "system" ? (mediaQuery.matches ? "dark" : "light") : theme;
-      root.classList.add(nextResolvedTheme);
-      setResolvedTheme(nextResolvedTheme);
-    };
-
-    applyTheme();
-    mediaQuery.addEventListener("change", applyTheme);
-    return () => {
-      mediaQuery.removeEventListener("change", applyTheme);
-    };
-  }, [theme]);
+    root.classList.toggle("dark", theme === "dark");
+    // Only set an override attribute when the user explicitly picks a theme.
+    // When absent, CSS `prefers-color-scheme` drives the default theme.
+    if (overrideTheme) {
+      root.dataset.theme = overrideTheme;
+    } else {
+      root.removeAttribute("data-theme");
+    }
+  }, [theme, overrideTheme]);
 
   const value = {
     theme,
-    resolvedTheme,
-    setTheme: (theme: Theme) => {
-      setTheme(theme);
-      localStorage.setItem("theme", theme);
+    setTheme: (next: Theme) => {
+      setOverrideTheme(next);
+    },
+    toggleTheme: () => {
+      const next: Theme = theme === "light" ? "dark" : "light";
+      setOverrideTheme(next);
     },
   };
 
