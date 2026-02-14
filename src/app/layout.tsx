@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   title: `Han Wokki – ${Zen[WOKKI_DOT_COM].hero.titles
     .map((item) => item.title)
     .join(", ")}`,
-  description: "I build AI products that fuse function with form.",
+  description: "The Philosopher of 21st Century",
+  authors: [{ name: "Wokki", url: `https://${WOKKI_DOT_COM}` }],
+  creator: "Wokki",
 };
 
 export default function RootLayout({

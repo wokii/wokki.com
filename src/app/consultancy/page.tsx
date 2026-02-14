@@ -4,6 +4,7 @@ import ConsultancyHome from "./consultancy-home";
 export const metadata: Metadata = {
   title: "Wokki Consultancy - The All Knowing Consultancy",
   openGraph: {
+    type: "website",
     title: "Wokki Consultancy - The All Knowing Consultancy",
     images: [
       {
