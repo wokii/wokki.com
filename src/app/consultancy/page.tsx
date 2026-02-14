@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Wokki Consultancy - The All Knowing Consultancy",
     images: [
       {
-        url: "/w.svg",
+        url: "/w.png",
         width: 1600,
         height: 400,
         alt: "Wokki (W)",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Wokki Consultancy - The All Knowing Consultancy",
-    images: ["/w.svg"],
+    images: ["/w.png"],
   },
 };
 

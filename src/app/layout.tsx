@@ -12,6 +12,21 @@ export const metadata: Metadata = {
   description: "The Philosopher of 21st Century",
   authors: [{ name: "Wokki", url: `https://${WOKKI_DOT_COM}` }],
   creator: "Wokki",
+  openGraph: {
+    type: "website",
+    siteName: "Wokki",
+    images: [
+      {
+        url: "/w.png",
+        alt: "Wokki (W)",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@hanwokki",
+    images: ["/w.png"],
+  },
 };
 
 export default function RootLayout({
