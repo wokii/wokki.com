@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { cookies } from "next/headers";
 import { WOKKI_DOT_COM, Zen } from "./lib/WokkiNodes";
 import "./globals.css";
 import Providers from "./providers";
@@ -12,37 +13,20 @@ export const metadata: Metadata = {
   description: "I build AI products that fuse function with form.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const themeCookie = (await cookies()).get("theme")?.value;
+  const isDark = themeCookie === "dark";
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script id="theme-init" strategy="beforeInteractive">{`(() => {
-  try {
-    var root = document.documentElement;
-    var THEME_KEY = "theme";
-
-    var saved = localStorage.getItem(THEME_KEY);
-    var theme = (saved === "light" || saved === "dark") ? saved : null;
-
-    if (!theme) {
-      var prefersDark = false;
-      try {
-        prefersDark =
-          window.matchMedia &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches;
-      } catch {}
-      theme = prefersDark ? "dark" : "light";
-    }
-
-    root.classList.toggle("dark", theme === "dark");
-    root.style.colorScheme = theme;
-  } catch {}
-})();`}</Script>
-      </head>
+    <html
+      lang="en"
+      className={isDark ? "dark" : undefined}
+      style={{ colorScheme: isDark ? "dark" : "light" }}
+    >
       <body className="antialiased">
         <Providers>{children}</Providers>
         <Script

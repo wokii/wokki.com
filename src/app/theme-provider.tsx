@@ -27,6 +27,27 @@ export function useTheme() {
 }
 
 const THEME_STORAGE_KEY = "theme";
+const THEME_COOKIE_KEY = "theme";
+const THEME_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
+
+function readCookieTheme(): Theme | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(
+    new RegExp(`(?:^|;\\s*)${THEME_COOKIE_KEY}=([^;]*)`),
+  );
+  if (!match) return null;
+  try {
+    const value = decodeURIComponent(match[1] ?? "");
+    return value === "light" || value === "dark" ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeThemeCookie(theme: Theme) {
+  // Avoid `Secure` so it still works on localhost.
+  document.cookie = `${THEME_COOKIE_KEY}=${encodeURIComponent(theme)}; Path=/; Max-Age=${THEME_COOKIE_MAX_AGE_SECONDS}; SameSite=Lax`;
+}
 
 function readSavedTheme(): Theme | null {
   if (typeof window === "undefined") return null;
@@ -54,14 +75,14 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
   // If the visitor hasn't chosen a theme explicitly, stay in sync with system
   // preference changes.
   useEffect(() => {
-    const saved = readSavedTheme();
+    const saved = readSavedTheme() ?? readCookieTheme();
     if (saved) return;
     if (!("matchMedia" in window)) return;
 
     const mql = window.matchMedia("(prefers-color-scheme: dark)");
     const onChange = () => {
       // If the user later picks a theme explicitly, don't keep overriding it.
-      if (readSavedTheme()) return;
+      if (readSavedTheme() ?? readCookieTheme()) return;
       setThemeState(mql.matches ? "dark" : "light");
     };
     onChange();
@@ -75,11 +96,13 @@ export default function ThemeProvider({ children }: ThemeProviderProps) {
     setTheme: (next: Theme) => {
       setThemeState(next);
       window.localStorage.setItem(THEME_STORAGE_KEY, next);
+      writeThemeCookie(next);
     },
     toggleTheme: () => {
       const next: Theme = theme === "light" ? "dark" : "light";
       setThemeState(next);
       window.localStorage.setItem(THEME_STORAGE_KEY, next);
+      writeThemeCookie(next);
     },
   };
 
