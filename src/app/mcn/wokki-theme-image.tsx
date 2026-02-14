@@ -20,7 +20,7 @@ export default function WokkiThemeImage({
         alt={alt}
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className="object-cover object-top transition-all duration-700 ease-out opacity-100 scale-[1.14] group-hover:scale-[1.16] dark:opacity-0"
+        className="theme-image-day object-cover object-top transition-all duration-700 ease-out opacity-100 scale-[1.14] group-hover:scale-[1.16]"
       />
       <Image
         src={nightSrc}
@@ -28,7 +28,7 @@ export default function WokkiThemeImage({
         aria-hidden="true"
         fill
         sizes="(min-width: 768px) 35vw, 92vw"
-        className="object-cover object-top transition-all duration-700 ease-out opacity-0 scale-[1.16] dark:opacity-100 dark:scale-[1.26] dark:group-hover:scale-[1.28]"
+        className="theme-image-night object-cover object-top transition-all duration-700 ease-out opacity-0 scale-[1.16]"
       />
     </>
   );
