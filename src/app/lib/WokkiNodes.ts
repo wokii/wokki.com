@@ -139,6 +139,23 @@ export type Writing = {
 };
 
 export type ConsultancyWokki = {
+  meta: {
+    title: string;
+    description: string;
+  };
+  header: {
+    brand: string;
+    links: Array<{
+      label: string;
+      tag: string;
+      href: string;
+    }>;
+    nav: {
+      pricing: string;
+      testimonials: string;
+      contact: string;
+    };
+  };
   hero: {
     title: string;
     subtitle: string;
@@ -148,6 +165,46 @@ export type ConsultancyWokki = {
       href: string;
     };
     rateNote: string;
+  };
+  pricing: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    services: Array<{
+      key: "initial" | "subscription" | "tenMinute";
+      title: string;
+      oneTimeDuration?: string;
+      description: string;
+      cta: string;
+      href: string | null;
+      targetPaid?: number;
+    }>;
+  };
+  testimonials: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    linkedInProfileUrl: string;
+    linkedInProfileLabel: string;
+    emptyState: string;
+    recommendations: Array<{
+      author: string;
+      role: string;
+      text: string;
+      avatarSrc?: string;
+      profileUrl?: string;
+      profileCategory?: string;
+    }>;
+  };
+  contact: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    actions: Array<{
+      prompt: string;
+      label: string;
+      href: string;
+    }>;
   };
   insights: {
     records: InsightRecord[];
@@ -679,6 +736,23 @@ export const wokkiCom: WokkiCom = {
 };
 
 export const consultancyWokki: ConsultancyWokki = {
+  meta: {
+    title: "Wokki Consultancy - The All Knowing Consultancy",
+    description:
+      "Private consulting across strategy, product, engineering, psychology and AI.",
+  },
+  header: {
+    brand: "Wokki Consultancy",
+    links: [
+      { label: "Wokki.com", tag: "Main Site", href: "/" },
+      { label: "Wokki MCN", tag: "MCN Layer", href: "/mcn" },
+    ],
+    nav: {
+      pricing: "Pricing",
+      testimonials: "Testimony",
+      contact: "Contact",
+    },
+  },
   hero: {
     eyebrow: "Consultancy",
     title: "Wokki Consultancy",
@@ -689,6 +763,85 @@ export const consultancyWokki: ConsultancyWokki = {
       href: "#pricing",
     },
     rateNote: "Starting rate: £1,111 per hour.",
+  },
+  pricing: {
+    eyebrow: "Pricing",
+    heading: "Consulting Services",
+    description:
+      "Three focused ways to work together, designed for clarity and momentum.",
+    services: [
+      {
+        key: "initial",
+        title: "Initial Consultation",
+        oneTimeDuration: "over a week",
+        description:
+          "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
+        cta: "Book initial session",
+        href: "https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04",
+        targetPaid: 11,
+      },
+      {
+        key: "subscription",
+        title: "Insight Subscription",
+        oneTimeDuration: "month",
+        description: "Ongoing customized insight delivery.",
+        cta: "Start subscription",
+        href: null,
+      },
+      {
+        key: "tenMinute",
+        title: "11.11-Minute Session",
+        oneTimeDuration: "11.11 minutes",
+        description: "Focused answers in a short call.",
+        cta: "Book 11.11 minutes",
+        href: null,
+        targetPaid: 11,
+      },
+    ],
+  },
+  testimonials: {
+    eyebrow: "Testimony",
+    heading: "Recommendations",
+    description:
+      "Selected recommendations from LinkedIn, presented as concise endorsements.",
+    linkedInProfileUrl: "https://www.linkedin.com/in/wokki/",
+    linkedInProfileLabel: "View LinkedIn Profile",
+    emptyState: "No public LinkedIn recommendations are visible yet.",
+    recommendations: [
+      {
+        author: "Patrick Fagan",
+        role: "Behavioural psychologist | Sunday Times bestselling author | University lecturer | Founder",
+        text: "Han is a genius and very good at what he does. We built some very cool AI products together. He's great to work with (just gets stuff done and to a high standard) and is always very intelligent and insightful to talk to. I thoroughly recommend!",
+        avatarSrc: "/kindreds/patrick-fagan.png",
+        profileUrl: "https://www.linkedin.com/in/pfagan87/",
+        profileCategory: "LinkedIn",
+      },
+      {
+        author: "Christine Hui",
+        role: "Events Executive at Financial Times | Delivering Global B2B Events with Impact | Strategic Marketing",
+        text: "Han is a standout leader and a phenomenal empowerer. In helping me build my personal brand, he demonstrated a remarkable talent for simplifying the complex, turning dense strategy into a clear path for growth. He pairs an obsession with excellence with a genuine trust in his partners. More than just a consultant, Han is someone who deeply invests in the success of those he works with-he is truly a catalyst for achievement.",
+        avatarSrc: "/kindreds/Christine.png",
+        profileUrl: "https://www.linkedin.com/in/christine-huingaman/",
+        profileCategory: "LinkedIn",
+      },
+    ],
+  },
+  contact: {
+    eyebrow: "Contact",
+    heading: "Let's talk.",
+    description: "Choose your preferred path and we'll take it from there.",
+    actions: [
+      {
+        prompt: "Ready to chat?",
+        label: "Book initial session",
+        href: "https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04",
+      },
+      {
+        prompt: "Prefer email?",
+        label: "Email sales",
+        href: consultancyInitialSessionEmail,
+      },
+    ],
   },
   insights: {
     records: [
