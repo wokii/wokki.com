@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import Section from "./Section";
 import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
+import LegendaryTasteeTitles from "../LegendaryTasteeTitles";
 
 export default function Hero() {
   const { hero } = Zen[WOKKI_DOT_COM];
@@ -18,17 +19,7 @@ export default function Hero() {
       containerClassName="md:relative -mt-6 md:mt-0"
     >
       <div className="relative">
-        <h1 className="text-3xl md:text-6xl font-bold z-10 relative text-left">
-          {hero.titles.map((item, index) => (
-            <React.Fragment key={item.title}>
-              {item.title}
-              <span className="ml-2 text-xs md:text-base text-foreground/50">
-                {item.note}
-              </span>
-              {index < hero.titles.length - 1 && <br />}
-            </React.Fragment>
-          ))}
-        </h1>
+        <LegendaryTasteeTitles titles={hero.titles} />
       </div>
       <div className="mt-3 md:mt-4">
         <p className="text-base md:text-xl text-left text-foreground/70">

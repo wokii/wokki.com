@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import ConsultancyHome from "./consultancy-home";
+import { CONSULTANCY_WOKKI, Zen } from "../lib/WokkiNodes";
+
+const { meta } = Zen[CONSULTANCY_WOKKI];
 
 export const metadata: Metadata = {
-  title: "Wokki Consultancy - The All Knowing Consultancy",
+  title: meta.title,
+  description: meta.description,
   openGraph: {
     type: "website",
-    title: "Wokki Consultancy - The All Knowing Consultancy",
+    title: meta.title,
+    description: meta.description,
     images: [
       {
         url: "/w.png",
@@ -17,7 +22,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Wokki Consultancy - The All Knowing Consultancy",
+    title: meta.title,
+    description: meta.description,
     images: ["/w.png"],
   },
 };

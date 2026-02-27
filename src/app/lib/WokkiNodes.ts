@@ -139,6 +139,24 @@ export type Writing = {
 };
 
 export type ConsultancyWokki = {
+  meta: {
+    title: string;
+    description: string;
+  };
+  header: {
+    brand: string;
+    links: Array<{
+      label: string;
+      tag: string;
+      href: string;
+      featured?: boolean;
+    }>;
+    nav: {
+      pricing: string;
+      testimonials: string;
+      contact: string;
+    };
+  };
   hero: {
     title: string;
     subtitle: string;
@@ -148,6 +166,45 @@ export type ConsultancyWokki = {
       href: string;
     };
     rateNote: string;
+  };
+  pricing: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    services: Array<{
+      key: "initial" | "subscription" | "tenMinute";
+      title: string;
+      oneTimeDuration?: string;
+      description: string;
+      ctaLabel: string;
+      href: string | null;
+    }>;
+  };
+  testimonials: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    emptyState: string;
+    linkedInFallbackCtaLabel: string;
+    linkedInProfileUrl: string;
+    recommendations: Array<{
+      author: string;
+      role: string;
+      text: string;
+      avatarSrc?: string;
+      profileUrl?: string;
+      profileCategory?: string;
+    }>;
+  };
+  contact: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    readyLabel: string;
+    bookInitialSessionLabel: string;
+    bookInitialSessionHref: string;
+    preferEmailLabel: string;
+    emailSalesLabel: string;
   };
   insights: {
     records: InsightRecord[];
@@ -679,47 +736,111 @@ export const wokkiCom: WokkiCom = {
 };
 
 export const consultancyWokki: ConsultancyWokki = {
-  hero: {
-    eyebrow: "Consultancy",
-    title: "Wokki Consultancy",
-    subtitle:
-      "Private consulting across Strategy, Product, Engineering, Psychology and AI.",
-    cta: {
-      label: "Check Pricing",
-      href: "#pricing",
-    },
-    rateNote: "Starting rate: £1,111 per hour.",
+  meta: {
+    title: "Wokki Consultancy | The Merlin to Your King Arthur",
+    description:
+      "Strategic prophecy for modern founders. We provide the vision, the blade, and the roadmap to Avalon. Transform your calling into a kingdom.",
   },
-  insights: {
-    records: [
+  header: {
+    brand: "Wokki Consultancy",
+    links: [
+      { label: "The Prophecy", tag: "Insights", href: "#insights" },
+      { label: "The Round Table", tag: "Testimonials", href: "#testimonials" },
       {
-        id: "insight-001",
-        email: "hanwokki@gmail.com",
-        title: "Test Insight 1",
-        summary: "Your focus peaks on Tuesday mornings and dips after 4pm.",
-        createdAt: "2026-01-22T10:30:00Z",
-      },
-      {
-        id: "insight-002",
-        email: "hanwokki@gmail.com",
-        title: "Test Insight 2 (Energy)",
-        summary: "Short breaks every 90 minutes correlate with higher output.",
-        createdAt: "2026-01-20T14:00:00Z",
-      },
-      {
-        id: "insight-003",
-        email: "christine.huingaman@gmail.com",
-        title: "Momentum check",
-        summary: "Evening sessions are trending upward this month.",
-        createdAt: "2026-01-18T19:40:00Z",
+        label: "Summon Merlin",
+        tag: "Contact",
+        href: "#contact",
+        featured: true,
       },
     ],
-    heading: "Your insight records",
-    emptyState: "No insight records yet.",
+    nav: {
+      pricing: "The Tribute",
+      testimonials: "The Legends",
+      contact: "The Summoning",
+    },
+  },
+  hero: {
+    eyebrow: "FOR THOSE WHO HAVE HEARD THE CALLING",
+    title: "The Merlin to Your King Arthur",
+    subtitle:
+      "Every great reign begins with a guide who sees what others cannot. We don't just consult; we architect your legend through relentless action and strategic foresight.",
+    cta: {
+      label: "Claim Your Excalibur",
+      href: "https://www.wokki.com/consultancy#pricing",
+    },
+    rateNote:
+      "Consultations are strictly reserved for those ready to take the throne.",
+  },
+  pricing: {
+    eyebrow: "THE ARMORY",
+    title: "Choose Your Path to the Throne",
+    subtitle:
+      "Whether you need a quick spark of magic or a lifetime of strategic alliance.",
+    services: [
+      {
+        key: "initial",
+        title: "The Sword in the Stone",
+        oneTimeDuration: "60 Minutes",
+        description:
+          "A deep-dive tactical session to unearth your 'Excalibur'. We map your terrain, identify your dragons, and forge your first 90-day battle plan.",
+        ctaLabel: "Pull the Sword",
+        href: "/book-initial",
+      },
+      {
+        key: "subscription",
+        title: "The Round Table Alliance",
+        description:
+          "Retainer-based guardianship. Unlimited access to Merlin’s foresight for your ongoing campaigns. We scale as your kingdom grows.",
+        ctaLabel: "Form the Alliance",
+        href: "/subscribe",
+      },
+      {
+        key: "tenMinute",
+        title: "The Raven's Message",
+        oneTimeDuration: "10 Minutes",
+        description:
+          "A lightning strike of clarity for urgent pivots or high-stakes decisions. No fluff—just the magic you need right now.",
+        ctaLabel: "Send a Raven",
+        href: "/quick-call",
+      },
+    ],
+  },
+  testimonials: {
+    eyebrow: "TALES OF THE REALM",
+    title: "Chronicled Successes",
+    subtitle:
+      "Hear from the Sovereigns who have already reclaimed their kingdoms with our guidance.",
+    emptyState: "The scrolls are being updated with new legends as we speak.",
+    linkedInFallbackCtaLabel: "View the Hall of Fame on LinkedIn",
+    linkedInProfileUrl: "https://www.linkedin.com/in/your-profile",
+    recommendations: [
+      {
+        author: "Lancelot of Tech",
+        role: "Founder, Stealth Startup",
+        text: "Wokki didn't just give me advice; they gave me a vision of the market I couldn't see. It felt like having a cheat code for the industry.",
+      },
+    ],
+  },
+  contact: {
+    eyebrow: "THE SUMMONING",
+    title: "Are You Ready to Rule?",
+    subtitle:
+      "The mist is clearing. The path is open. The only question is: will you walk it?",
+    readyLabel: "Your Kingdom Awaits.",
+    bookInitialSessionLabel: "Schedule an Audience with Merlin",
+    bookInitialSessionHref: "https://calendly.com/wokki",
+    preferEmailLabel: "Prefer a sealed scroll?",
+    emailSalesLabel: "merlin@wokki.com",
+  },
+  insights: {
+    heading: "The Prophecies",
+    records: [], // To be populated with your blog/insight data
+    emptyState:
+      "The scrying mirror is currently dark. Check back at the next full moon.",
     signIn: {
-      heading: "Sign in required",
-      body: "Please sign in to view insights tied to your account.",
-      ctaLabel: "Sign in with Google",
+      heading: "Enter the Inner Sanctum",
+      body: "Our most potent strategies are reserved for the chosen. Log in to access the High Magic of business scaling.",
+      ctaLabel: "Reveal the Secrets",
     },
   },
 };

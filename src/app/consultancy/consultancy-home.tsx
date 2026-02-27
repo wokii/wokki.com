@@ -16,10 +16,9 @@ const MAIN_SITE_URL =
   (process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
     : `https://${WOKKI_DOT_COM}`);
-const LINKEDIN_PROFILE_URL = "https://www.linkedin.com/in/wokki/";
 
 export default function ConsultancyHome() {
-  const { hero } = Zen[CONSULTANCY_WOKKI];
+  const { hero, pricing, testimonials, contact } = Zen[CONSULTANCY_WOKKI];
   const { theme, toggleTheme } = useTheme();
   type ServiceKey = "initial" | "subscription" | "tenMinute";
   type ServicePrice = {
@@ -85,31 +84,6 @@ export default function ConsultancyHome() {
   const dynamicRateNote = initialServicePrice
     ? `Starting rate: ${initialServicePrice}.`
     : null;
-  const recommendations: Array<{
-    author: string;
-    role: string;
-    text: string;
-    avatarSrc?: string;
-    profileUrl?: string;
-    profileCategory?: string;
-  }> = [
-    {
-      author: "Patrick Fagan",
-      role: "Behavioural psychologist | Sunday Times bestselling author | University lecturer | Founder",
-      text: "Han is a genius and very good at what he does. We built some very cool AI products together. He's great to work with (just gets stuff done and to a high standard) and is always very intelligent and insightful to talk to. I thoroughly recommend!",
-      avatarSrc: "/kindreds/patrick-fagan.png",
-      profileUrl: "https://www.linkedin.com/in/pfagan87/",
-      profileCategory: "LinkedIn",
-    },
-    {
-      author: "Christine Hui",
-      role: "Events Executive at Financial Times | Delivering Global B2B Events with Impact | Strategic Marketing",
-      text: "Han is a standout leader and a phenomenal empowerer. In helping me build my personal brand, he demonstrated a remarkable talent for simplifying the complex, turning dense strategy into a clear path for growth. He pairs an obsession with excellence with a genuine trust in his partners. More than just a consultant, Han is someone who deeply invests in the success of those he works with-he is truly a catalyst for achievement.",
-      avatarSrc: "/kindreds/Christine.png",
-      profileUrl: "https://www.linkedin.com/in/christine-huingaman/",
-      profileCategory: "LinkedIn",
-    },
-  ];
 
   useEffect(() => {
     setMounted(true);
@@ -232,57 +206,21 @@ export default function ConsultancyHome() {
         <div className="flex flex-col gap-10">
           <div>
             <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
-              Pricing
+              {pricing.eyebrow}
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-              Consulting Services
+              {pricing.title}
             </h2>
             <p className="mt-3 max-w-2xl text-sm text-foreground/60">
-              Three focused ways to work together, designed for clarity and
-              momentum.
+              {pricing.subtitle}
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
-            {(
-              [
-                {
-                  key: "initial",
-                  title: "Initial Consultation",
-                  oneTimeDuration: "over a week",
-                  description:
-                    "Initial information gathering, attributes digging and objectives setting session. This session will be done sync and asyncly within a week of the order time. Prerequisite for all other services.",
-                  cta: "Book initial session",
-                  href: "https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04",
-                  stats: serviceStats.initial,
-                },
-                {
-                  key: "subscription",
-                  title: "Insight Subscription",
-                  oneTimeDuration: "month",
-                  description: "Ongoing customized insight delivery.",
-                  cta: "Start subscription",
-                  href: null,
-                  stats: serviceStats.subscription,
-                },
-                {
-                  key: "tenMinute",
-                  title: "11.11-Minute Session",
-                  oneTimeDuration: "11.11 minutes",
-                  description: "Focused answers in a short call.",
-                  cta: "Book 11.11 minutes",
-                  href: null,
-                  stats: serviceStats.tenMinute,
-                },
-              ] as Array<{
-                key: ServiceKey;
-                title: string;
-                oneTimeDuration?: string;
-                description: string;
-                cta: string;
-                href: string | null;
-                stats: { paid: number | null; completed: number | null };
-              }>
-            ).map((item) => {
+            {pricing.services.map((service) => {
+              const item = {
+                ...service,
+                stats: serviceStats[service.key],
+              };
               const paidTarget =
                 item.key === "initial"
                   ? 11
@@ -313,7 +251,7 @@ export default function ConsultancyHome() {
                             : "cursor-not-allowed opacity-50 pointer-events-none shadow-none"
                         }`}
                       >
-                        {item.href ? item.cta : "Init' Session Required"}
+                        {item.href ? item.ctaLabel : "Init' Session Required"}
                       </a>
                     </div>
                   </div>
@@ -346,19 +284,18 @@ export default function ConsultancyHome() {
         <div className="flex flex-col gap-10">
           <div>
             <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
-              Testimony
+              {testimonials.eyebrow}
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
-              Recommendations
+              {testimonials.title}
             </h2>
             <p className="mt-3 max-w-2xl text-sm text-foreground/60">
-              Selected recommendations from LinkedIn, presented as concise
-              endorsements.
+              {testimonials.subtitle}
             </p>
           </div>
-          {recommendations.length ? (
+          {testimonials.recommendations.length ? (
             <div className="grid gap-6 md:grid-cols-2">
-              {recommendations.map((recommendation) => (
+              {testimonials.recommendations.map((recommendation) => (
                 <article
                   key={`${recommendation.author}-${recommendation.role}`}
                   className="flex h-full flex-col rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/85 via-background/70 to-background/45 p-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl"
@@ -447,15 +384,15 @@ export default function ConsultancyHome() {
           ) : (
             <div className="rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/85 via-background/70 to-background/45 p-8 text-center shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
               <p className="text-sm text-foreground/70">
-                No public LinkedIn recommendations are visible yet.
+                {testimonials.emptyState}
               </p>
               <a
-                href={LINKEDIN_PROFILE_URL}
+                href={testimonials.linkedInProfileUrl}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
               >
-                View LinkedIn Profile
+                {testimonials.linkedInFallbackCtaLabel}
               </a>
             </div>
           )}
@@ -469,13 +406,13 @@ export default function ConsultancyHome() {
           <div className="flex flex-col gap-3">
             <div className="rounded-3xl border border-foreground/10 bg-gradient-to-br from-background/80 via-background/60 to-background/40 px-6 py-6 shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl">
               <p className="text-[10px] uppercase tracking-[0.4em] text-foreground/50">
-                Contact
+                {contact.eyebrow}
               </p>
               <h2 className="mt-3 text-3xl font-semibold tracking-tight md:text-4xl">
-                Let&apos;s talk.
+                {contact.title}
               </h2>
               <p className="mt-3 text-sm text-foreground/60">
-                Choose your preferred path and we&apos;ll take it from there.
+                {contact.subtitle}
               </p>
             </div>
           </div>
@@ -486,13 +423,13 @@ export default function ConsultancyHome() {
                 className="absolute -left-8 top-1/2 h-px w-8 -translate-y-1/2 bg-foreground/20"
               />
               <span className="text-sm uppercase tracking-[0.25em] text-foreground/50">
-                Ready to chat?
+                {contact.readyLabel}
               </span>
               <a
-                href="https://pay.wokki.com/b/9B6cN6gszgxxbqV5ZK3Je04"
+                href={contact.bookInitialSessionHref}
                 className="inline-flex items-center justify-center rounded-full border border-foreground/20 bg-background/70 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/80 shadow-[0_0_18px_rgba(255,95,64,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent hover:shadow-[0_0_32px_rgba(255,95,64,0.45)]"
               >
-                Book initial session
+                {contact.bookInitialSessionLabel}
               </a>
             </div>
             <div className="relative flex flex-wrap items-center gap-4 rounded-3xl border border-foreground/10 bg-background/60 px-5 py-4 shadow-[0_10px_30px_rgba(0,0,0,0.12)] backdrop-blur">
@@ -501,13 +438,13 @@ export default function ConsultancyHome() {
                 className="absolute -left-8 top-1/2 h-px w-8 -translate-y-1/2 bg-foreground/20"
               />
               <span className="text-sm uppercase tracking-[0.25em] text-foreground/50">
-                Prefer email?
+                {contact.preferEmailLabel}
               </span>
               <a
                 href={consultancyInitialSessionEmail}
                 className="inline-flex items-center justify-center rounded-full border border-foreground/15 bg-background/60 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/70 transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:text-accent"
               >
-                Email sales
+                {contact.emailSalesLabel}
               </a>
             </div>
           </div>
