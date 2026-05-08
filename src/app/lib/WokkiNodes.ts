@@ -1,3 +1,15 @@
+import { NANA_WOKKI, nanaWokki, type NanaWokki } from "./NanaWokkiNodes";
+
+export { NANA_WOKKI, nanaWokki } from "./NanaWokkiNodes";
+export type {
+  NanaWokki,
+  NanaSong,
+  NanaSongBadge,
+  NanaCategory,
+  NanaAboutBullet,
+  NanaLink,
+} from "./NanaWokkiNodes";
+
 export type HeroTitle = {
   title: string;
   note: string;
@@ -273,6 +285,7 @@ export type Zen = {
   [WOKKI_DOT_COM]: WokkiCom;
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
   [MCN_WOKKI]: MCNWokki;
+  [NANA_WOKKI]: NanaWokki;
 };
 
 export const wokkiCom: WokkiCom = {
@@ -805,4 +818,5 @@ export const Zen: Zen = {
   [WOKKI_DOT_COM]: wokkiCom,
   [CONSULTANCY_WOKKI]: consultancyWokki,
   [MCN_WOKKI]: mcnWokki,
+  [NANA_WOKKI]: nanaWokki,
 };
