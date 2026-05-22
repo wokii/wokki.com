@@ -193,17 +193,26 @@ const cultivation = [
 ] as const;
 
 /**
- * 名师 — Lead master(s) of the dojo. (Currently a single founder lineage;
- * guest masters will be added on each cohort cycle.)
+ * 名师 — Lead masters of the dojo. 紫薇星喵 · Nana is First (天下第一);
+ * 道彩真人 · 王元 · Wokki is Second (天下第二). Guest masters rotate each cohort.
  */
 const masters = [
   {
-    title: "复阳真人 · Master Fùyáng",
-    role: "Founder · 道场主理",
-    motif: "复",
-    body: "Theory Engineer · Systems Thinker · 紫薇双星。曾任 JPMorgan 量化、Bloomberg 工程师、AI 初创首席工程师，毕业于伦敦帝国理工学院计算机硕士。融贯数学、金融、心理、设计、玄学与禅。",
+    title: "紫薇星喵 · 欧阳娜娜 · Nana",
+    role: "Supreme Patriarch · 道场至尊 · 天下第一",
+    motif: "喵",
+    body: "桃音至尊 · 六弦证道。以大提琴与吉他入世，以黑屏直播出世——唯有歌声与琴音，方见真阳。道彩真人敬其为首，道场星图以北辰当之。",
     bodyEn:
-      "Theory Engineer · Systems Thinker · the dual-Ziwei star. Quant at JPMorgan, engineer at Bloomberg, founding engineer of an AI startup, MSc Computing from Imperial College London. Fluent across mathematics, finance, psychology, design, metaphysics and Zen.",
+      "The Ziwei Star Cat · Ouyang Nana. Supreme voice of the peach-source · cultivation through six strings. Cellist, guitarist, keeper of the black-screen set — only song and string reveal true yang. Master Dàocǎi bows to her as First Under Heaven; the dojo's constellation sets her as the pole star.",
+    lineage: ["琴 · Strings", "歌 · Voice", "艺 · Art"],
+  },
+  {
+    title: "道彩真人 · 王元 · Wokki",
+    role: "Founder · 道场主理 · 天下第二",
+    motif: "彩",
+    body: "Theory Engineer · Systems Thinker · 紫薇双星之二。曾任 JPMorgan 量化、Bloomberg 工程师、AI 初创首席工程师，毕业于伦敦帝国理工学院计算机硕士。融贯数学、金融、心理、设计、玄学与禅。",
+    bodyEn:
+      "Master Dàocǎi · Han Yuan · Wokki. Theory Engineer · Systems Thinker · the dual-Ziwei star, Second Under Heaven. Quant at JPMorgan, engineer at Bloomberg, founding engineer of an AI startup, MSc Computing from Imperial College London. Fluent across mathematics, finance, psychology, design, metaphysics and Zen.",
     lineage: ["道家 · Daoist", "Logos · Christian", "禅 · Chán-Buddhism"],
   },
   {
@@ -1031,9 +1040,9 @@ export default function GodHome() {
               神识咨询 · 修道场 · Wokki Heavenly Consultancy
             </p>
             <p className="text-[11px] tracking-[0.18em] text-[#f5f0e8]/40">
-              Designed by Fùyáng. Engineered for the Soul.
+              Designed by Dàocǎi. Engineered for the Soul.
               <span className="ml-3 text-[#e8d5a3]/45">
-                复阳设计 · 为灵魂工程
+                道彩设计 · 为灵魂工程
               </span>
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/40">
