@@ -8,7 +8,6 @@ type GodHeaderProps = {
 
 export default function GodHeader({ mainSiteUrl }: GodHeaderProps) {
   const base = mainSiteUrl.replace(/\/$/, "");
-  const consultancyUrl = `${base}/consultancy`;
   const mcnUrl = `${base}/mcn`;
 
   const handleTopClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
@@ -44,17 +43,6 @@ export default function GodHeader({ mainSiteUrl }: GodHeaderProps) {
                 </p>
                 <p className="text-[10px] uppercase tracking-[0.2em] text-[#c9a962]/80">
                   人间 · Main Site
-                </p>
-              </Link>
-              <Link
-                href={consultancyUrl}
-                className="group/item block w-full rounded-2xl border border-transparent px-3 py-2.5 transition-all duration-200 hover:border-[#e8d5a3]/12 hover:bg-[#f5f0e8]/[0.04]"
-              >
-                <p className="text-base font-medium text-[#f5f0e8]/85 transition-colors group-hover/item:text-[#f5f0e8]">
-                  Wokki Consultancy
-                </p>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-[#f5f0e8]/40">
-                  凡间法则 · Mortal Plane
                 </p>
               </Link>
               <Link

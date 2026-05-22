@@ -326,7 +326,7 @@ export default function GodHome() {
       <GodHeader mainSiteUrl={MAIN_SITE_URL} />
 
       {/* 牌位刘海 · The Serif altar tablet — viewport-pinned notch, autoplay once then tucks away */}
-      <GodAltarTV src="/god/lv.mp4" />
+      <GodAltarTV src="/god/lv-trimmed.mp4" />
 
       <div className="relative mx-auto w-full max-w-5xl px-6 md:px-10">
         {/* ─── HERO ─────────────────────────────────────────── */}
@@ -338,7 +338,7 @@ export default function GodHome() {
 
           <div className="god-fade-up relative z-10 flex flex-col items-center">
             <p className="text-[10px] uppercase tracking-[0.5em] text-[#c9a962]/80">
-              神识咨询 · Wokki Heavenly Consultancy
+              神识·修道场 · The Wokki Cultivation Dojo
             </p>
 
             <h1 className="mt-7 text-4xl font-normal leading-[1.05] tracking-[0.08em] text-[#f5f0e8] md:text-6xl">
@@ -382,16 +382,15 @@ export default function GodHome() {
             </figure>
 
             <p className="god-fade-up god-fade-up-delay-2 mt-10 max-w-2xl text-base leading-relaxed text-[#f5f0e8]/68 md:text-lg">
-              我们不是一家咨询公司——我们是一座
+              这里是一座
               <span className="text-[#e8d5a3]">桃源修道场</span>。
               <br className="hidden md:block" />
               名师指点，同修结伴；六个月一届，十二人一批。
             </p>
             <p className="god-fade-up god-fade-up-delay-2 mt-3 max-w-2xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
-              We are not a consultancy — we are a{" "}
-              <span className="text-[#f5b8c8]/85">peach-source dojo</span>: the
-              YC of becoming-immortal. Twelve disciples per cohort. Six months
-              from sealing to ascension. Lifetime fellowship after that.
+              A <span className="text-[#f5b8c8]/85">peach-source dojo</span> —
+              the YC of becoming-immortal. Twelve disciples per cohort. Six
+              months from sealing to ascension. Lifetime fellowship after that.
             </p>
 
             <div className="god-fade-up god-fade-up-delay-3 mt-12 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
@@ -550,65 +549,87 @@ export default function GodHome() {
             {elements.map((el, i) => (
               <article
                 key={el.char}
-                className={`group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                className={`group relative flex h-[30rem] flex-col overflow-hidden rounded-[1.25rem] border bg-gradient-to-b from-[#1a140e]/85 via-[#13110b]/70 to-[#0a0908]/55 px-3 py-5 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 md:h-[34rem] lg:h-[36rem] ${
                   i === 2 ? "lg:col-span-1 lg:translate-y-2" : ""
                 }`}
                 style={{
                   borderColor: `${el.color}28`,
                 }}
               >
+                {/* faint bamboo grain — vertical seam lines */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-3 -top-4 text-[8rem] font-light leading-none transition-opacity duration-300 group-hover:opacity-[0.18]"
+                  className="pointer-events-none absolute inset-y-3 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#c9a962]/10 to-transparent"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-6 left-2 w-px bg-gradient-to-b from-transparent via-[#c9a962]/[0.06] to-transparent"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-6 right-2 w-px bg-gradient-to-b from-transparent via-[#c9a962]/[0.06] to-transparent"
+                />
+
+                {/* huge watermark element character, kept horizontal */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-4 -top-6 text-[7.5rem] font-light leading-none transition-opacity duration-300 group-hover:opacity-[0.18]"
                   style={{ color: el.color, opacity: 0.07 }}
                 >
                   {el.char}
                 </span>
-                <div className="relative">
-                  <div className="flex items-baseline justify-between gap-3">
-                    <span
-                      className="text-3xl font-light"
-                      style={{ color: el.color, letterSpacing: "0.04em" }}
-                    >
-                      {el.char}
-                    </span>
-                    <span
-                      className="text-[10px] uppercase tracking-[0.28em]"
-                      style={{ color: `${el.color}cc` }}
-                    >
-                      {el.pinyin} · {el.en}
-                    </span>
-                  </div>
-                  <div
-                    className="mt-3 h-px w-full"
-                    style={{
-                      background: `linear-gradient(to right, ${el.color}66, transparent)`,
-                    }}
-                  />
-                  <dl className="mt-4 space-y-1.5 text-[10px] uppercase tracking-[0.18em] text-[#f5f0e8]/50">
-                    <div className="flex items-center justify-between gap-3">
-                      <dt className="text-[#f5f0e8]/35">方位</dt>
-                      <dd>{el.direction}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <dt className="text-[#f5f0e8]/35">季节</dt>
-                      <dd>{el.season}</dd>
-                    </div>
-                    <div className="flex items-center justify-between gap-3">
-                      <dt className="text-[#f5f0e8]/35">德</dt>
-                      <dd>{el.virtue}</dd>
-                    </div>
-                  </dl>
+
+                {/* 竹简正文 — vertical-rl, right-to-left columns */}
+                <div
+                  className="relative flex-1 overflow-hidden py-1"
+                  style={{
+                    writingMode: "vertical-rl",
+                    textOrientation: "mixed",
+                  }}
+                >
+                  {/* Column 1 (rightmost, read first): element seal */}
                   <p
-                    className="mt-5 text-[11px] font-semibold uppercase tracking-[0.28em]"
+                    className="m-0 text-4xl font-light leading-[1.05]"
+                    style={{
+                      color: el.color,
+                      letterSpacing: "0.12em",
+                    }}
+                  >
+                    {el.char}
+                  </p>
+                  <p
+                    className="ml-1 mt-0 text-[9px] uppercase tracking-[0.32em]"
+                    style={{ color: `${el.color}cc` }}
+                  >
+                    {el.pinyin} · {el.en}
+                  </p>
+
+                  {/* Column 2: 方位 · 季节 · 德 */}
+                  <p className="ml-4 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
+                    方位 · {el.direction}
+                  </p>
+                  <p className="ml-1 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
+                    季节 · {el.season}
+                  </p>
+                  <p className="ml-1 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
+                    德 · {el.virtue}
+                  </p>
+
+                  {/* Column 3: dimension (signature label) */}
+                  <p
+                    className="ml-4 text-[12px] font-semibold tracking-[0.28em]"
                     style={{ color: el.color }}
                   >
                     {el.dimension}
                   </p>
-                  <p className="mt-3 text-[12.5px] leading-relaxed text-[#f5f0e8]/65">
+
+                  {/* Column 4: body Chinese — the main verse */}
+                  <p className="ml-3 text-[12.5px] leading-[2.05] text-[#f5f0e8]/68">
                     {el.body}
                   </p>
-                  <p className="mt-2 text-[11px] leading-relaxed text-[#f5f0e8]/38">
+
+                  {/* Column 5 (leftmost): body English, rotated naturally */}
+                  <p className="ml-3 text-[10px] leading-[2.05] tracking-wide text-[#f5f0e8]/38">
                     {el.bodyEn}
                   </p>
                 </div>
@@ -1020,7 +1041,7 @@ export default function GodHome() {
                     Direct transmission · Email
                   </p>
                   <p className="mt-2 text-base font-medium text-[#f5f0e8]/85 md:text-lg">
-                    wokkiacross@gmail.com
+                    self@wokki.com
                   </p>
                 </div>
                 <span
@@ -1041,7 +1062,7 @@ export default function GodHome() {
               <GodPeachBlossom color="#f5b8c8" opacity={0.85} />
             </div>
             <p className="text-[10px] uppercase tracking-[0.42em] text-[#e8d5a3]/55">
-              神识咨询 · 修道场 · Wokki Heavenly Consultancy
+              神识·修道场 · The Wokki Cultivation Dojo
             </p>
             <p className="text-[11px] tracking-[0.18em] text-[#f5f0e8]/40">
               Designed by Dàocǎi. Engineered for the Soul.
@@ -1055,15 +1076,6 @@ export default function GodHome() {
                 className="transition-colors hover:text-[#e8d5a3]"
               >
                 Wokki.com
-              </Link>
-              <span aria-hidden className="text-[#e8d5a3]/20">
-                ·
-              </span>
-              <Link
-                href={consultancyUrl}
-                className="transition-colors hover:text-[#e8d5a3]"
-              >
-                Wokki Consultancy
               </Link>
               <span aria-hidden className="text-[#e8d5a3]/20">
                 ·
