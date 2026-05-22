@@ -3,6 +3,7 @@ import {
   consultancyInitialSessionEmail,
   WOKKI_DOT_COM,
 } from "../lib/WokkiNodes";
+import GodAltarTV from "./god-altar-tv";
 import GodCultivationPath from "./god-cultivation-path";
 import GodFiveElements from "./god-five-elements";
 import GodHeader from "./god-header";
@@ -323,6 +324,9 @@ export default function GodHome() {
       <GodPetals className="absolute inset-0 h-full" />
 
       <GodHeader mainSiteUrl={MAIN_SITE_URL} />
+
+      {/* 牌位刘海 · The Serif altar tablet — viewport-pinned notch, autoplay once then tucks away */}
+      <GodAltarTV src="/god/lv.mp4" />
 
       <div className="relative mx-auto w-full max-w-5xl px-6 md:px-10">
         {/* ─── HERO ─────────────────────────────────────────── */}
