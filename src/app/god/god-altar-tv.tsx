@@ -3,11 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * 修道场 · 牌位 / Samsung The Serif / iPhone Notch
+ * 修道场 · 牌位 / Samsung The Serif TV
  * --------------------------------------------------
- * A small video "tablet" hanging from the top of the hero section.
- * Plays once on mount (muted, so autoplay is reliably allowed),
- * then fades and tucks itself away. Visitors can unmute mid-play.
+ * A small video "tablet" pinned to the right side of the viewport.
+ * Tries to autoplay with sound on first; if the browser blocks
+ * unmuted autoplay, it falls back to a muted play and shows a
+ * discreet unmute button. While sound is on, the mute button glows
+ * prominently so the visitor can silence it in one tap.
+ * After the video ends, the tablet slides off to the right.
  */
 type GodAltarTVProps = {
   /** Public path to the video (mp4 / H.264 recommended for cross-browser). */
@@ -17,17 +20,26 @@ type GodAltarTVProps = {
 export default function GodAltarTV({ src }: GodAltarTVProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [visible, setVisible] = useState(true);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    v.muted = true;
-    const playPromise = v.play();
-    if (playPromise && typeof playPromise.catch === "function") {
-      playPromise.catch(() => {
-        // Autoplay was blocked — let the visitor tap the tablet to start.
+    // Try with sound first; if the browser blocks unmuted autoplay,
+    // fall back to muted playback (visitor can tap to re-enable sound).
+    v.muted = false;
+    const tryUnmuted = v.play();
+    if (tryUnmuted && typeof tryUnmuted.catch === "function") {
+      tryUnmuted.catch(() => {
+        v.muted = true;
+        setMuted(true);
+        const retry = v.play();
+        if (retry && typeof retry.catch === "function") {
+          retry.catch(() => {
+            // Even muted autoplay was blocked — wait for a tap.
+          });
+        }
       });
     }
   }, []);
@@ -84,7 +96,7 @@ export default function GodAltarTV({ src }: GodAltarTVProps) {
               ref={videoRef}
               src={src}
               autoPlay
-              muted
+              muted={muted}
               playsInline
               preload="auto"
               onEnded={handleEnded}
@@ -111,7 +123,7 @@ export default function GodAltarTV({ src }: GodAltarTVProps) {
               </div>
             ) : null}
 
-            {/* Sound toggle — small TV button on the bezel */}
+            {/* Sound toggle — discreet when muted, big & glowing when sound is on */}
             <button
               type="button"
               onClick={(e) => {
@@ -119,8 +131,19 @@ export default function GodAltarTV({ src }: GodAltarTVProps) {
                 toggleMute();
               }}
               aria-label={muted ? "Unmute video" : "Mute video"}
-              className="absolute right-2 top-2 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#f5f0e8]/25 bg-black/55 text-[11px] leading-none text-[#f5f0e8]/85 backdrop-blur-md transition hover:border-[#e8d5a3]/65 hover:text-[#e8d5a3]"
+              className={`absolute right-2 top-2 inline-flex items-center justify-center rounded-full backdrop-blur-md transition-all duration-500 ease-out ${
+                muted
+                  ? "h-6 w-6 border border-[#f5f0e8]/25 bg-black/55 text-[#f5f0e8]/85 hover:border-[#e8d5a3]/65 hover:text-[#e8d5a3]"
+                  : "h-9 w-9 border border-[#e8d5a3]/70 bg-[#1a1208]/85 text-[#fff5d7] shadow-[0_0_24px_rgba(232,213,163,0.55)] ring-2 ring-[#e8d5a3]/35 hover:border-[#fff5d7] hover:text-white hover:shadow-[0_0_36px_rgba(232,213,163,0.75)]"
+              }`}
             >
+              {!muted ? (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-1 animate-pulse rounded-full bg-[#e8d5a3]/25 blur-md"
+                />
+              ) : null}
+
               {muted ? (
                 <svg
                   width="11"
@@ -139,17 +162,18 @@ export default function GodAltarTV({ src }: GodAltarTVProps) {
                 </svg>
               ) : (
                 <svg
-                  width="11"
-                  height="11"
+                  width="16"
+                  height="16"
                   viewBox="0 0 16 16"
                   fill="none"
                   aria-hidden
+                  className="relative"
                 >
                   <path d="M3 6h2.5L9 3v10L5.5 10H3V6z" fill="currentColor" />
                   <path
-                    d="M11.5 5.5c1 1 1 4 0 5M13.5 4c1.8 1.8 1.8 6.2 0 8"
+                    d="M11.4 5.4c1.2 1.2 1.2 4 0 5.2M13.6 3.6c2.1 2.1 2.1 6.7 0 8.8"
                     stroke="currentColor"
-                    strokeWidth="1.2"
+                    strokeWidth="1.3"
                     strokeLinecap="round"
                     fill="none"
                   />
