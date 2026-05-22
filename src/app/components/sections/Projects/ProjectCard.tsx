@@ -155,7 +155,7 @@ export default function ProjectCard({
           </div>
         </div>
       ) : (
-        <div className="relative h-full rounded-[2rem] overflow-hidden border border-foreground/10 bg-background/70 shadow-sm transition-shadow duration-300 hover:shadow-md">
+        <div className="relative h-full rounded-[2rem] overflow-hidden border border-foreground/10 bg-background/55 shadow-[0_24px_60px_-32px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-300 hover:border-foreground/25 hover:shadow-[0_30px_70px_-30px_rgba(0,0,0,0.45)]">
           {bg && (
             <div className="pointer-events-none absolute -bottom-10 -right-10">
               <svg
@@ -189,27 +189,37 @@ export default function ProjectCard({
             }}
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">
-                Project
+              <p className="text-[10px] uppercase tracking-[0.32em] text-foreground/55">
+                Project · 项
               </p>
+              {cardSuit && cardRank && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-foreground/15 bg-background/60 px-2 py-0.5 text-[10px] font-semibold text-foreground/65 backdrop-blur">
+                  <span>{cardRank}</span>
+                  <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
+                    {cardSuit}
+                  </span>
+                </span>
+              )}
             </div>
 
             <div>
-              <h3 className="text-2xl md:text-3xl font-semibold leading-tight">
+              <h3 className="text-2xl md:text-3xl font-semibold leading-tight tracking-tight">
                 {title}
               </h3>
-              <p className="mt-3 text-sm text-foreground/60">{shortIntro}</p>
+              <p className="mt-3 text-sm uppercase tracking-[0.2em] text-foreground/55">
+                {shortIntro}
+              </p>
             </div>
 
-            <div className="flex items-center gap-2 text-sm text-foreground/50">
-              <span className="h-px w-10 bg-foreground/20" />
-              <span>Wokki Projects</span>
+            <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.28em] text-foreground/50">
+              <span className="h-px w-10 bg-foreground/25" />
+              <span>Wokki Projects · 翻面看</span>
             </div>
           </div>
 
           {/* Card back */}
           <div
-            className={`absolute inset-0 rounded-[2rem] p-6 md:p-7 flex flex-col gap-4 transition-opacity duration-300 bg-background/80 ${
+            className={`absolute inset-0 rounded-[2rem] p-6 md:p-7 flex flex-col gap-4 transition-opacity duration-300 bg-background/80 backdrop-blur-2xl ${
               flipped ? "opacity-100" : "opacity-0 pointer-events-none"
             }`}
             onClick={() => onToggle(id)}
@@ -223,11 +233,11 @@ export default function ProjectCard({
             }}
           >
             <div className="flex items-center justify-between">
-              <p className="text-xs uppercase tracking-[0.3em] text-foreground/50">
-                Overview
+              <p className="text-[10px] uppercase tracking-[0.32em] text-foreground/55">
+                Overview · 简介
               </p>
               {cardSuit && cardRank && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-foreground/15 px-2.5 py-1 text-xs font-semibold text-foreground/70">
+                <span className="inline-flex items-center gap-1 rounded-full border border-foreground/15 bg-background/60 px-2.5 py-1 text-xs font-semibold text-foreground/70">
                   <span>{cardRank}</span>
                   <span className={isRedSuit(cardSuit) ? RED_SUIT_CLASS : ""}>
                     {cardSuit}
@@ -237,8 +247,12 @@ export default function ProjectCard({
             </div>
 
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold">{title}</h3>
-              <p className="mt-3 text-sm text-foreground/70">{description}</p>
+              <h3 className="text-xl md:text-2xl font-semibold tracking-tight">
+                {title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-foreground/70">
+                {description}
+              </p>
             </div>
 
             <div className="mt-auto flex items-center justify-end text-sm">
@@ -247,14 +261,16 @@ export default function ProjectCard({
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-accent hover:underline"
+                  className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/[0.08] px-4 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-accent transition-all duration-300 hover:-translate-y-0.5 hover:border-accent hover:bg-accent/[0.16] hover:shadow-[0_0_22px_color-mix(in_srgb,var(--accent)_30%,transparent)]"
                   onClick={(event) => event.stopPropagation()}
                 >
-                  View project
+                  View Project
                   <span aria-hidden>↗</span>
                 </a>
               ) : (
-                <span className="text-foreground/40">Private</span>
+                <span className="text-[10px] uppercase tracking-[0.28em] text-foreground/40">
+                  Private · 私
+                </span>
               )}
             </div>
           </div>
