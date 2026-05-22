@@ -340,13 +340,13 @@ export default function Scroll() {
       containerClassName="flex h-full flex-col"
     >
       <SectionTitle
-        className="relative top-4"
+        eyebrow={<span>Scroll · 卷 · The Living Timeline</span>}
         subtitle="(A.K.A. Timeline, Timeseries, Chart, Graph, etc.)"
       >
         SCROLL
       </SectionTitle>
 
-      <div className="mt-10 rounded-[2.75rem] border border-foreground/10 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--background)_95%,var(--accent)_5%)_0%,color-mix(in_srgb,var(--background)_90%,transparent)_70%)] p-6 md:p-8 shadow-[0_30px_80px_-60px_rgba(0,0,0,0.55)] flex-1 min-h-[60vh]">
+      <div className="relative mt-6 flex-1 min-h-[60vh] rounded-[2.75rem] border border-foreground/10 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--background)_95%,var(--accent)_5%)_0%,color-mix(in_srgb,var(--background)_90%,transparent)_70%)] p-4 md:p-8 shadow-[0_30px_80px_-60px_rgba(0,0,0,0.55)] backdrop-blur-xl">
         <div className="grid h-full gap-10 md:grid-cols-[240px_1fr]">
           <div className="flex flex-col gap-6">
             <div>

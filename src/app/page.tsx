@@ -11,16 +11,20 @@ import About from "./components/sections/About";
 
 export default function Home() {
   return (
-    <main className="min-h-screen">
+    <main className="relative min-h-screen overflow-x-clip">
+      {/* 氛围 — calm ambient wash, theme-aware. */}
+      <div className="wokki-ambient" aria-hidden />
       <Header />
       <ThemeToggle />
-      <Hero />
-      <Projects />
-      <Curation />
-      <Writing />
-      <Scroll />
-      <About />
-      <Footer />
+      <div className="relative z-10">
+        <Hero />
+        <Projects />
+        <Curation />
+        <Writing />
+        <Scroll />
+        <About />
+        <Footer />
+      </div>
     </main>
   );
 }
