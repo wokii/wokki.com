@@ -2,26 +2,26 @@ import type { Metadata } from "next";
 import GodHome from "./god-home";
 
 export const metadata: Metadata = {
-  title: "神识咨询 · Wokki Heavenly Consultancy",
+  title: "神识·修道场 · The Wokki Cultivation Dojo",
   description:
-    "解码天意。重构人生。Decoding the Logos. Architecting the Destiny. — 以第一性原理打通科技、心理与宇宙法则的底层逻辑。",
+    "神仙本是凡人变，只怕凡人之不坚定。A peach-source cultivation dojo — twelve disciples per cohort, six months from sealing to ascension, lifetime fellowship after. The YC of becoming-immortal.",
   openGraph: {
     type: "website",
-    title: "神识咨询 · Wokki Heavenly Consultancy",
+    title: "神识·修道场 · The Wokki Cultivation Dojo",
     description:
-      "Decoding the Logos. Architecting the Destiny. — A unified taxonomy of Dao, Logos, and Buddha-mind, engineered as a Life Operating System.",
+      "「神仙本是凡人变，只怕凡人之不坚定。」名师指点，同修结伴；六个月一届，十二人一批。A YC for becoming-immortal — cohorts of twelve, six-month inner-alchemy cycle.",
     images: [
       {
         url: "/w.png",
         width: 1600,
         height: 400,
-        alt: "Wokki (W) · 神识咨询",
+        alt: "Wokki · 修道场",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "神识咨询 · Wokki Heavenly Consultancy",
+    title: "神识·修道场 · The Wokki Cultivation Dojo",
     images: ["/w.png"],
   },
 };

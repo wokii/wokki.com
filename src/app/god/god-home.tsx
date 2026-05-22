@@ -3,8 +3,11 @@ import {
   consultancyInitialSessionEmail,
   WOKKI_DOT_COM,
 } from "../lib/WokkiNodes";
+import GodCultivationPath from "./god-cultivation-path";
 import GodFiveElements from "./god-five-elements";
 import GodHeader from "./god-header";
+import GodPeachBlossom from "./god-peach-blossom";
+import GodPetals from "./god-petals";
 import GodStarWheel from "./god-star-wheel";
 import GodTrinity from "./god-trinity";
 
@@ -39,7 +42,7 @@ const pillars = [
     glyph: "觉",
     title: "佛 · The Consciousness",
     subtitle: "意识的终极觉醒 · Final awakening of awareness",
-    body: "见相非相，即见如来。结合心理学与「神识」的觉醒，剥离外在的幻象 (Meta-illusion)。每一次咨询，都是一次意识的迭代，助你在纷扰的世俗中完成内心的「顿悟」，重获绝对的清明。",
+    body: "见相非相，即见如来。结合心理学与「神识」的觉醒，剥离外在的幻象 (Meta-illusion)。每一次修习，都是一次意识的迭代，助你在纷扰的世俗中完成内心的「顿悟」，重获绝对的清明。",
     english:
       "“See past form, and behold the Tathāgata.” Through psychology and the awakening of 神识 (divine consciousness), we strip away the meta-illusion — each session is an iteration of awareness toward absolute clarity.",
   },
@@ -118,59 +121,172 @@ const elements = [
 ] as const;
 
 /**
- * 咨询方法论 — three-stage operating procedure.
+ * 五阶修行 · The Cultivation Path — five canonical stages of 内丹 (inner-alchemy)
+ * cultivation, reframed as a YC-style operational journey.
  */
-const approach = [
+const cultivation = [
   {
-    index: "01",
-    badge: "全局扫描",
-    title: "System Scan",
-    body: "通过紫微斗数与四柱八字，精准刻画你的原生配置与时间周期。Native configuration & temporal cycles, profiled with the precision of an astronomical chart.",
+    stage: "炼气",
+    pinyin: "Liàn Qì",
+    en: "Refining Qi",
+    color: "#5fa37a",
+    duration: "Week 01 → 04",
+    cohortLabel: "Onboarding · 入定",
+    yc: "The Application Read-Through",
+    title: "认识你自己 — 收摄气息，澄清意图。",
+    body: "扫描原生配置：紫微斗数、四柱八字、性格地图、当下情境。建立每日修习节奏，与同期道友互相照见——找到自己当下真实的「气」。",
+    bodyEn:
+      "Read your native chart. Establish the daily cadence. Meet your cohort. The first month is about clearing static and discovering what energy you actually carry — not what you imagine you carry.",
   },
   {
-    index: "02",
-    badge: "意识对齐",
-    title: "Alignment",
-    body: "结合佛家禅定与心理分析，清理认知冗余，实现自我觉醒。Chan-stillness meets cognitive analysis — cognitive overhead pruned, the self brought online.",
+    stage: "筑基",
+    pinyin: "Zhù Jī",
+    en: "Foundation",
+    color: "#c9a962",
+    duration: "Week 05 → 12",
+    cohortLabel: "Sprint · 共修",
+    yc: "Build Phase",
+    title: "搭建道基 — 把洞见沉淀为系统。",
+    body: "把模糊的觉知翻译成可执行的人生 OS：决策框架、能量管理、关系拓扑、财务流。每周名师答疑，每周同修复盘。基础不牢，地动山摇。",
+    bodyEn:
+      "Translate fuzzy awareness into an executable life-OS: decision frameworks, energy management, relational topology, capital flow. Weekly master Q&A, weekly cohort retros. Without foundation, every gain leaks back out.",
   },
   {
-    index: "03",
-    badge: "架构重组",
-    title: "Reconstruction",
-    body: "运用第一性原理与系统思维，为你重新编写事业、财富与关系的发展路径。Career, capital and relationship — rewritten from first principles into a coherent operating path.",
+    stage: "金丹",
+    pinyin: "Jīn Dān",
+    en: "Golden Core",
+    color: "#d9d2c0",
+    duration: "Month 04 → 05",
+    cohortLabel: "Crystallisation · 凝结",
+    yc: "Demo-Day Build-Up",
+    title: "结成金丹 — 把独特性凝固成签名。",
+    body: "找到你独一无二的「道号」——可以被外部世界识别、传播、信赖的核心标识。事业、作品、个人品牌——把你的天赋折叠成一颗会发光的金丹。",
+    bodyEn:
+      "Find your sovereign signal — the unique mark by which the outer world will recognise, transmit, and trust you. Whether business, body of work, or brand, the talent must be folded into a luminous core.",
+  },
+  {
+    stage: "元婴",
+    pinyin: "Yuán Yīng",
+    en: "Nascent Soul",
+    color: "#d9554e",
+    duration: "Month 06",
+    cohortLabel: "Demo · 出关",
+    yc: "Demo Day",
+    title: "出关大典 — 你的元婴正式现世。",
+    body: "在道场内对全体名师与同修发布你的「元婴」：新公司、新作品、新身份、新决定。从此你已是独立修行者，不再依附师门，但永远是道场之子。",
+    bodyEn:
+      "Demo day. You ship your nascent soul — a new venture, a new body of work, a new identity, a new decisive cut — to the masters and the cohort. You are no longer dependent on the school, yet forever a child of the school.",
+  },
+  {
+    stage: "飞升",
+    pinyin: "Fēi Shēng",
+    en: "Ascension",
+    color: "#f5b8c8",
+    duration: "Lifetime · 终身",
+    cohortLabel: "Alumni · 同门",
+    yc: "The Alumni Network",
+    title: "飞升为仙 — 加入同门星图。",
+    body: "结业即结缘。终身共修通道、季度雅集、跨期道友互助、未来批次的开示席位。星图越大，每一颗星越亮——这是真正的复利。",
+    bodyEn:
+      "Graduation is communion. A lifelong shared channel, quarterly gatherings, cross-cohort 道友 support, and a perpetual seat in future cohorts. The constellation only grows brighter — that is the only real compounding.",
   },
 ] as const;
 
 /**
- * 服务模块 — three offerings, three depths of engagement.
+ * 名师 — Lead master(s) of the dojo. (Currently a single founder lineage;
+ * guest masters will be added on each cohort cycle.)
+ */
+const masters = [
+  {
+    title: "复阳真人 · Master Fùyáng",
+    role: "Founder · 道场主理",
+    motif: "复",
+    body: "Theory Engineer · Systems Thinker · 紫薇双星。曾任 JPMorgan 量化、Bloomberg 工程师、AI 初创首席工程师，毕业于伦敦帝国理工学院计算机硕士。融贯数学、金融、心理、设计、玄学与禅。",
+    bodyEn:
+      "Theory Engineer · Systems Thinker · the dual-Ziwei star. Quant at JPMorgan, engineer at Bloomberg, founding engineer of an AI startup, MSc Computing from Imperial College London. Fluent across mathematics, finance, psychology, design, metaphysics and Zen.",
+    lineage: ["道家 · Daoist", "Logos · Christian", "禅 · Chán-Buddhism"],
+  },
+  {
+    title: "客座道友 · Guest Masters",
+    role: "Cohort guest faculty",
+    motif: "客",
+    body: "每一期道场会邀请 3–5 位领域内的「真传」客座道友——可能来自量化金融、行为科学、品牌叙事、创业实战、传统玄学等不同山门——确保每位同修都能与某一道相印证。",
+    bodyEn:
+      "Each cohort hosts 3–5 guest masters drawn from quant finance, behavioural science, brand-narrative, founder-mode operations, and classical metaphysics — so every disciple can find at least one lineage that resonates.",
+    lineage: ["量化 · Quant", "品牌 · Brand", "创业 · Founder"],
+  },
+] as const;
+
+/**
+ * 同修 — The cohort. Properties of the fellowship.
+ */
+const fellowship = [
+  {
+    metric: "12",
+    label: "Disciples · 同修名额",
+    sub: "每届严选 12 位，宁缺毋滥。Each cohort, twelve disciples — never more.",
+  },
+  {
+    metric: "180",
+    label: "Days · 共修周期",
+    sub: "六个月闭关至出关。Six months from sealing to ascension.",
+  },
+  {
+    metric: "∞",
+    label: "Lifetime · 同门终身",
+    sub: "出关后即永远同门。Graduation is the beginning, not the end.",
+  },
+] as const;
+
+/**
+ * 入道 — three offerings, three depths of engagement, reframed as
+ * cultivation tiers: 初心 (taster) → 同修 (full cohort) → 真传 (inner disciple).
  */
 const offerings = [
   {
-    label: "「顿悟」",
-    name: "The Awakening",
+    label: "「初心」",
+    name: "Initiation",
+    pinyin: "Chū Xīn",
+    cadence: "一次入定 · A single deep session",
+    ycLike: "≈ YC Office Hours, one-shot",
     description:
-      "针对人生十字路口的深度对谈。拨开迷雾，直击本质，触发认知层面的破局。",
+      "针对人生十字路口的深度对谈。一次入定，拨开迷雾，直击本质——决定要不要踏上修仙这条路。",
     descriptionEn:
-      "A single, deep dialogue at a crossroad. We cut through the fog, strike at essence, and trigger a cognitive break-through.",
-    motif: "一",
+      "A single, deep dialogue at a crossroad. One sitting, the fog parts, you decide whether to walk this path at all.",
+    motif: "初",
+    primary: false,
+    cta: "Inquire · 问道",
+    color: "#c9a962",
   },
   {
-    label: "「顺势」",
-    name: "The Flow",
+    label: "「同修」",
+    name: "The Cohort",
+    pinyin: "Tóng Xiū",
+    cadence: "六月共修 · Six-month batch",
+    ycLike: "≈ YC Batch (W26)",
     description:
-      "年度／周期运势运筹。不设限，不强求，依据你的命运节拍，定制顺应「道」的商业与生活决策。",
+      "完整六个月的道场之旅：每届 12 位同修，每周名师答疑，每月线下雅集，从「炼气」走到「出关」。修仙的人不是孤独地走，是和最好的同期一起走。",
     descriptionEn:
-      "Annual & cyclical strategic counsel — no force, no friction. Business and life decisions tuned to the metre of your destiny.",
-    motif: "二",
+      "The full six-month cohort: twelve disciples per batch, weekly master Q&A, monthly in-person 雅集, walking together from 炼气 to 出关. You don't ascend alone — you ascend with your batch.",
+    motif: "同",
+    primary: true,
+    cta: "Apply · 申请入门",
+    color: "#f5b8c8",
   },
   {
-    label: "「造物」",
-    name: "The Architect",
+    label: "「真传」",
+    name: "Inner Disciple",
+    pinyin: "Zhēn Chuán",
+    cadence: "一年陪跑 · Year-long lineage",
+    ycLike: "≈ YC continuity + 1-on-1",
     description:
-      "面向创业者与高阶个体的长期陪跑。将你的个人愿景与宇宙周期融合，打造属于你的「大一统」人生版图。",
+      "面向已有同修经验的高阶个体。一对一全年陪跑：每周私授，季度闭关，融贯你的事业、家庭、灵性于同一条线索之中。",
     descriptionEn:
-      "A long-form companionship for founders and high-agency individuals — your vision interwoven with cosmic cadence into a Universal-Unified life architecture.",
-    motif: "三",
+      "For high-agency individuals with prior cohort experience. A year of one-on-one transmission: weekly private sessions, quarterly retreats, your career, family and inner life woven into a single thread.",
+    motif: "真",
+    primary: false,
+    cta: "Lineage · 入室",
+    color: "#e8d5a3",
   },
 ] as const;
 
@@ -182,7 +298,7 @@ export default function GodHome() {
       className="relative min-h-screen overflow-hidden text-[#f5f0e8]"
       style={{
         background:
-          "radial-gradient(ellipse 90% 60% at 50% -8%, rgba(232,213,163,0.14) 0%, transparent 55%), radial-gradient(ellipse 65% 50% at 88% 70%, rgba(249,197,216,0.05) 0%, transparent 55%), radial-gradient(ellipse 55% 40% at 10% 88%, rgba(201,169,98,0.08) 0%, transparent 50%), #06050c",
+          "radial-gradient(ellipse 90% 60% at 50% -8%, rgba(232,213,163,0.14) 0%, transparent 55%), radial-gradient(ellipse 65% 50% at 88% 70%, rgba(245,184,200,0.06) 0%, transparent 55%), radial-gradient(ellipse 55% 40% at 10% 88%, rgba(201,169,98,0.08) 0%, transparent 50%), #06050c",
       }}
     >
       <div
@@ -190,9 +306,12 @@ export default function GodHome() {
         aria-hidden
       >
         <div className="absolute left-1/2 top-32 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-[#e8d5a3]/[0.07] blur-3xl" />
-        <div className="absolute -right-24 bottom-40 h-72 w-72 rounded-full bg-[#f9c5d8]/[0.05] blur-3xl" />
-        <div className="absolute -left-20 top-1/2 h-56 w-56 rounded-full bg-[#8cb4ff]/[0.05] blur-3xl" />
+        <div className="absolute -right-24 bottom-40 h-72 w-72 rounded-full bg-[#f5b8c8]/[0.05] blur-3xl" />
+        <div className="absolute -left-20 top-1/2 h-56 w-56 rounded-full bg-[#8cb4ff]/[0.04] blur-3xl" />
       </div>
+
+      {/* 桃花雨 — drifts across the full page */}
+      <GodPetals className="absolute inset-0 h-full" />
 
       <GodHeader mainSiteUrl={MAIN_SITE_URL} />
 
@@ -200,56 +319,79 @@ export default function GodHome() {
         {/* ─── HERO ─────────────────────────────────────────── */}
         <section className="relative flex min-h-screen flex-col items-center justify-center pb-24 pt-32 text-center">
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <GodStarWheel className="w-[36rem] max-w-[92vw] opacity-[0.45] md:w-[44rem]" />
+            <GodStarWheel className="w-[36rem] max-w-[92vw] opacity-[0.40] md:w-[44rem]" />
             <div className="pointer-events-none absolute inset-0 god-ripple" />
           </div>
 
           <div className="god-fade-up relative z-10 flex flex-col items-center">
             <p className="text-[10px] uppercase tracking-[0.5em] text-[#c9a962]/80">
-              Wokki Heavenly Consultancy
+              神识咨询 · Wokki Heavenly Consultancy
             </p>
 
-            <h1 className="mt-8 text-5xl font-normal leading-[1.05] tracking-[0.08em] text-[#f5f0e8] md:text-7xl">
-              神识咨询
+            <h1 className="mt-7 text-4xl font-normal leading-[1.05] tracking-[0.08em] text-[#f5f0e8] md:text-6xl">
+              修道场
             </h1>
             <p className="mt-3 text-[11px] uppercase tracking-[0.42em] text-[#e8d5a3]/65 md:text-xs">
-              Shén Shí · Divine Consciousness Consultancy
+              The Cultivation Dojo · A YC for Becoming-Immortal
             </p>
 
-            <div className="god-fade-up god-fade-up-delay-1 mt-12 flex items-center gap-5 text-2xl font-light tracking-[0.05em] text-[#e8d5a3] md:text-3xl">
-              <span>解码天意</span>
-              <span aria-hidden className="text-[#c9a962]/40">
-                ·
-              </span>
-              <span>重构人生</span>
-            </div>
-            <p className="god-fade-up god-fade-up-delay-1 mt-3 max-w-2xl text-sm uppercase tracking-[0.32em] text-[#f5f0e8]/55 md:text-[13px]">
-              Decoding the Logos · Architecting the Destiny
-            </p>
+            {/* The Founding Stele — central quote, the dojo's 道训 */}
+            <figure className="god-fade-up god-fade-up-delay-1 mt-12 max-w-2xl">
+              <div className="relative rounded-[2rem] border border-[#e8d5a3]/15 bg-gradient-to-b from-[#12101c]/80 via-[#0c0b14]/55 to-[#06050c]/70 px-8 py-10 shadow-[0_30px_90px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -left-2 -top-3 text-[5rem] font-light leading-none text-[#e8d5a3]/15"
+                >
+                  「
+                </span>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-2 -bottom-7 text-[5rem] font-light leading-none text-[#e8d5a3]/15"
+                >
+                  」
+                </span>
+                <blockquote className="relative">
+                  <p className="text-2xl font-light leading-relaxed tracking-[0.1em] text-[#f5f0e8] md:text-3xl">
+                    神仙本是凡人变，
+                    <br />
+                    只怕凡人之不坚定。
+                  </p>
+                  <p className="mt-4 text-[11px] uppercase tracking-[0.32em] text-[#e8d5a3]/65 md:text-xs">
+                    Immortals were once mortal —
+                    <br className="md:hidden" /> the only barrier is conviction.
+                  </p>
+                </blockquote>
+                <figcaption className="mt-6 border-t border-[#e8d5a3]/10 pt-4 text-right text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/40">
+                  道场训 · The Dojo&rsquo;s Stele
+                </figcaption>
+              </div>
+            </figure>
 
-            <p className="god-fade-up god-fade-up-delay-2 mt-10 max-w-2xl text-base leading-relaxed text-[#f5f0e8]/65 md:text-lg">
-              以第一性原理，打通科技、心理与宇宙法则的底层逻辑。
+            <p className="god-fade-up god-fade-up-delay-2 mt-10 max-w-2xl text-base leading-relaxed text-[#f5f0e8]/68 md:text-lg">
+              我们不是一家咨询公司——我们是一座
+              <span className="text-[#e8d5a3]">桃源修道场</span>。
+              <br className="hidden md:block" />
+              名师指点，同修结伴；六个月一届，十二人一批。
             </p>
-            <p className="god-fade-up god-fade-up-delay-2 mt-2 max-w-2xl text-sm leading-relaxed text-[#f5f0e8]/45">
-              这里没有期限与焦虑，只有顺势而为的「道」。
-              <span className="block opacity-70">
-                No deadlines. No friction. Only the Way that yields the
-                inevitable.
-              </span>
+            <p className="god-fade-up god-fade-up-delay-2 mt-3 max-w-2xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
+              We are not a consultancy — we are a{" "}
+              <span className="text-[#f5b8c8]/85">peach-source dojo</span>: the
+              YC of becoming-immortal. Twelve disciples per cohort. Six months
+              from sealing to ascension. Lifetime fellowship after that.
             </p>
 
             <div className="god-fade-up god-fade-up-delay-3 mt-12 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
               <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-full border border-[#c9a962]/45 bg-[#c9a962]/12 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#f5f0e8] shadow-[0_0_36px_rgba(201,169,98,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8d5a3]/65 hover:bg-[#c9a962]/22 hover:shadow-[0_0_56px_rgba(232,213,163,0.32)]"
+                href="#offerings"
+                className="inline-flex items-center justify-center rounded-full border border-[#f5b8c8]/55 bg-gradient-to-r from-[#c9a962]/15 to-[#f5b8c8]/15 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#f5f0e8] shadow-[0_0_40px_rgba(245,184,200,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f5b8c8]/75 hover:shadow-[0_0_60px_rgba(245,184,200,0.36)]"
               >
-                接入系统 · Initialize
+                申请入门 · Apply to the Cohort
               </a>
               <a
-                href="#philosophy"
+                href="#cultivation"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-[#f5f0e8]/15 px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#f5f0e8]/65 transition-colors hover:border-[#e8d5a3]/35 hover:text-[#e8d5a3]"
               >
-                Learn the Taxonomy
+                See the Path
                 <span aria-hidden className="text-[#e8d5a3]/60">
                   ↓
                 </span>
@@ -258,7 +400,7 @@ export default function GodHome() {
           </div>
         </section>
 
-        {/* ─── SECTION 1: UNIFIED PHILOSOPHY ────────────────── */}
+        {/* ─── PHILOSOPHY ──────────────────────────────────── */}
         <section
           id="philosophy"
           className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
@@ -266,7 +408,7 @@ export default function GodHome() {
           <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr] lg:items-center">
             <div>
               <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
-                天启 · The Unified Philosophy
+                天启 · The Core Teaching
               </p>
               <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
                 万物皆有代码，
@@ -277,13 +419,14 @@ export default function GodHome() {
                 Everything is code. 神识 is the algorithm beneath the algorithm.
               </p>
               <p className="mt-8 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/65 md:text-base">
-                我们将三大人类至高智慧体系，重构为现代人的「人生操作系统」(Life
-                Operating System)。
+                道场之上，三家心法并立、互为印证。我们将三大人类至高智慧体系，重构为现代修行者的「人生操作系统」(Life
+                Operating System)——既是哲学，也是工程。
               </p>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
                 Three apex traditions — Daoist cosmology, Christian Logos and
                 Buddhist consciousness — refactored into one coherent operating
-                system for the modern soul.
+                system for the modern cultivator. Philosophy and engineering at
+                once.
               </p>
             </div>
 
@@ -324,7 +467,7 @@ export default function GodHome() {
           </div>
         </section>
 
-        {/* ─── SECTION 1.5: FIVE ELEMENTS ───────────────────── */}
+        {/* ─── FIVE ELEMENTS ───────────────────────────────── */}
         <section
           id="wuxing"
           className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
@@ -352,13 +495,14 @@ export default function GodHome() {
                 <span className="font-medium" style={{ color: "#d9554e" }}>
                   {" 相克 "}
                 </span>
-                穿插而衡——这是宇宙最古老的反馈控制系统。
+                穿插而衡——这是宇宙最古老的反馈控制系统，也是道场内修习的核心心法。
               </p>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
                 If the Trinity defines the why, the Five Elements define the
                 how-of-flow. Wood, Fire, Earth, Metal and Water nourish along
                 the 相生 cycle and balance through the 相克 cycle — the oldest
-                feedback-control system in the cosmos.
+                feedback-control system in the cosmos, and the core 心法 of the
+                dojo.
               </p>
               <div className="mt-8 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.22em]">
                 {elements.map((el) => (
@@ -459,76 +603,246 @@ export default function GodHome() {
           </div>
         </section>
 
-        {/* ─── SECTION 2: APPROACH ──────────────────────────── */}
+        {/* ─── 修行 · THE CULTIVATION PATH ─────────────────── */}
         <section
-          id="approach"
+          id="cultivation"
           className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
         >
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:items-start">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
             <div>
               <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
-                法门 · The Approach
+                修行 · The Five-Stage Path
               </p>
               <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
-                从理论到现实的
+                从凡夫到神仙，
                 <br className="hidden md:block" />
-                降维打击。
+                只需五阶。
               </h2>
-              <p className="mt-5 max-w-md text-[13px] uppercase tracking-[0.18em] text-[#f5f0e8]/45 md:text-sm md:tracking-[0.1em] md:normal-case">
-                A higher-dimensional strike, deployed on lower-dimensional
-                reality.
+              <p className="mt-5 max-w-xl text-sm uppercase tracking-[0.18em] text-[#f5f0e8]/45 md:text-base md:tracking-[0.1em] md:normal-case">
+                Five canonical stages of inner-alchemy — restructured as a
+                six-month operational cohort.
               </p>
-              <p className="mt-8 max-w-md text-sm leading-relaxed text-[#f5f0e8]/65 md:text-base">
-                复阳 (Fùyáng)
-                创立神识咨询的初衷，在于打破「形而上」与「现实世界」的壁垒。我们不提供安慰剂，我们提供的是一套可执行的系统级解决方案。
+            </div>
+            <div className="text-sm leading-relaxed text-[#f5f0e8]/65 md:text-base">
+              <p>
+                如果 YC 把创业者从{" "}
+                <span className="text-[#e8d5a3]/85">application</span> 带到{" "}
+                <span className="text-[#e8d5a3]/85">demo day</span>，
+                我们则把修行者从「炼气」带到「飞升」——
+                同样是孵化器的结构，但行走的是修仙之路。
               </p>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
-                Fùyáng founded 神识咨询 to dissolve the barrier between the
-                metaphysical and the material. We do not dispense placebos. We
-                ship system-level solutions.
+              <p className="mt-3 text-[#f5f0e8]/45">
+                Where YC takes founders from application to demo day, we take
+                cultivators from 炼气 (Refining Qi) to 飞升 (Ascension) — same
+                incubator architecture, but the path is romance, not hustle.
+              </p>
+            </div>
+          </div>
+
+          {/* The path visualisation */}
+          <div className="mt-14 overflow-x-auto pb-2">
+            <GodCultivationPath className="min-w-[640px]" />
+          </div>
+
+          {/* Stage cards */}
+          <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-5">
+            {cultivation.map((stage, i) => (
+              <li key={stage.stage} className="list-none">
+                <article
+                  className={`group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                    i === 4 ? "lg:bg-gradient-to-b lg:from-[#1a1018]/85" : ""
+                  }`}
+                  style={{ borderColor: `${stage.color}30` }}
+                >
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -right-3 -top-4 text-[7rem] font-light leading-none transition-opacity duration-300 group-hover:opacity-[0.2]"
+                    style={{ color: stage.color, opacity: 0.08 }}
+                  >
+                    {stage.stage[0]}
+                  </span>
+                  <div className="relative">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span
+                        className="text-[10px] font-semibold uppercase tracking-[0.28em]"
+                        style={{ color: stage.color }}
+                      >
+                        0{i + 1}
+                      </span>
+                      <span className="text-[10px] uppercase tracking-[0.22em] text-[#f5f0e8]/45">
+                        {stage.duration}
+                      </span>
+                    </div>
+                    <h3
+                      className="mt-3 text-2xl font-light"
+                      style={{
+                        color: stage.color,
+                        letterSpacing: "0.06em",
+                      }}
+                    >
+                      {stage.stage}
+                    </h3>
+                    <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/50">
+                      {stage.pinyin} · {stage.en}
+                    </p>
+                    <div
+                      className="mt-3 h-px w-full"
+                      style={{
+                        background: `linear-gradient(to right, ${stage.color}66, transparent)`,
+                      }}
+                    />
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-[9px] uppercase tracking-[0.22em]">
+                      <span
+                        className="rounded-full border px-2 py-0.5"
+                        style={{
+                          borderColor: `${stage.color}55`,
+                          color: stage.color,
+                          backgroundColor: `${stage.color}10`,
+                        }}
+                      >
+                        {stage.cohortLabel}
+                      </span>
+                      <span className="rounded-full border border-[#f5f0e8]/15 bg-[#f5f0e8]/[0.04] px-2 py-0.5 text-[#f5f0e8]/55">
+                        {stage.yc}
+                      </span>
+                    </div>
+                    <p className="mt-4 text-[13px] font-medium leading-snug text-[#f5f0e8]/80">
+                      {stage.title}
+                    </p>
+                    <p className="mt-2 text-[12.5px] leading-relaxed text-[#f5f0e8]/60">
+                      {stage.body}
+                    </p>
+                    <p className="mt-2 text-[11px] leading-relaxed text-[#f5f0e8]/35">
+                      {stage.bodyEn}
+                    </p>
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* ─── 道场 · MASTERS & FELLOWSHIP ─────────────────── */}
+        <section
+          id="dojo"
+          className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
+        >
+          <div className="grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-start">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
+                道场 · The Dojo
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
+                名师指点，
+                <br className="hidden md:block" />
+                同修结伴。
+              </h2>
+              <p className="mt-5 max-w-xl text-sm uppercase tracking-[0.18em] text-[#f5f0e8]/45 md:text-base md:tracking-[0.1em] md:normal-case">
+                Masters point the Way · Fellows walk it together.
+              </p>
+              <p className="mt-8 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/65 md:text-base">
+                修仙从来不是孤独的事。一个人走得快，一群人走得远——而要登天，
+                必须既有
+                <span className="text-[#e8d5a3]/85">名师</span>
+                的「点化」，也要有
+                <span className="text-[#f5b8c8]/85">同修</span>
+                的「印证」。
+              </p>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
+                Cultivation has never been a solitary craft. One walks fast
+                alone — a sangha walks far. Ascension requires both the
+                master&rsquo;s spark and the fellow disciple&rsquo;s mirror.
               </p>
             </div>
 
-            <ol className="relative flex flex-col gap-6 border-l border-[#e8d5a3]/15 pl-8 lg:pl-12">
-              {approach.map((step) => (
-                <li key={step.index} className="relative">
-                  <span
-                    aria-hidden
-                    className="absolute -left-[2.55rem] top-1.5 flex h-7 w-7 items-center justify-center rounded-full border border-[#c9a962]/45 bg-[#06050c] text-[10px] font-semibold tracking-[0.16em] text-[#e8d5a3] lg:-left-[3.6rem]"
+            <div className="relative">
+              <div className="absolute -right-4 -top-6 h-32 w-32 opacity-50">
+                <GodPeachBlossom color="#f5b8c8" opacity={0.55} />
+              </div>
+              <div className="relative grid gap-3 rounded-[2rem] border border-[#f5b8c8]/15 bg-gradient-to-b from-[#1a1018]/70 to-[#0a0912]/55 p-6 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl md:grid-cols-3">
+                {fellowship.map((f) => (
+                  <div
+                    key={f.label}
+                    className="flex flex-col items-start gap-2 rounded-2xl border border-[#e8d5a3]/12 bg-[#0c0b14]/55 p-4"
                   >
-                    {step.index}
-                  </span>
-                  <div className="rounded-2xl border border-[#e8d5a3]/12 bg-gradient-to-b from-[#12101c]/80 to-[#0a0912]/55 p-6 shadow-[0_16px_50px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-                    <p className="text-[10px] uppercase tracking-[0.32em] text-[#c9a962]/75">
-                      {step.badge} · {step.title}
+                    <p
+                      className="text-3xl font-light leading-none text-[#e8d5a3] md:text-4xl"
+                      style={{ letterSpacing: "0.04em" }}
+                    >
+                      {f.metric}
                     </p>
-                    <p className="mt-3 text-sm leading-relaxed text-[#f5f0e8]/70 md:text-[15px]">
-                      {step.body}
+                    <p className="text-[10px] uppercase tracking-[0.26em] text-[#f5b8c8]/80">
+                      {f.label}
+                    </p>
+                    <p className="text-[11px] leading-snug text-[#f5f0e8]/50">
+                      {f.sub}
                     </p>
                   </div>
-                </li>
-              ))}
-            </ol>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Masters */}
+          <div className="mt-14 grid gap-5 md:grid-cols-2">
+            {masters.map((m) => (
+              <article
+                key={m.title}
+                className="group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#e8d5a3]/14 bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-7 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8d5a3]/35"
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-6 -top-4 text-[10rem] font-light leading-none text-[#e8d5a3]/[0.07] transition-colors group-hover:text-[#e8d5a3]/[0.13]"
+                >
+                  {m.motif}
+                </span>
+                <div className="relative">
+                  <p className="text-[10px] uppercase tracking-[0.32em] text-[#c9a962]/80">
+                    {m.role}
+                  </p>
+                  <h3 className="mt-3 text-2xl font-semibold tracking-tight text-[#e8d5a3] md:text-3xl">
+                    {m.title}
+                  </h3>
+                  <p className="mt-5 text-sm leading-relaxed text-[#f5f0e8]/70">
+                    {m.body}
+                  </p>
+                  <p className="mt-3 text-[12px] leading-relaxed text-[#f5f0e8]/40">
+                    {m.bodyEn}
+                  </p>
+                  <div className="mt-5 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.22em]">
+                    {m.lineage.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-[#e8d5a3]/22 bg-[#e8d5a3]/[0.06] px-3 py-1 text-[#e8d5a3]/80"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        {/* ─── SECTION 3: OFFERINGS ─────────────────────────── */}
+        {/* ─── 入道 · OFFERINGS / COHORT TIERS ─────────────── */}
         <section
           id="offerings"
           className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
         >
           <div className="max-w-2xl">
             <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
-              服务 · The Offerings
+              入道 · How to Begin
             </p>
             <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
-              三层服务，
+              三层入道，
               <br className="hidden md:block" />
-              三种共振。
+              一脉相承。
             </h2>
             <p className="mt-5 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/55 md:text-base">
-              Three modules, three depths of engagement. Each is calibrated to a
-              moment in your life-cycle — choose by resonance, not by impulse.
+              Three gates of entry, one lineage. From a single conversation to a
+              year-long inner-disciple transmission — choose the depth that
+              matches your conviction.
             </p>
           </div>
 
@@ -536,27 +850,63 @@ export default function GodHome() {
             {offerings.map((offering, i) => (
               <article
                 key={offering.name}
-                className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-[#e8d5a3]/12 bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-7 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:border-[#e8d5a3]/35 hover:shadow-[0_36px_100px_rgba(232,213,163,0.16)] ${
-                  i === 1 ? "md:translate-y-3" : ""
+                className={`group relative flex h-full flex-col overflow-hidden rounded-[2rem] border bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-7 shadow-[0_24px_70px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 ${
+                  offering.primary
+                    ? "shadow-[0_36px_110px_rgba(245,184,200,0.18)] md:-translate-y-2"
+                    : ""
                 }`}
+                style={{
+                  borderColor: offering.primary
+                    ? `${offering.color}55`
+                    : `${offering.color}28`,
+                }}
               >
+                {offering.primary ? (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute -top-px left-6 inline-flex -translate-y-1/2 items-center gap-1 rounded-full border border-[#f5b8c8]/60 bg-[#1a1018]/95 px-2.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.28em] text-[#f5b8c8] shadow-[0_0_24px_rgba(245,184,200,0.35)]"
+                  >
+                    <span className="h-1 w-1 rounded-full bg-[#f5b8c8]" />
+                    Main Path · 主修
+                  </span>
+                ) : null}
+
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute -right-3 -top-6 text-[9rem] font-light leading-none text-[#e8d5a3]/[0.07] transition-all duration-500 group-hover:text-[#e8d5a3]/[0.14]"
+                  className="pointer-events-none absolute -right-3 -top-6 text-[9rem] font-light leading-none transition-all duration-500 group-hover:opacity-[0.18]"
+                  style={{ color: offering.color, opacity: 0.08 }}
                 >
                   {offering.motif}
                 </span>
 
                 <div className="relative">
                   <p className="text-[10px] uppercase tracking-[0.32em] text-[#c9a962]/80">
-                    Module · 0{i + 1}
+                    Tier · 0{i + 1}
                   </p>
-                  <h3 className="mt-3 text-2xl font-light tracking-[0.06em] text-[#e8d5a3] md:text-3xl">
+                  <h3
+                    className="mt-3 text-2xl font-light md:text-3xl"
+                    style={{ color: offering.color, letterSpacing: "0.06em" }}
+                  >
                     {offering.label}
                   </h3>
-                  <p className="mt-1.5 text-[11px] uppercase tracking-[0.28em] text-[#f5f0e8]/50">
-                    {offering.name}
+                  <p className="mt-1.5 text-[11px] uppercase tracking-[0.28em] text-[#f5f0e8]/55">
+                    {offering.pinyin} · {offering.name}
                   </p>
+                  <div className="mt-5 flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.22em]">
+                    <span
+                      className="rounded-full border px-2.5 py-1"
+                      style={{
+                        borderColor: `${offering.color}45`,
+                        color: offering.color,
+                        backgroundColor: `${offering.color}10`,
+                      }}
+                    >
+                      {offering.cadence}
+                    </span>
+                    <span className="rounded-full border border-[#f5f0e8]/15 bg-[#f5f0e8]/[0.04] px-2.5 py-1 text-[#f5f0e8]/55">
+                      {offering.ycLike}
+                    </span>
+                  </div>
                   <p className="mt-6 text-sm leading-relaxed text-[#f5f0e8]/68">
                     {offering.description}
                   </p>
@@ -568,10 +918,11 @@ export default function GodHome() {
                 <div className="relative mt-8 border-t border-[#e8d5a3]/10 pt-5">
                   <a
                     href="#contact"
-                    className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#e8d5a3]/85 transition-colors hover:text-[#e8d5a3]"
+                    className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.28em] transition-colors"
+                    style={{ color: offering.color }}
                   >
-                    Inquire
-                    <span aria-hidden className="text-[#c9a962]/60">
+                    {offering.cta}
+                    <span aria-hidden style={{ color: `${offering.color}cc` }}>
                       ↗
                     </span>
                   </a>
@@ -581,7 +932,7 @@ export default function GodHome() {
           </div>
         </section>
 
-        {/* ─── CONTACT / RESONANCE ──────────────────────────── */}
+        {/* ─── 结缘 · APPLY / CONTACT ───────────────────────── */}
         <section
           id="contact"
           className="relative flex min-h-[70svh] flex-col justify-center border-t border-[#e8d5a3]/10 py-24"
@@ -589,30 +940,54 @@ export default function GodHome() {
           <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
             <div>
               <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
-                结缘 · Resonance
+                结缘 · Apply / Be Found
               </p>
               <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
-                当频率对齐，
+                只怕凡人之
                 <br className="hidden md:block" />
-                自有缘。
+                不坚定。
               </h2>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-[#f5f0e8]/55 md:text-base">
-                When the frequency aligns, resonance arrives. Reach through the
-                mortal plane, or transmit directly.
+                修道场每年开两届。如果你已读到这里，那不是巧合——
+                这是你与同修之间的第一次照见。
+              </p>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-[#f5f0e8]/40 md:text-[15px]">
+                Two cohorts per year. If you&rsquo;ve read this far, it&rsquo;s
+                not chance — it&rsquo;s the first mirror between you and your
+                fellow disciples.
               </p>
             </div>
 
             <div className="flex flex-col gap-4">
+              <a
+                href={consultancyInitialSessionEmail}
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-[#f5b8c8]/40 bg-gradient-to-r from-[#c9a962]/[0.08] to-[#f5b8c8]/[0.08] px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f5b8c8]/70 hover:shadow-[0_0_40px_rgba(245,184,200,0.25)]"
+              >
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-[#f5b8c8]/85">
+                    主修 · Apply to the Cohort
+                  </p>
+                  <p className="mt-2 text-base font-medium text-[#f5f0e8] md:text-lg">
+                    申请下一届同修席位 (12 spots)
+                  </p>
+                </div>
+                <span
+                  aria-hidden
+                  className="text-lg text-[#f5b8c8] transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </a>
               <Link
                 href={consultancyUrl}
-                className="group flex items-center justify-between gap-4 rounded-2xl border border-[#c9a962]/35 bg-[#c9a962]/[0.08] px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8d5a3]/55 hover:bg-[#c9a962]/[0.16] hover:shadow-[0_0_36px_rgba(232,213,163,0.18)]"
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-[#c9a962]/35 bg-[#c9a962]/[0.06] px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#e8d5a3]/55 hover:bg-[#c9a962]/[0.12]"
               >
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.28em] text-[#c9a962]/85">
-                    凡间法则 · Mortal Plane
+                    初心 · Single Session
                   </p>
-                  <p className="mt-2 text-base font-medium text-[#f5f0e8] md:text-lg">
-                    Wokki Consultancy — pricing & sessions
+                  <p className="mt-2 text-base font-medium text-[#f5f0e8]/90 md:text-lg">
+                    Book a one-shot Initiation
                   </p>
                 </div>
                 <span
@@ -648,11 +1023,14 @@ export default function GodHome() {
         {/* ─── FOOTER ───────────────────────────────────────── */}
         <footer className="border-t border-[#e8d5a3]/10 py-12">
           <div className="flex flex-col items-center gap-6 text-center">
+            <div className="h-10 w-10 opacity-60">
+              <GodPeachBlossom color="#f5b8c8" opacity={0.85} />
+            </div>
             <p className="text-[10px] uppercase tracking-[0.42em] text-[#e8d5a3]/55">
-              Wokki Heavenly Consultancy · 神识咨询
+              神识咨询 · 修道场 · Wokki Heavenly Consultancy
             </p>
             <p className="text-[11px] tracking-[0.18em] text-[#f5f0e8]/40">
-              Designed by Fuyang. Engineered for the Soul.
+              Designed by Fùyáng. Engineered for the Soul.
               <span className="ml-3 text-[#e8d5a3]/45">
                 复阳设计 · 为灵魂工程
               </span>
