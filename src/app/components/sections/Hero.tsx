@@ -1,6 +1,6 @@
 import React from "react";
-import Image from "next/image";
 import Section from "./Section";
+import HeroDouyinFeed from "../HeroDouyinFeed";
 import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
 
 // Decorative pulse-bar rhythm (mirrors the nana setlist accent).
@@ -132,24 +132,10 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Hero image — kept (preserves original element); positioned as a
-            quiet accent on desktop and a small framed mark on mobile so the
-            text always breathes. */}
-        <div className="pointer-events-none relative z-0 mx-auto h-[260px] w-[260px] select-none sm:h-[320px] sm:w-[320px] md:h-auto md:w-auto md:justify-self-end md:translate-y-12 lg:translate-y-16">
-          <div
-            aria-hidden
-            className="absolute inset-0 -z-10 rounded-full bg-accent/10 blur-3xl md:hidden"
-          />
-          <Image
-            src="/hero.png"
-            alt=""
-            width={560}
-            height={560}
-            sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 75vw"
-            className="h-auto w-[clamp(220px,72vw,560px)] origin-bottom-right drop-shadow-[0_20px_60px_rgba(0,0,0,0.18)] md:w-[clamp(240px,42vw,560px)]"
-            priority
-            aria-hidden="true"
-          />
+        {/* 抖音 · Scroll Feed — replaces the right-side hero portrait with
+            a full phone-frame Douyin module. Hover + wheel to cycle. */}
+        <div className="relative z-10 mx-auto w-full max-w-[300px] md:mx-0 md:max-w-none md:justify-self-end">
+          <HeroDouyinFeed />
         </div>
       </div>
     </Section>

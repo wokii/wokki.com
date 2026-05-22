@@ -99,7 +99,7 @@ export default function Header() {
   const { theme } = useTheme();
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [accentColor, setAccentColor] = useState<string>("#ff5f40");
+  const [accentColor, setAccentColor] = useState<string>("#ef4444");
   const [isColorPaletteOpen, setIsColorPaletteOpen] = useState(false);
   const [networkLinks, setNetworkLinks] = useState(defaultNetworkLinks);
   const [didApplyHiddenAccent, setDidApplyHiddenAccent] = useState(false);
