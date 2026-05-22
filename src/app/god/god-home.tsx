@@ -3,6 +3,7 @@ import {
   consultancyInitialSessionEmail,
   WOKKI_DOT_COM,
 } from "../lib/WokkiNodes";
+import GodFiveElements from "./god-five-elements";
 import GodHeader from "./god-header";
 import GodStarWheel from "./god-star-wheel";
 import GodTrinity from "./god-trinity";
@@ -41,6 +42,78 @@ const pillars = [
     body: "见相非相，即见如来。结合心理学与「神识」的觉醒，剥离外在的幻象 (Meta-illusion)。每一次咨询，都是一次意识的迭代，助你在纷扰的世俗中完成内心的「顿悟」，重获绝对的清明。",
     english:
       "“See past form, and behold the Tathāgata.” Through psychology and the awakening of 神识 (divine consciousness), we strip away the meta-illusion — each session is an iteration of awareness toward absolute clarity.",
+  },
+] as const;
+
+/**
+ * 五行 · Five Elements — each element maps to a lived dimension of practice.
+ * Ordered along the 相生 (generative) cycle: 木 → 火 → 土 → 金 → 水.
+ */
+const elements = [
+  {
+    char: "木",
+    pinyin: "Mù",
+    en: "Wood",
+    color: "#5fa37a",
+    direction: "东方 · East",
+    season: "春 · Spring",
+    virtue: "仁 · Benevolence",
+    dimension: "发轫 · Genesis",
+    body: "新生与扩张的能量。事业的初创、关系的萌发、愿景的具象化——一切由「无」生「有」的时刻。",
+    bodyEn:
+      "The vector of growth & expansion. Founding ventures, blooming relationships, vision crystallised — every passage from nothing to something.",
+  },
+  {
+    char: "火",
+    pinyin: "Huǒ",
+    en: "Fire",
+    color: "#d9554e",
+    direction: "南方 · South",
+    season: "夏 · Summer",
+    virtue: "礼 · Propriety",
+    dimension: "彰显 · Radiance",
+    body: "显化与影响力。品牌、表达、传播、被看见——把内在的光放射至外部世界的能力。",
+    bodyEn:
+      "Manifestation & influence. Brand, voice, signal, visibility — the capacity to radiate inner light outward into the social field.",
+  },
+  {
+    char: "土",
+    pinyin: "Tǔ",
+    en: "Earth",
+    color: "#c9a962",
+    direction: "中央 · Center",
+    season: "长夏 · Late Summer",
+    virtue: "信 · Trust",
+    dimension: "承载 · Foundation",
+    body: "稳定与承诺。系统、流程、信任、积累——把闪光的洞察沉淀为可重复的运营机制。",
+    bodyEn:
+      "Stability & commitment. Systems, processes, accumulated trust — settling brilliant insight into repeatable operating mechanics.",
+  },
+  {
+    char: "金",
+    pinyin: "Jīn",
+    en: "Metal",
+    color: "#d9d2c0",
+    direction: "西方 · West",
+    season: "秋 · Autumn",
+    virtue: "义 · Righteousness",
+    dimension: "裁决 · Discernment",
+    body: "聚焦与切割。战略取舍、剥离冗余、做出艰难但正确的决定——以刀之锋利换取系统之纯粹。",
+    bodyEn:
+      "Focus & decisive cutting. Strategic trade-offs, pruning redundancy, the hard but right decisions — buying purity with the edge of a blade.",
+  },
+  {
+    char: "水",
+    pinyin: "Shuǐ",
+    en: "Water",
+    color: "#3b5b8c",
+    direction: "北方 · North",
+    season: "冬 · Winter",
+    virtue: "智 · Wisdom",
+    dimension: "洞观 · Wisdom",
+    body: "深观与流动。研究、直觉、休养、潜行——在静默中积蓄势能，在弯曲中抵达远方。",
+    bodyEn:
+      "Deep observation & fluidity. Research, intuition, rest, undercurrents — momentum gathered in silence, arrival reached through curvature.",
   },
 ] as const;
 
@@ -244,6 +317,141 @@ export default function GodHome() {
                   </p>
                   <p className="mt-4 text-[12px] leading-relaxed text-[#f5f0e8]/40">
                     {pillar.english}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── SECTION 1.5: FIVE ELEMENTS ───────────────────── */}
+        <section
+          id="wuxing"
+          className="relative flex min-h-screen flex-col justify-center border-t border-[#e8d5a3]/10 py-28"
+        >
+          <div className="grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:items-center">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.45em] text-[#c9a962]/75">
+                五行 · The Five Elements
+              </p>
+              <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
+                金木水火土，
+                <br className="hidden md:block" />
+                五种能量，五种维度。
+              </h2>
+              <p className="mt-5 max-w-xl text-sm uppercase tracking-[0.18em] text-[#f5f0e8]/45 md:text-base md:tracking-[0.1em] md:normal-case">
+                Five elements · five energies · five operating dimensions of a
+                life.
+              </p>
+              <p className="mt-8 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/65 md:text-base">
+                若三位一体定义「为何」，五行则定义「如何流动」。木火土金水以
+                <span className="font-medium" style={{ color: "#5fa37a" }}>
+                  {" 相生 "}
+                </span>
+                环流而养，以
+                <span className="font-medium" style={{ color: "#d9554e" }}>
+                  {" 相克 "}
+                </span>
+                穿插而衡——这是宇宙最古老的反馈控制系统。
+              </p>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-[#f5f0e8]/45 md:text-[15px]">
+                If the Trinity defines the why, the Five Elements define the
+                how-of-flow. Wood, Fire, Earth, Metal and Water nourish along
+                the 相生 cycle and balance through the 相克 cycle — the oldest
+                feedback-control system in the cosmos.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3 text-[10px] uppercase tracking-[0.22em]">
+                {elements.map((el) => (
+                  <span
+                    key={el.char}
+                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5"
+                    style={{
+                      borderColor: `${el.color}55`,
+                      color: el.color,
+                      backgroundColor: `${el.color}12`,
+                    }}
+                  >
+                    <span
+                      aria-hidden
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ backgroundColor: el.color }}
+                    />
+                    {el.char} · {el.en}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative mx-auto flex w-full max-w-md items-center justify-center">
+              <div className="absolute inset-0 -z-10 rounded-full bg-[#e8d5a3]/[0.04] blur-2xl" />
+              <GodFiveElements className="h-[22rem] w-[22rem] md:h-[24rem] md:w-[24rem]" />
+            </div>
+          </div>
+
+          <div className="mt-16 grid gap-4 md:grid-cols-3 lg:grid-cols-5">
+            {elements.map((el, i) => (
+              <article
+                key={el.char}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] border bg-gradient-to-b from-[#12101c]/85 to-[#0a0912]/55 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.32)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
+                  i === 2 ? "lg:col-span-1 lg:translate-y-2" : ""
+                }`}
+                style={{
+                  borderColor: `${el.color}28`,
+                }}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-3 -top-4 text-[8rem] font-light leading-none transition-opacity duration-300 group-hover:opacity-[0.18]"
+                  style={{ color: el.color, opacity: 0.07 }}
+                >
+                  {el.char}
+                </span>
+                <div className="relative">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <span
+                      className="text-3xl font-light"
+                      style={{ color: el.color, letterSpacing: "0.04em" }}
+                    >
+                      {el.char}
+                    </span>
+                    <span
+                      className="text-[10px] uppercase tracking-[0.28em]"
+                      style={{ color: `${el.color}cc` }}
+                    >
+                      {el.pinyin} · {el.en}
+                    </span>
+                  </div>
+                  <div
+                    className="mt-3 h-px w-full"
+                    style={{
+                      background: `linear-gradient(to right, ${el.color}66, transparent)`,
+                    }}
+                  />
+                  <dl className="mt-4 space-y-1.5 text-[10px] uppercase tracking-[0.18em] text-[#f5f0e8]/50">
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-[#f5f0e8]/35">方位</dt>
+                      <dd>{el.direction}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-[#f5f0e8]/35">季节</dt>
+                      <dd>{el.season}</dd>
+                    </div>
+                    <div className="flex items-center justify-between gap-3">
+                      <dt className="text-[#f5f0e8]/35">德</dt>
+                      <dd>{el.virtue}</dd>
+                    </div>
+                  </dl>
+                  <p
+                    className="mt-5 text-[11px] font-semibold uppercase tracking-[0.28em]"
+                    style={{ color: el.color }}
+                  >
+                    {el.dimension}
+                  </p>
+                  <p className="mt-3 text-[12.5px] leading-relaxed text-[#f5f0e8]/65">
+                    {el.body}
+                  </p>
+                  <p className="mt-2 text-[11px] leading-relaxed text-[#f5f0e8]/38">
+                    {el.bodyEn}
                   </p>
                 </div>
               </article>

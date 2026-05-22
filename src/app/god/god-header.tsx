@@ -78,6 +78,9 @@ export default function GodHeader({ mainSiteUrl }: GodHeaderProps) {
           >
             天启
           </a>
+          <a href="#wuxing" className="transition-colors hover:text-[#e8d5a3]">
+            五行
+          </a>
           <a
             href="#approach"
             className="transition-colors hover:text-[#e8d5a3]"

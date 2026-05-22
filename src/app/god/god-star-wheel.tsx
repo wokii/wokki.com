@@ -29,7 +29,18 @@ const PALACES = [
 
 const TRIGRAMS = ["☰", "☱", "☲", "☳", "☴", "☵", "☶", "☷"] as const;
 
-const ELEMENTS = ["金", "木", "水", "火", "土"] as const;
+/**
+ * 五行 — ordered along the 相生 (generative) cycle starting from 木 at the top,
+ * proceeding clockwise: 木 → 火 → 土 → 金 → 水 → 木. Each element wears its
+ * canonical hue (Wood-green, Fire-red, Earth-gold, Metal-silver, Water-blue).
+ */
+const ELEMENTS: ReadonlyArray<{ char: string; color: string }> = [
+  { char: "木", color: "#5fa37a" },
+  { char: "火", color: "#d9554e" },
+  { char: "土", color: "#c9a962" },
+  { char: "金", color: "#d9d2c0" },
+  { char: "水", color: "#3b5b8c" },
+] as const;
 
 function polar(deg: number, radius: number) {
   const rad = ((deg - 90) * Math.PI) / 180;
@@ -211,22 +222,31 @@ export default function GodStarWheel({ className }: Props) {
             strokeLinejoin="round"
           />
 
-          {ELEMENTS.map((char, i) => {
+          {ELEMENTS.map((el, i) => {
             const p = polar(i * 72, elementR - 6);
+            const glow = polar(i * 72, elementR - 6);
             return (
-              <text
-                key={char}
-                x={p.x}
-                y={p.y}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize="14"
-                fill="#e8d5a3"
-                opacity="0.78"
-                style={{ letterSpacing: "0.06em" }}
-              >
-                {char}
-              </text>
+              <g key={el.char}>
+                <circle
+                  cx={glow.x}
+                  cy={glow.y}
+                  r="10"
+                  fill={el.color}
+                  opacity="0.18"
+                />
+                <text
+                  x={p.x}
+                  y={p.y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize="15"
+                  fill={el.color}
+                  opacity="0.92"
+                  style={{ letterSpacing: "0.06em", fontWeight: 500 }}
+                >
+                  {el.char}
+                </text>
+              </g>
             );
           })}
 
