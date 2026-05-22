@@ -393,7 +393,65 @@ export default function GodHome() {
               months from sealing to ascension. Lifetime fellowship after that.
             </p>
 
-            <div className="god-fade-up god-fade-up-delay-3 mt-12 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
+            {/* 结缘提灯 · Altar Offering — the most prominent altar action */}
+            <div className="god-fade-up god-fade-up-delay-2 mt-10 w-full max-w-2xl text-left">
+              <a
+                href="https://pay.wokki.com/b/eVq9AU9074OPfHb5ZK3Je08"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative block overflow-hidden rounded-[2.25rem] border border-[#f5b8c8]/55 bg-gradient-to-br from-[#3a1a2a]/85 via-[#1a1018]/85 to-[#2a141e]/85 px-6 py-5 shadow-[0_0_70px_rgba(245,184,200,0.32)] backdrop-blur-xl transition-all duration-500 hover:-translate-y-0.5 hover:border-[#f5b8c8]/85 hover:shadow-[0_0_100px_rgba(245,184,200,0.5)] md:px-8 md:py-6"
+              >
+                {/* breathing halo */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -inset-1 animate-pulse rounded-[2.5rem] bg-[#f5b8c8]/[0.10] blur-2xl"
+                />
+
+                {/* 福 glyph backdrop */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-3 -top-5 text-[10rem] font-light leading-none text-[#f5b8c8]/[0.07] transition-opacity duration-500 group-hover:text-[#f5b8c8]/[0.14]"
+                >
+                  福
+                </span>
+
+                <div className="relative flex items-center gap-4 md:gap-6">
+                  {/* lantern medallion */}
+                  <div
+                    className="relative flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border border-[#f5b8c8]/65 bg-gradient-to-b from-[#f5b8c8]/[0.22] to-[#f5b8c8]/[0.04] text-[1.65rem] text-[#f5b8c8] shadow-[0_0_24px_rgba(245,184,200,0.4)] md:h-16 md:w-16 md:text-[1.85rem]"
+                    aria-hidden
+                  >
+                    <span
+                      className="pointer-events-none absolute -inset-2 animate-pulse rounded-full bg-[#f5b8c8]/15 blur-md"
+                      aria-hidden
+                    />
+                    <span className="relative font-light">福</span>
+                  </div>
+
+                  <div className="flex-1">
+                    <p className="text-[10px] uppercase tracking-[0.42em] text-[#f5b8c8]/85">
+                      结缘 · 祈福 · 祝福
+                    </p>
+                    <p className="mt-1.5 text-base font-medium leading-snug text-[#f5f0e8] md:text-lg">
+                      为你或挚爱的人，提一盏神识之灯
+                    </p>
+                    <p className="mt-1 text-[11.5px] leading-relaxed text-[#f5f0e8]/55 md:text-[12.5px]">
+                      Light a lamp at the altar · Offer a blessing for you or
+                      someone you love
+                    </p>
+                  </div>
+
+                  <span
+                    aria-hidden
+                    className="hidden text-2xl text-[#f5b8c8] transition-transform duration-300 group-hover:translate-x-1 sm:inline"
+                  >
+                    →
+                  </span>
+                </div>
+              </a>
+            </div>
+
+            <div className="god-fade-up god-fade-up-delay-3 mt-8 flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
               <a
                 href="#offerings"
                 className="inline-flex items-center justify-center rounded-full border border-[#f5b8c8]/55 bg-gradient-to-r from-[#c9a962]/15 to-[#f5b8c8]/15 px-7 py-3.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#f5f0e8] shadow-[0_0_40px_rgba(245,184,200,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#f5b8c8]/75 hover:shadow-[0_0_60px_rgba(245,184,200,0.36)]"
@@ -587,49 +645,45 @@ export default function GodHome() {
                     textOrientation: "mixed",
                   }}
                 >
-                  {/* Column 1 (rightmost, read first): element seal */}
-                  <p
-                    className="m-0 text-4xl font-light leading-[1.05]"
-                    style={{
-                      color: el.color,
-                      letterSpacing: "0.12em",
-                    }}
-                  >
-                    {el.char}
-                  </p>
-                  <p
-                    className="ml-1 mt-0 text-[9px] uppercase tracking-[0.32em]"
-                    style={{ color: `${el.color}cc` }}
-                  >
-                    {el.pinyin} · {el.en}
+                  {/* Column 1 (read first): element seal — big char above its pinyin in the same column */}
+                  <p className="m-0 leading-[1.1]">
+                    <span
+                      className="text-[2rem] font-light lg:text-[1.75rem]"
+                      style={{
+                        color: el.color,
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      {el.char}
+                    </span>
+                    <span
+                      className="text-[8px] uppercase tracking-[0.32em] lg:text-[7px]"
+                      style={{ color: `${el.color}cc` }}
+                    >
+                      　{el.pinyin}·{el.en}
+                    </span>
                   </p>
 
-                  {/* Column 2: 方位 · 季节 · 德 */}
-                  <p className="ml-4 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
-                    方位 · {el.direction}
-                  </p>
-                  <p className="ml-1 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
-                    季节 · {el.season}
-                  </p>
-                  <p className="ml-1 text-[10px] tracking-[0.22em] text-[#f5f0e8]/55">
-                    德 · {el.virtue}
+                  {/* Column 2: 方位 · 季节 · 德 — three meta items flow in a single column */}
+                  <p className="m-0 ml-3 text-[10px] leading-[1.9] tracking-[0.16em] text-[#f5f0e8]/55 lg:ml-2 lg:text-[9px] lg:leading-[1.75]">
+                    方位·{el.direction}　季节·{el.season}　德·{el.virtue}
                   </p>
 
                   {/* Column 3: dimension (signature label) */}
                   <p
-                    className="ml-4 text-[12px] font-semibold tracking-[0.28em]"
+                    className="m-0 ml-3 text-[11px] font-semibold tracking-[0.28em] lg:ml-2 lg:text-[10px]"
                     style={{ color: el.color }}
                   >
                     {el.dimension}
                   </p>
 
                   {/* Column 4: body Chinese — the main verse */}
-                  <p className="ml-3 text-[12.5px] leading-[2.05] text-[#f5f0e8]/68">
+                  <p className="m-0 ml-3 text-[11.5px] leading-[1.85] text-[#f5f0e8]/68 lg:ml-2 lg:text-[10.5px] lg:leading-[1.7]">
                     {el.body}
                   </p>
 
                   {/* Column 5 (leftmost): body English, rotated naturally */}
-                  <p className="ml-3 text-[10px] leading-[2.05] tracking-wide text-[#f5f0e8]/38">
+                  <p className="m-0 ml-3 text-[9px] leading-[1.85] tracking-wide text-[#f5f0e8]/38 lg:ml-2 lg:text-[8px] lg:leading-[1.7]">
                     {el.bodyEn}
                   </p>
                 </div>
