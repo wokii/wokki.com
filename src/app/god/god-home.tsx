@@ -354,11 +354,12 @@ export default function GodHome() {
                   <p className="text-2xl font-light leading-relaxed tracking-[0.1em] text-[#f5f0e8] md:text-3xl">
                     神仙本是凡人变，
                     <br />
-                    只怕凡人之不坚定。
+                    只怕凡人志不坚。
                   </p>
                   <p className="mt-4 text-[11px] uppercase tracking-[0.32em] text-[#e8d5a3]/65 md:text-xs">
                     Immortals were once mortal —
-                    <br className="md:hidden" /> the only barrier is conviction.
+                    <br className="md:hidden" /> the only barrier is the
+                    firmness of the mortal will.
                   </p>
                 </blockquote>
                 <figcaption className="mt-6 border-t border-[#e8d5a3]/10 pt-4 text-right text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/40">
@@ -943,9 +944,9 @@ export default function GodHome() {
                 结缘 · Apply / Be Found
               </p>
               <h2 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-[#f5f0e8] md:text-5xl">
-                只怕凡人之
+                只怕凡人
                 <br className="hidden md:block" />
-                不坚定。
+                志不坚。
               </h2>
               <p className="mt-5 max-w-md text-sm leading-relaxed text-[#f5f0e8]/55 md:text-base">
                 修道场每年开两届。如果你已读到这里，那不是巧合——
