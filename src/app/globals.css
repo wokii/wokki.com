@@ -477,6 +477,19 @@ body {
 }
 
 /* /god — heavenly consultancy */
+/* 五行 — canonical Five-Element palette (subtly desaturated for void backdrop) */
+/* 桃源 — peach-blossom palette for the 修道场 cohort theme            */
+:root {
+  --wx-wood: #5fa37a;
+  --wx-fire: #d9554e;
+  --wx-earth: #c9a962;
+  --wx-metal: #d9d2c0;
+  --wx-water: #3b5b8c;
+  --peach-blossom: #f5b8c8;
+  --peach-mist: #f4cec8;
+  --peach-deep: #d97b8f;
+}
+
 @keyframes god-spin {
   from {
     transform: rotate(0deg);
@@ -484,6 +497,62 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes god-wuxing-glow {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.95;
+  }
+}
+
+.god-wuxing-glow {
+  animation: god-wuxing-glow 4.8s ease-in-out infinite;
+}
+
+/* 桃花 drifting petals — purely decorative */
+@keyframes god-petal-drift {
+  0% {
+    transform: translate3d(0, -10vh, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate3d(-6vw, 110vh, 0) rotate(540deg);
+    opacity: 0;
+  }
+}
+
+.god-petal {
+  position: absolute;
+  top: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+  animation: god-petal-drift linear infinite;
+}
+
+@keyframes god-pulse-soft {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+.god-pulse-soft {
+  animation: god-pulse-soft 4s ease-in-out infinite;
 }
 
 @keyframes god-ripple-pulse {

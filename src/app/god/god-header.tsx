@@ -30,7 +30,7 @@ export default function GodHeader({ mainSiteUrl }: GodHeaderProps) {
             className="relative z-10 inline-flex w-full items-center justify-center rounded-full border border-[#e8d5a3]/20 bg-[#0c0b14]/85 px-5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#f5f0e8]/85 shadow-[0_4px_24px_rgba(201,169,98,0.12)] transition-colors duration-200 hover:border-[#e8d5a3]/40 hover:text-[#e8d5a3]"
           >
             <span className="whitespace-nowrap font-normal tracking-[0.32em]">
-              神识咨询 · Heavenly
+              神识·修道场
             </span>
           </a>
           <div className="pointer-events-none absolute left-0 top-full mt-2 w-72 translate-y-2 scale-[0.985] rounded-[2rem] border border-[#e8d5a3]/12 bg-gradient-to-b from-[#12101c]/98 to-[#0a0912]/90 p-3 opacity-0 shadow-[0_28px_65px_rgba(0,0,0,0.45)] backdrop-blur-2xl transition-all duration-300 after:absolute after:-top-3 after:left-0 after:h-3 after:w-full group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:scale-100 group-hover:opacity-100">
@@ -71,26 +71,49 @@ export default function GodHeader({ mainSiteUrl }: GodHeaderProps) {
             </div>
           </div>
         </div>
-        <nav className="flex items-center gap-5 text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/50">
+        <nav className="hidden items-center gap-5 text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/50 md:flex">
           <a
             href="#philosophy"
             className="transition-colors hover:text-[#e8d5a3]"
           >
             天启
           </a>
+          <a href="#wuxing" className="transition-colors hover:text-[#e8d5a3]">
+            五行
+          </a>
           <a
-            href="#approach"
+            href="#cultivation"
             className="transition-colors hover:text-[#e8d5a3]"
           >
-            法门
+            修行
+          </a>
+          <a href="#dojo" className="transition-colors hover:text-[#e8d5a3]">
+            道场
           </a>
           <a
             href="#offerings"
             className="transition-colors hover:text-[#e8d5a3]"
           >
-            服务
+            入道
           </a>
-          <a href="#contact" className="transition-colors hover:text-[#e8d5a3]">
+          <a href="#contact" className="transition-colors hover:text-[#f5b8c8]">
+            结缘
+          </a>
+        </nav>
+        <nav className="flex items-center gap-3 text-[10px] uppercase tracking-[0.28em] text-[#f5f0e8]/50 md:hidden">
+          <a
+            href="#cultivation"
+            className="transition-colors hover:text-[#e8d5a3]"
+          >
+            修行
+          </a>
+          <a
+            href="#offerings"
+            className="transition-colors hover:text-[#e8d5a3]"
+          >
+            入道
+          </a>
+          <a href="#contact" className="transition-colors hover:text-[#f5b8c8]">
             结缘
           </a>
         </nav>
