@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import CBackgroundVideo from "./c-background-video";
+import cVideo from "./c.MP4";
 import { WOKKI_DOT_COM } from "../lib/WokkiNodes";
 
 const MAIN_SITE_URL =
@@ -31,17 +33,7 @@ export const metadata: Metadata = {
 export default function CPage() {
   return (
     <main className="relative min-h-screen w-full overflow-hidden bg-[#030303] text-[#f5f0e8]">
-      <video
-        src="/c.MP4"
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover opacity-90 transition-opacity duration-1000"
-        style={{
-          filter: "grayscale(10%) contrast(110%) brightness(0.9)",
-        }}
-      />
+      <CBackgroundVideo src={cVideo} />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#030303]/60 via-transparent to-[#030303]/90" />
       <div className="pointer-events-none absolute left-1/2 top-[42%] h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(157,78,221,0.14)_0%,rgba(123,44,191,0.08)_42%,rgba(36,0,70,0.04)_68%,transparent_78%)] blur-3xl" />
