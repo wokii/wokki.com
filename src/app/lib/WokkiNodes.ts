@@ -1,6 +1,9 @@
 import { NANA_WOKKI, nanaWokki, type NanaWokki } from "./NanaWokkiNodes";
+import { SAS_WOKKI, sasWokki, type SasWokki } from "./SasWokkiNodes";
 
 export { NANA_WOKKI, nanaWokki } from "./NanaWokkiNodes";
+export { SAS_WOKKI, sasWokki } from "./SasWokkiNodes";
+export type { SasWokki } from "./SasWokkiNodes";
 export type {
   NanaWokki,
   NanaSong,
@@ -286,6 +289,7 @@ export type Zen = {
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
   [MCN_WOKKI]: MCNWokki;
   [NANA_WOKKI]: NanaWokki;
+  [SAS_WOKKI]: SasWokki;
 };
 
 export const wokkiCom: WokkiCom = {
@@ -819,4 +823,5 @@ export const Zen: Zen = {
   [CONSULTANCY_WOKKI]: consultancyWokki,
   [MCN_WOKKI]: mcnWokki,
   [NANA_WOKKI]: nanaWokki,
+  [SAS_WOKKI]: sasWokki,
 };
