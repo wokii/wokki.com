@@ -47,7 +47,7 @@ export default function CPage() {
           </p>
         </header>
 
-        <div className="god-fade-up god-fade-up-delay-1 -translate-x-4 -translate-y-36 md:-translate-x-7 md:-translate-y-48 flex flex-col items-center text-center">
+        <div className="god-fade-up god-fade-up-delay-1 absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
           <h1
             className="font-serif text-9xl font-light leading-none text-[#f5edd6] md:text-[13rem]"
             style={{
