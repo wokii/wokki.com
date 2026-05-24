@@ -143,7 +143,7 @@ export const sasWokki: SasWokki = {
     subtitleEn:
       "An advanced academy of refined arts, nestled deep in mist-shrouded mountains — or so the outsiders believe.",
     brochureLine:
-      "我们教你如何优雅地折断别人的手腕，以及，如何对这个喧嚣的武林保持「管他的」的精妙态度。",
+      "我们教你如何优雅地折断别人的手腕，以及，如何对这个喧嚣的武林保持「逍遥」的精妙态度。",
     primaryCta: {
       label: "阅读招生简章 · Read the Brochure",
       href: "#admissions",
@@ -178,7 +178,7 @@ export const sasWokki: SasWokki = {
       },
       {
         heading: "The Attitude · 精神闭环",
-        body: "别的门派喊「千秋万载，一统江湖」；我们的招生简章上只写着：管他的。",
+        body: "别的门派喊「千秋万载，一统江湖」；我们的招生简章上只写着：逍遥。",
         bodyEn:
           "Other schools shout for eternal dominion. Our brochure simply says: whatever — and means it.",
       },
@@ -258,7 +258,7 @@ export const sasWokki: SasWokki = {
         name: "北冥神功",
         nameEn: "Běimíng Shéngōng",
         tag: "Absorption · 吸功",
-        body: "海纳百川，有容乃大。借他人之力，成逍遥之道——但请先学会「管他的」，否则反噬。",
+        body: "海纳百川，有容乃大。借他人之力，成逍遥之道——但请先学会「逍遥」，否则反噬。",
         bodyEn:
           "The northern sea accepts all rivers. Borrow force, become free — but only after mastering indifference, or the rebound will end you.",
       },
@@ -353,7 +353,7 @@ export const sasWokki: SasWokki = {
       {
         label: "态度 · Attitude",
         detail:
-          "须已初步掌握「管他的」——否则北冥神功第一课就会教你什么叫真的管不了。",
+          "须已初步掌握「逍遥」——否则北冥神功第一课就会教你什么叫真的管不了。",
         detailEn:
           "Prior fluency in enlightened indifference required — otherwise Lesson One of Beiming Shen Gong will teach you what ‘cannot cope’ feels like.",
       },
@@ -397,7 +397,7 @@ export const sasWokki: SasWokki = {
       {
         zh: "无扰",
         en: "No Disturbance",
-        body: "管他的。这是最高心法，也是最低门槛。",
+        body: "逍遥。这是最高心法，也是最低门槛。",
         bodyEn: "Whatever. The highest doctrine and the lowest bar.",
       },
     ],
