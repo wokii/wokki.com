@@ -35,7 +35,7 @@ export default function CPage() {
       <CBackgroundVideo src="/c/video" />
 
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#030303]/60 via-transparent to-[#030303]/90" />
-      <div className="pointer-events-none absolute left-1/2 top-[42%] h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(157,78,221,0.14)_0%,rgba(123,44,191,0.08)_42%,rgba(36,0,70,0.04)_68%,transparent_78%)] blur-3xl" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(157,78,221,0.14)_0%,rgba(123,44,191,0.08)_42%,rgba(36,0,70,0.04)_68%,transparent_78%)] blur-3xl" />
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-between px-6 py-12 md:px-10 md:py-16">
         <header className="god-fade-up w-full text-center">
@@ -47,9 +47,9 @@ export default function CPage() {
           </p>
         </header>
 
-        <div className="god-fade-up god-fade-up-delay-1 -translate-x-4 -translate-y-36 md:-translate-x-7 md:-translate-y-48 flex flex-col items-center text-center">
+        <div className="god-fade-up god-fade-up-delay-1 absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center text-center">
           <h1
-            className="font-serif text-9xl font-light leading-none text-[#f3e6fa] md:text-[13rem]"
+            className="font-serif text-[11rem] font-light leading-none text-[#f3e6fa] md:text-[16rem]"
             style={{
               letterSpacing: "0.15em",
               textIndent: "0.15em",
