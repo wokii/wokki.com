@@ -9,6 +9,7 @@ type SasHeaderProps = {
     curriculum: string;
     arts: string;
     faculty: string;
+    transmissions: string;
     admissions: string;
     contact: string;
     home: { label: string; href: string };
@@ -100,6 +101,12 @@ export default function SasHeader({
             {nav.faculty}
           </a>
           <a
+            href="#transmissions"
+            className="transition-colors hover:text-[#a8d4c8]"
+          >
+            {nav.transmissions}
+          </a>
+          <a
             href="#admissions"
             className="transition-colors hover:text-[#a8d4c8]"
           >
@@ -111,8 +118,11 @@ export default function SasHeader({
         </nav>
 
         <nav className="flex items-center gap-3 text-[10px] uppercase tracking-[0.24em] text-[#e8f0ec]/50 md:hidden">
-          <a href="#arts" className="transition-colors hover:text-[#a8d4c8]">
-            {nav.arts}
+          <a
+            href="#transmissions"
+            className="transition-colors hover:text-[#a8d4c8]"
+          >
+            {nav.transmissions}
           </a>
           <a
             href="#admissions"

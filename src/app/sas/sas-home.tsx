@@ -21,6 +21,7 @@ export default function SasHome() {
     curriculum,
     arts,
     faculty,
+    transmissions,
     admissions,
     tenets,
     contact,
@@ -82,10 +83,6 @@ export default function SasHome() {
             <p className="mt-3 text-sm leading-relaxed text-[#e8f0ec]/45 md:text-[15px]">
               {hero.subtitleEn}
             </p>
-
-            <blockquote className="mt-10 max-w-2xl border-l-2 border-[#7eb8a8]/40 pl-5 text-left text-sm leading-relaxed text-[#c4e8dc]/85 italic md:text-base">
-              「{hero.brochureLine}」
-            </blockquote>
 
             <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
               <a
@@ -180,7 +177,7 @@ export default function SasHome() {
             {curriculum.subtitle}
           </p>
 
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {curriculum.items.map((item) => (
               <article
                 key={item.glyph}
@@ -305,6 +302,57 @@ export default function SasHome() {
           </div>
         </section>
 
+        {/* ─── TRANSMISSIONS ────────────────────────────────── */}
+        <section
+          id="transmissions"
+          className="relative border-t border-[#a8d4c8]/10 py-24"
+        >
+          <p className="text-[10px] uppercase tracking-[0.45em] text-[#7eb8a8]/75">
+            {transmissions.eyebrow}
+          </p>
+          <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#e8f0ec] md:text-4xl">
+            {transmissions.title}
+          </h2>
+          <p className="mt-4 max-w-2xl text-sm text-[#e8f0ec]/45 md:text-base">
+            {transmissions.subtitle}
+          </p>
+          <p className="mt-3 text-[11px] uppercase tracking-[0.28em] text-[#a8d4c8]/60">
+            {transmissions.lecturer}
+          </p>
+          <p className="mt-1 text-[10px] tracking-[0.18em] text-[#e8f0ec]/35">
+            {transmissions.lecturerEn}
+          </p>
+
+          <div className="mt-12 flex flex-col gap-4">
+            {transmissions.items.map((item, i) => (
+              <article
+                key={item.topic}
+                className="grid gap-4 rounded-2xl border border-[#a8d4c8]/10 bg-[#0d1512]/50 p-6 md:grid-cols-[1fr_2fr] md:items-start md:gap-8"
+              >
+                <div>
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-[#7eb8a8]/55">
+                    {String(i + 1).padStart(2, "0")} · {item.format}
+                  </span>
+                  <h3 className="mt-2 text-xl font-medium text-[#e8f0ec]">
+                    {item.topic}
+                  </h3>
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-[#a8d4c8]/55">
+                    {item.topicEn}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-sm leading-relaxed text-[#e8f0ec]/65">
+                    {item.body}
+                  </p>
+                  <p className="mt-2 text-[12px] leading-relaxed text-[#e8f0ec]/38">
+                    {item.bodyEn}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         {/* ─── ADMISSIONS ───────────────────────────────────── */}
         <section
           id="admissions"
@@ -316,11 +364,11 @@ export default function SasHome() {
           <h2 className="mt-4 text-3xl font-semibold tracking-tight text-[#e8f0ec] md:text-4xl">
             {admissions.title}
           </h2>
-          <p className="mt-4 text-base text-[#c4e8dc]/80">
-            {admissions.tagline}
+          <p className="mt-4 text-sm text-[#e8f0ec]/55 md:text-base">
+            {admissions.subtitle}
           </p>
           <p className="mt-1 text-sm text-[#e8f0ec]/40">
-            {admissions.taglineEn}
+            {admissions.subtitleEn}
           </p>
 
           <div className="mt-12 grid gap-8 lg:grid-cols-2">
@@ -345,7 +393,7 @@ export default function SasHome() {
 
             <div className="rounded-2xl border border-[#7eb8a8]/25 bg-[#7eb8a8]/[0.06] p-8">
               <p className="text-[10px] uppercase tracking-[0.32em] text-[#7eb8a8]/80">
-                Official Brochure · 官方简章
+                {admissions.title}
               </p>
               <ul className="mt-6 space-y-3">
                 {admissions.brochure.map((line, i) => (
@@ -450,6 +498,27 @@ export default function SasHome() {
                 <span
                   aria-hidden
                   className="text-lg text-[#a8d4c8] transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  →
+                </span>
+              </a>
+              <a
+                href={contact.secondaryCta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between gap-4 rounded-2xl border border-[#e8f0ec]/10 bg-[#0d1512]/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#a8d4c8]/30"
+              >
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.28em] text-[#e8f0ec]/50">
+                    {contact.secondaryCta.label}
+                  </p>
+                  <p className="mt-2 text-base font-medium text-[#e8f0ec]/85 md:text-lg">
+                    {contact.secondaryCta.sub}
+                  </p>
+                </div>
+                <span
+                  aria-hidden
+                  className="text-lg text-[#a8d4c8]/80 transition-transform duration-300 group-hover:translate-x-1"
                 >
                   →
                 </span>

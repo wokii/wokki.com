@@ -25,6 +25,14 @@ export type SasFaculty = {
   lineage: string[];
 };
 
+export type SasTransmission = {
+  topic: string;
+  topicEn: string;
+  format: string;
+  body: string;
+  bodyEn: string;
+};
+
 export type SasTenet = {
   zh: string;
   en: string;
@@ -46,6 +54,7 @@ export type SasWokki = {
       curriculum: string;
       arts: string;
       faculty: string;
+      transmissions: string;
       admissions: string;
       contact: string;
       home: { label: string; href: string };
@@ -57,7 +66,6 @@ export type SasWokki = {
     titleEn: string;
     subtitle: string;
     subtitleEn: string;
-    brochureLine: string;
     primaryCta: { label: string; href: string };
     secondaryCta: { label: string; href: string };
   };
@@ -85,11 +93,19 @@ export type SasWokki = {
     subtitle: string;
     items: SasFaculty[];
   };
+  transmissions: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    lecturer: string;
+    lecturerEn: string;
+    items: SasTransmission[];
+  };
   admissions: {
     eyebrow: string;
     title: string;
-    tagline: string;
-    taglineEn: string;
+    subtitle: string;
+    subtitleEn: string;
     requirements: Array<{ label: string; detail: string; detailEn: string }>;
     brochure: string[];
     brochureEn: string[];
@@ -107,6 +123,7 @@ export type SasWokki = {
     body: string;
     bodyEn: string;
     cta: { label: string; href: string };
+    secondaryCta: { label: string; sub: string; href: string };
     email: string;
   };
   footer: {
@@ -118,8 +135,7 @@ export type SasWokki = {
 export const sasWokki: SasWokki = {
   meta: {
     title: "逍遥派 · Subtle Art School",
-    description:
-      "We teach you to break a wrist with grace — and to hold a sublime indifference toward the noise of the martial world. An elite academy of subtle arts, hidden in mist, open only to those who already know.",
+    description: "琴棋戏书画，花鸟诗酒茶。",
     ogImage: "/w.png",
   },
   header: {
@@ -130,292 +146,322 @@ export const sasWokki: SasWokki = {
       curriculum: "六艺",
       arts: "绝学",
       faculty: "名师",
+      transmissions: "口传",
       admissions: "招生",
       contact: "问道",
       home: { label: "Wokki.com", href: "/" },
     },
   },
   hero: {
-    eyebrow: "Hidden in the mist · 藏于烟霞",
+    eyebrow: "烟霞",
     titleZh: "逍遥派",
     titleEn: "Subtle Art School",
-    subtitle: "坐落在深山老林里的高级文艺书院——至少，对外人是这么说的。",
-    subtitleEn:
-      "An advanced academy of refined arts, nestled deep in mist-shrouded mountains — or so the outsiders believe.",
-    brochureLine:
-      "我们教你如何优雅地折断别人的手腕，以及，如何对这个喧嚣的武林保持「逍遥」的精妙态度。",
-    primaryCta: {
-      label: "阅读招生简章 · Read the Brochure",
-      href: "#admissions",
-    },
-    secondaryCta: { label: "浏览绝学 · The Arts", href: "#arts" },
+    subtitle: "琴棋戏书画，花鸟诗酒茶。",
+    subtitleEn: "Music, chess, opera, brush — flowers, birds, poetry, tea.",
+    primaryCta: { label: "简章", href: "#admissions" },
+    secondaryCta: { label: "口传", href: "#transmissions" },
   },
   manifesto: {
-    eyebrow: "名相 · On the Name",
-    title: "为什么叫 School，不叫 Sect",
+    eyebrow: "名相",
+    title: "Subtle Art School",
     paragraphs: [
       {
-        zh: "逍遥派收徒不仅看脸，还要求琴棋书画、医卜星相、奇门遁甲样样精通。他们本质上是一个精英艺术学霸联盟——不是宗教帮会，而是学派。",
-        en: "The Xiaoyao lineage does not merely recruit for combat potential. Disciples must excel across the classical arts — music, strategy, calligraphy, painting, medicine, divination, astronomy, and esoteric geometry. They are, at core, an elite league of artistic savants — not a sect in the religious sense, but a school of thought.",
+        zh: "六艺为门，武学在内。",
+        en: "Six arts at the gate; martial work within.",
       },
       {
-        zh: "Subtle Art School 保留了那种「老子天下第一、不在乎世俗眼光」的狂傲与洒脱，却将其包装在学术、正经的外壳之下。这种反差，才是最高级的装杯。",
-        en: "Subtle Art School preserves the swagger of absolute self-sovereignty — the sublime art of not giving a damn what the world thinks — while wrapping it in the respectable shell of scholarship. That contrast is the finest low-key flex.",
+        zh: "王元讲席，录课传世。",
+        en: "Wokki lectures; lessons recorded.",
       },
     ],
     nameRationale: [
       {
-        heading: "School · 学院质感",
-        body: "「School」在英文里既是武术门派，更是学院、学派的代名词。它凸显无崖子、苏星河等人知识渊博、气质高雅的学霸属性。",
-        bodyEn:
-          "In English, “School” denotes both a martial lineage and an academy of ideas. It foregrounds the scholarly elegance of masters like Wuyazi and Su Xinghe — polymaths, not gang bosses.",
+        heading: "School",
+        body: "武学，亦学问。",
+        bodyEn: "Martial art, also scholarship.",
       },
       {
-        heading: "Subtle Art · 隐蔽装杯",
-        body: "对外，这里是教导精妙艺术的书院；对内，「艺术」是杀人于无形、优雅至极的绝顶武功——比如凌波微步那种极具美感的步法。",
-        bodyEn:
-          "Outwardly, subtle art means refined culture. Inwardly, it is the art of ending a fight before it begins — footwork so beautiful it looks like dance, force so quiet it feels like weather.",
+        heading: "Art",
+        body: "艺为表，功为里。",
+        bodyEn: "Art outward; skill inward.",
       },
       {
-        heading: "The Attitude · 精神闭环",
-        body: "别的门派喊「千秋万载，一统江湖」；我们的招生简章上只写着：逍遥。",
-        bodyEn:
-          "Other schools shout for eternal dominion. Our brochure simply says: whatever — and means it.",
+        heading: "Subtle",
+        body: "精微，不张扬。",
+        bodyEn: "Refined. Unannounced.",
       },
     ],
   },
   curriculum: {
-    eyebrow: "六艺 · The Curriculum",
-    title: "入学门槛：样样精通",
-    subtitle:
-      "琴棋书画 · 医卜星相 · 奇门遁甲 — before you touch a single lethal form.",
+    eyebrow: "六艺",
+    title: "所考",
+    subtitle: "琴棋书画，医卜星相。",
     items: [
       {
         glyph: "琴",
-        title: "Strings · 音律",
+        title: "音律",
         titleEn: "Qín",
-        body: "以音入心，以律合气。逍遥派弟子须能借一曲止戈，或以弦震退敌——美学即武器。",
-        bodyEn:
-          "Sound enters the mind; rhythm aligns the breath. A single phrase may halt a blade — aesthetics as armament.",
+        body: "以音调气。",
+        bodyEn: "Breath through sound.",
       },
       {
         glyph: "棋",
-        title: "Strategy · 弈道",
+        title: "弈道",
         titleEn: "Qí",
-        body: "棋盘即战场。落子三手之外，胜负已分。苏星河以珍珑棋局择徒，非为消遣，实为识人。",
-        bodyEn:
-          "The board is the battlefield. Three moves ahead, the outcome is sealed. Su Xinghe’s chess ordeal selects disciples — not pastime, but oracle.",
+        body: "珍珑试人。",
+        bodyEn: "Chess tests the mind.",
       },
       {
         glyph: "书",
-        title: "Calligraphy · 笔法",
+        title: "笔法",
         titleEn: "Shū",
-        body: "一笔一画皆含劲力。字可杀人，亦可渡人——取决于你当时「管不管」。",
-        bodyEn:
-          "Every stroke carries force. Characters can wound or redeem — depending on whether you care that day.",
+        body: "劲在笔端。",
+        bodyEn: "Force in the stroke.",
       },
       {
         glyph: "画",
-        title: "Painting · 丹青",
+        title: "丹青",
         titleEn: "Huà",
-        body: "观画如观势。无崖子以画传功，以石室壁画藏百年绝学——美，是最长的伪装。",
-        bodyEn:
-          "To read a painting is to read a formation. Wuyazi transmitted gong through murals — beauty as the longest camouflage.",
+        body: "石室壁画。",
+        bodyEn: "Stone-chamber murals.",
       },
       {
         glyph: "医",
-        title: "Medicine · 医理",
+        title: "医理",
         titleEn: "Yī",
-        body: "知生死，方能掌生死。医道与武道同源——逍遥派从不把「救人」与「杀人」分得太清。",
-        bodyEn:
-          "Know life and death to command them. Medicine and martial arts share one root — the school rarely draws a bright line between healing and ending.",
+        body: "经脉药性。",
+        bodyEn: "Channels and herbs.",
       },
       {
         glyph: "卜",
-        title: "Divination · 星相",
-        titleEn: "Bǔ & Xiàng",
-        body: "医卜星相，奇门遁甲。逍遥派弟子读天象如读人心——预测，是为了更优雅地不出手。",
-        bodyEn:
-          "Divination, astronomy, esoteric gates. Disciples read the sky as they read intent — foresight so you need not strike at all.",
+        title: "星相",
+        titleEn: "Bǔ",
+        body: "观天行事。",
+        bodyEn: "Read the sky; act.",
+      },
+      {
+        glyph: "理",
+        title: "论工",
+        titleEn: "Lǐ",
+        body: "现象成论。",
+        bodyEn: "Phenomena into argument.",
+      },
+      {
+        glyph: "数",
+        title: "系统",
+        titleEn: "Shù",
+        body: "模型为器。",
+        bodyEn: "Models as tools.",
       },
     ],
   },
   arts: {
-    eyebrow: "绝学 · Signature Arts",
-    title: "精妙艺术，杀人无形",
-    subtitle:
-      "Outsiders see culture. Initiates see combat systems with impeccable taste.",
+    eyebrow: "绝学",
+    title: "武学",
+    subtitle: "名见于册。",
     items: [
       {
         name: "凌波微步",
         nameEn: "Língbō Wēibù",
-        tag: "Movement · 步法",
-        body: "凌波而行，微步生莲。世间最美的逃跑路线——也是最难被锁定的杀阵。",
-        bodyEn:
-          "Walk upon ripples; each step blooms. The most beautiful exit path in the jianghu — and the hardest formation to pin down.",
+        tag: "步法",
+        body: "身轻步远。",
+        bodyEn: "Light body, long step.",
       },
       {
         name: "北冥神功",
         nameEn: "Běimíng Shéngōng",
-        tag: "Absorption · 吸功",
-        body: "海纳百川，有容乃大。借他人之力，成逍遥之道——但请先学会「逍遥」，否则反噬。",
-        bodyEn:
-          "The northern sea accepts all rivers. Borrow force, become free — but only after mastering indifference, or the rebound will end you.",
+        tag: "吸功",
+        body: "纳海须空。",
+        bodyEn: "Receive much; hold empty.",
       },
       {
         name: "小无相功",
         nameEn: "Xiǎo Wúxiàng Gōng",
-        tag: "Formless · 无相",
-        body: "无形无相，拟形拟意。可化天下武学于掌中——前提是，你本来就样样精通。",
-        bodyEn:
-          "Without fixed form, it mirrors any form. Every art becomes available — if you were already fluent in every art.",
+        tag: "无相",
+        body: "无形拟形。",
+        bodyEn: "No form; mirrors form.",
       },
       {
         name: "天山六阳掌",
         nameEn: "Tiānshān Liùyáng Zhǎng",
-        tag: "Palm · 掌法",
-        body: "至阳至刚，却出自童姥之手。反差，是逍遥派的签名。",
-        bodyEn:
-          "Utter yang, utter force — yet transmitted by the Child Elder. Contrast is the school’s watermark.",
+        tag: "掌法",
+        body: "至阳至刚。",
+        bodyEn: "Utter yang, utter force.",
       },
       {
         name: "生死符",
         nameEn: "Shēngsǐ Fú",
-        tag: "Control · 制敌",
-        body: "一针定生死。不是威胁，是日程管理——逍遥派从不大声说话。",
-        bodyEn:
-          "One needle, two fates. Not a threat — appointment scheduling. The school never raises its voice.",
+        tag: "制敌",
+        body: "一针定命。",
+        bodyEn: "One needle decides.",
       },
     ],
   },
   faculty: {
-    eyebrow: "名师 · Faculty",
-    title: "学霸联盟，各怀绝学",
-    subtitle: "They publish papers. They also end disputes. Quietly.",
+    eyebrow: "名师",
+    title: "教席",
+    subtitle: "前辈在列。",
     items: [
       {
-        title: "无崖子 · Wuyazi",
-        role: "Founding Patriarch · 开山祖师",
+        title: "无崖子",
+        role: "开山祖师",
         motif: "崖",
-        body: "逍遥派之祖。琴棋书画皆通，石室壁画藏百年传承。因情所困，因道逍遥——典型的学霸悲剧，也是典型的逍遥起点。",
-        bodyEn:
-          "Founder of the lineage. Polymath, mural-archivist, keeper of a century of transmission. Trapped by attachment, liberated by doctrine — the scholar’s tragedy that birthed the school.",
-        lineage: ["画 · Murals", "无相 · Formless", "情 · Attachment"],
+        body: "壁画传功。",
+        bodyEn: "Murals transmit.",
+        lineage: ["画", "无相", "情"],
       },
       {
-        title: "苏星河 · Su Xinghe",
-        role: "Eight Friends · 八弟子之首",
+        title: "苏星河",
+        role: "八友之首",
         motif: "棋",
-        body: "珍珑棋局择徒，以死传功。苏星河不是「武夫」，是「Problem Setter」——逍遥派最严格的 Admissions Officer。",
-        bodyEn:
-          "He chose heirs through an impossible chess puzzle and died transmitting power. Not a brawler — a problem setter. The school’s strictest admissions officer.",
-        lineage: ["棋 · Strategy", "择徒 · Selection", "传功 · Transmission"],
+        body: "棋局择徒。",
+        bodyEn: "Chess selects heirs.",
+        lineage: ["棋", "择徒", "传功"],
       },
       {
-        title: "天山童姥 · Tianshan Child Elder",
-        role: "Northern Line · 天山一脉",
+        title: "天山童姥",
+        role: "北脉",
         motif: "童",
-        body: "八荒六合唯我独尊——听起来很中二，执行起来很有效。童姥证明：逍遥派允许你狂，只要你真有本事。",
-        bodyEn:
-          "“Eight directions, six harmonies — only I am supreme.” Sounds adolescent. Works. The Child Elder proves: swagger is permitted when backed by competence.",
-        lineage: ["六阳 · Yang Palm", "符 · Talismans", "尊 · Sovereignty"],
+        body: "六阳生死。",
+        bodyEn: "Yang palm; life-death needle.",
+        lineage: ["六阳", "符", "尊"],
       },
       {
-        title: "李秋水 · Li Qiushui",
-        role: "Southern Line · 南疆一脉",
+        title: "李秋水",
+        role: "南脉",
         motif: "水",
-        body: "秋水长天，美与杀并行。逍遥派从不承诺「纯善」——只承诺「有品味」。",
-        bodyEn:
-          "Autumn water, endless sky — beauty and lethality in parallel. The school never promised goodness. It promised taste.",
-        lineage: ["身法 · Movement", "毒 · Toxin", "魅 · Allure"],
+        body: "身法毒理。",
+        bodyEn: "Movement and toxin.",
+        lineage: ["身法", "毒", "魅"],
+      },
+      {
+        title: "王元 · Wokki",
+        role: "当代讲席",
+        motif: "元",
+        body: "理数命理，录课口传。",
+        bodyEn: "Theory, systems, metaphysics — on record.",
+        lineage: ["理", "数", "口"],
+      },
+    ],
+  },
+  transmissions: {
+    eyebrow: "口传",
+    title: "讲席录",
+    subtitle: "一事一课。",
+    lecturer: "王元 · Wokki",
+    lecturerEn: "@hanwokki",
+    items: [
+      {
+        topic: "命理",
+        topicEn: "Metaphysics",
+        format: "易经 · 八字 · 紫微",
+        body: "周期，结构，推演。",
+        bodyEn: "Cycles, structure, inference.",
+      },
+      {
+        topic: "系统",
+        topicEn: "Systems",
+        format: "系统",
+        body: "决策，关系，财务。",
+        bodyEn: "Decisions, relations, capital.",
+      },
+      {
+        topic: "原理",
+        topicEn: "First principles",
+        format: "言",
+        body: "假设与事实。",
+        bodyEn: "Assumption and fact.",
+      },
+      {
+        topic: "心理",
+        topicEn: "Psychology",
+        format: "觉",
+        body: "行为，模式，觉知。",
+        bodyEn: "Behaviour, pattern, awareness.",
+      },
+      {
+        topic: "工程",
+        topicEn: "Engineering",
+        format: "理",
+        body: "建模，执行。",
+        bodyEn: "Model, execute.",
       },
     ],
   },
   admissions: {
-    eyebrow: "招生 · Admissions",
-    title: "招生简章",
-    tagline: "我们不喊口号。我们只发 syllabus。",
-    taglineEn: "We don’t chant slogans. We distribute syllabi.",
+    eyebrow: "招生",
+    title: "简章",
+    subtitle: "三条。",
+    subtitleEn: "Three clauses.",
     requirements: [
       {
-        label: "颜值 · Presentation",
-        detail:
-          "逍遥派传统上「收徒看脸」。这不是肤浅——是相信气质即修炼的外显。",
-        detailEn:
-          "The lineage historically selects for presence. Not vanity — the belief that temperament shows on the surface.",
+        label: "仪容",
+        detail: "重气度。",
+        detailEn: "Temperament first.",
       },
       {
-        label: "全才 · Polymath",
-        detail: "六艺不全者，连珍珑棋局的边都摸不到。",
-        detailEn:
-          "Without mastery across the six arts, you will not even reach the first move of the chess ordeal.",
+        label: "通艺",
+        detail: "六艺有基。",
+        detailEn: "Six arts grounded.",
       },
       {
-        label: "态度 · Attitude",
-        detail:
-          "须已初步掌握「逍遥」——否则北冥神功第一课就会教你什么叫真的管不了。",
-        detailEn:
-          "Prior fluency in enlightened indifference required — otherwise Lesson One of Beiming Shen Gong will teach you what ‘cannot cope’ feels like.",
+        label: "心度",
+        detail: "能自修。",
+        detailEn: "Self-study able.",
       },
     ],
-    brochure: [
-      "本派不设「千秋万载，一统江湖」之宏愿。",
-      "本派不设「血债血偿」之俗套。",
-      "本派教授：如何优雅地折断别人的手腕。",
-      "本派教授：如何对喧嚣武林保持精妙的不在乎。",
-      "本派位于：你地图上没有的地方。",
-      "本派开放日：没有。",
-    ],
+    brochure: ["不统江湖。", "先艺后武。", "山门不启。", "传书问路。"],
     brochureEn: [
-      "We do not aspire to eternal dominion over the jianghu.",
-      "We do not traffic in crude vengeance arcs.",
-      "We teach: how to break a wrist with grace.",
-      "We teach: how to hold sublime indifference toward martial-world noise.",
-      "We are located: where your map ends.",
-      "Open day: never.",
+      "No dominion sought.",
+      "Arts before martial.",
+      "Gate closed.",
+      "Write to inquire.",
     ],
-    note: "若你读到这里仍想入门——恭喜，你已经通过了第一道筛选：好奇心比野心更诚实。",
-    noteEn:
-      "If you still wish to enroll after reading this — congratulations. You passed the first filter: curiosity more honest than ambition.",
+    note: "先阅录课，再传书。",
+    noteEn: "Read first. Write second.",
   },
   tenets: {
-    eyebrow: "心法 · Tenets",
-    title: "逍遥三诀",
+    eyebrow: "心法",
+    title: "三义",
     items: [
       {
         zh: "无招",
-        en: "No Fixed Form",
-        body: "小无相功之髓。形式是借来的，内核是自己的。",
-        bodyEn: "The marrow of formless gong — borrow shapes, keep your core.",
+        en: "No form",
+        body: "形借意立。",
+        bodyEn: "Borrow form; own intent.",
       },
       {
         zh: "无求",
-        en: "No Craving",
-        body: "不争名，不争位，不争「天下第一」——除非你真的无聊。",
-        bodyEn: "No thirst for titles — unless you are genuinely bored.",
+        en: "No grasp",
+        body: "名位空。",
+        bodyEn: "Titles empty.",
       },
       {
         zh: "无扰",
-        en: "No Disturbance",
-        body: "逍遥。这是最高心法，也是最低门槛。",
-        bodyEn: "Whatever. The highest doctrine and the lowest bar.",
+        en: "No stir",
+        body: "应止。",
+        bodyEn: "Respond, then stop.",
       },
     ],
   },
   contact: {
-    eyebrow: "问道 · Inquire",
-    title: "找不到山门？正常。",
-    body: "逍遥派不对公众开放。若你与派中已有渊源——或你只是想聊聊 TRPG 设定、同人世界观、公会 Lore——欢迎传书。",
-    bodyEn:
-      "The school is not open to the public. If you share lineage with an initiate — or simply wish to discuss TRPG lore, fan-worldbuilding, or guild mythology — a letter is welcome.",
+    eyebrow: "问道",
+    title: "传书",
+    body: "课业之问，致信讲席。",
+    bodyEn: "Coursework — write the lecturer.",
     cta: {
-      label: "传书 · Send a Letter",
+      label: "传书",
       href: "mailto:self@wokki.com?subject=Subtle%20Art%20School%20%E9%97%AE%E9%81%93",
+    },
+    secondaryCta: {
+      label: "录课",
+      sub: "@王元 Wokki",
+      href: "https://www.douyin.com/user/MS4wLjABAAAA6dlxf0baWEWZ4VQl8tuhWY-J8l4PreD1OkEHzCZS9gw",
     },
     email: "self@wokki.com",
   },
   footer: {
     line: "逍遥派 · Subtle Art School",
-    sub: "An elite academy of subtle arts — if you know, you know.",
+    sub: "琴棋戏书画，花鸟诗酒茶。",
   },
 };
