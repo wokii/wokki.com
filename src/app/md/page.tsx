@@ -32,7 +32,7 @@ export default function MichaelDumencicPage() {
             Michael Dumencic
           </h1>
           <p className="text-[10px] uppercase tracking-[0.55em] text-[#ffb06a]/75 md:text-xs">
-            Music Video Oracle
+            Sword of Integrity
           </p>
         </div>
 
