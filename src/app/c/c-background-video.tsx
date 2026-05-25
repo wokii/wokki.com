@@ -99,7 +99,7 @@ export default function CBackgroundVideo({ src }: CBackgroundVideoProps) {
           type="button"
           onClick={toggleMute}
           aria-label="Unmute video"
-          className="absolute bottom-8 right-6 z-20 inline-flex items-center gap-2 rounded-full border border-[#9D4EDD]/35 bg-[#030303]/45 px-4 py-2.5 text-[9px] uppercase tracking-[0.28em] text-[#eccff5]/80 backdrop-blur-xl transition-all duration-500 hover:border-[#9D4EDD]/60 hover:text-[#f3e6fa] hover:shadow-[0_0_24px_rgba(157,78,221,0.35)] md:bottom-10 md:right-10"
+          className="absolute bottom-8 right-6 z-20 inline-flex items-center gap-2 rounded-full border border-[#B8956B]/35 bg-[#030303]/45 px-4 py-2.5 text-[9px] uppercase tracking-[0.28em] text-[#E8DCC4]/80 backdrop-blur-xl transition-all duration-500 hover:border-[#B8956B]/60 hover:text-[#F0E6D2] hover:shadow-[0_0_24px_rgba(184,149,107,0.35)] md:bottom-10 md:right-10"
         >
           <svg
             width="12"
@@ -121,7 +121,7 @@ export default function CBackgroundVideo({ src }: CBackgroundVideoProps) {
           type="button"
           onClick={toggleMute}
           aria-label="Mute video"
-          className="absolute bottom-8 right-6 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#9D4EDD]/45 bg-[#030303]/40 text-[#eccff5]/70 backdrop-blur-xl transition-all duration-500 hover:border-[#9D4EDD]/65 hover:text-[#f3e6fa] md:bottom-10 md:right-10"
+          className="absolute bottom-8 right-6 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-[#B8956B]/45 bg-[#030303]/40 text-[#E8DCC4]/70 backdrop-blur-xl transition-all duration-500 hover:border-[#B8956B]/65 hover:text-[#F0E6D2] md:bottom-10 md:right-10"
         >
           <svg
             width="12"
