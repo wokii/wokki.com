@@ -29,10 +29,10 @@ export default function MichaelDumencicPage() {
             className="font-serif text-4xl font-light uppercase tracking-[0.28em] text-[#fff1df] md:text-6xl"
             style={emberGlow}
           >
-            Michael Dumencic
+            Sword of Integrity
           </h1>
           <p className="text-[10px] uppercase tracking-[0.55em] text-[#ffb06a]/75 md:text-xs">
-            Sword of Integrity
+            Michael Dumencic
           </p>
         </div>
 
