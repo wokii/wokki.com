@@ -1,9 +1,18 @@
+import { NABI_WOKKI, nabiWokki, type NabiWokki } from "./NabiWokkiNodes";
 import { NANA_WOKKI, nanaWokki, type NanaWokki } from "./NanaWokkiNodes";
 import { SAS_WOKKI, sasWokki, type SasWokki } from "./SasWokkiNodes";
 
+export { NABI_WOKKI, nabiWokki } from "./NabiWokkiNodes";
 export { NANA_WOKKI, nanaWokki } from "./NanaWokkiNodes";
 export { SAS_WOKKI, sasWokki } from "./SasWokkiNodes";
 export type { SasWokki } from "./SasWokkiNodes";
+export type {
+  NabiWokki,
+  NabiLink,
+  NabiSocialLink,
+  NabiCollection,
+  NabiPillar,
+} from "./NabiWokkiNodes";
 export type {
   NanaWokki,
   NanaSong,
@@ -288,6 +297,7 @@ export type Zen = {
   [WOKKI_DOT_COM]: WokkiCom;
   [CONSULTANCY_WOKKI]: ConsultancyWokki;
   [MCN_WOKKI]: MCNWokki;
+  [NABI_WOKKI]: NabiWokki;
   [NANA_WOKKI]: NanaWokki;
   [SAS_WOKKI]: SasWokki;
 };
@@ -822,6 +832,7 @@ export const Zen: Zen = {
   [WOKKI_DOT_COM]: wokkiCom,
   [CONSULTANCY_WOKKI]: consultancyWokki,
   [MCN_WOKKI]: mcnWokki,
+  [NABI_WOKKI]: nabiWokki,
   [NANA_WOKKI]: nanaWokki,
   [SAS_WOKKI]: sasWokki,
 };

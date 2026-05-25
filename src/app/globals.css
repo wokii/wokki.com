@@ -686,3 +686,26 @@ body {
 .md-oracle-pulse {
   animation: md-oracle-pulse 3s ease-in-out infinite;
 }
+
+/* TikTok badge halo — pulses while intro music plays */
+@keyframes tiktok-halo {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.12);
+  }
+}
+
+.tiktok-halo {
+  background: radial-gradient(
+    circle,
+    rgba(254, 44, 85, 0.55) 0%,
+    rgba(37, 244, 238, 0.4) 55%,
+    transparent 78%
+  );
+  animation: tiktok-halo 1.8s ease-in-out infinite;
+}
