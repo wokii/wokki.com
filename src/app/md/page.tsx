@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Cinzel } from "next/font/google";
 import mdPortrait from "./md.jpeg";
 import MdVideo from "./md-video";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
 
 const emberGlow = {
   textShadow:
@@ -26,7 +33,7 @@ export default function MichaelDumencicPage() {
             Wokki Presents
           </p>
           <h1
-            className="font-serif text-4xl font-light uppercase tracking-[0.28em] text-[#fff1df] md:text-6xl"
+            className={`${cinzel.className} text-4xl font-normal uppercase tracking-[0.28em] text-[#fff1df] md:text-6xl`}
             style={emberGlow}
           >
             Sword of Integrity
