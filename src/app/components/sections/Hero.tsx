@@ -1,6 +1,6 @@
 import React from "react";
-import Image from "next/image";
 import Section from "./Section";
+import HeroPortrait from "./HeroPortrait";
 import { WOKKI_DOT_COM, Zen } from "../../lib/WokkiNodes";
 
 export default function Hero() {
@@ -59,18 +59,7 @@ export default function Hero() {
           </a>
         ) : null}
       </div>
-      <div className="pointer-events-none absolute bottom-0 right-0 -z-10 translate-y-0 select-none md:right-16 md:translate-y-20 lg:translate-y-24">
-        <Image
-          src="/hero.png"
-          alt=""
-          width={560}
-          height={560}
-          sizes="(min-width: 1024px) 32vw, (min-width: 768px) 45vw, 75vw"
-          className="h-auto w-[clamp(210px,68vw,600px)] origin-bottom-right drop-shadow-lg scale-[0.81] md:w-[clamp(240px,45vw,560px)]"
-          priority
-          aria-hidden="true"
-        />
-      </div>
+      <HeroPortrait />
     </Section>
   );
 }
